@@ -24,8 +24,9 @@ USE `autenticazione`;
 DROP TABLE IF EXISTS `utente`;
 CREATE TABLE IF NOT EXISTS `utente` (
   `id_utente` int NOT NULL AUTO_INCREMENT,
-  `nome_utente` text,
-  `token` text,
+  `nome_utente` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `password` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `token` text NOT NULL,
   PRIMARY KEY (`id_utente`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
