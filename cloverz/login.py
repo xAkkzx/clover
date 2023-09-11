@@ -16,14 +16,11 @@ def register():
         print("Registrazione effettuata con successo!")
         # Ottieni il token dalla risposta
         token = response.json()["token"]
-        # Chiamata a /welcome con il token nell'header
-        welcome_response = requests.post("http://localhost:3000/welcome", headers={"x-access-token": token})
-        if welcome_response.status_code == 200:
-            print("Benvenuto!")
-        else:
-            print("Errore durante l'accesso a /welcome")
+        db_name, user_request = get_db_and_request()
+        chat(token, db_name, user_request)
     elif response.status_code == 409:
         print("Utente già esistente. Effettua l'accesso invece.")
+        login()
     else:
         print("Errore durante la registrazione")
 
@@ -42,16 +39,28 @@ def login():
     if response.status_code == 200:
         token = response.json()["token"]
         print(f"Accesso effettuato con successo. Token: {token}")
-        # Chiamata a /welcome con il token nell'header
-        welcome_response = requests.post("http://localhost:3000/welcome", headers={"x-access-token": token})
-        if welcome_response.status_code == 200:
-            print("Benvenuto!")
-        else:
-            print("Errore durante l'accesso a /welcome")
+        db_name, user_request = get_db_and_request()
+        chat(token, db_name, user_request)
     elif response.status_code == 401:
         print("Credenziali non valide. Riprova.")
+        login()
     else:
         print("Errore durante l'accesso")
+
+# Funzione per richiedere il "Nome Database" e la "Richiesta"
+def get_db_and_request():
+    db_name = input("Inserisci il Nome Database: ")
+    user_request = input("Inserisci la Richiesta: ")
+    return db_name, user_request
+
+# Funzione per chiamare /chat
+def chat(token, db_name, user_request):
+    chat_data = {"db_name": db_name, "user_request": user_request}
+    chat_response = requests.post("http://localhost:3000/chat", headers={"x-access-token": token}, json=chat_data)
+    if chat_response.status_code == 200:
+        print("Chiamata a /chat effettuata con successo!")
+    else:
+        print("Errore durante la chiamata a /chat")
 
 # Menu principale
 while True:
