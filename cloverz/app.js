@@ -4,7 +4,11 @@ require("dotenv").config();
 const express = require("express");
 const mysql = require("mysql2/promise"); // Import mysql2
 const fs = require("fs");
-const { Configuration, OpenAIApi } = require("openai");
+const Papa = require("papaparse");
+const OpenAI = require("openai");
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 const app = express();
 
@@ -27,12 +31,40 @@ function extractQuery(text) {
 
   if (match) {
     const query = match[0].trim();
-
     return query;
   }
-
   return null; // Restituisce null se non viene trovata alcuna corrispondenza
 }
+async function convertCSVtoTSV(csvText) {
+  try {
+    // Parse the CSV text
+
+    const parsed = Papa.parse(csvText);
+
+    // Get the data rows from the parsed CSV
+
+    const rows = parsed.data;
+
+    // Convert the rows to TSV format with fixed column width
+
+    const tsvText = rows
+
+      .map((row) => {
+        const firstThreeColumns = row.slice(0, 3); // Get the first three columns
+
+        return firstThreeColumns.map((cell) => cell.padEnd(45)).join("\t");
+      })
+
+      .join("\n");
+
+    // console.log("Displaying only the first 3 columns\n");
+
+    return tsvText;
+  } catch (error) {
+    throw new Error("Error converting CSV to TSV: " + error.message);
+  }
+}
+
 async function dentroZipitiCsv(data, csvFilePath) {
   return new Promise((resolve, reject) => {
     const keys = Object.keys(data[0]);
@@ -49,12 +81,11 @@ async function dentroZipitiCsv(data, csvFilePath) {
 
         reject(err);
       } else {
-        console.log("CSV data successfully written to file:", csvFilePath);
+        // console.log("CSV data successfully written to file:", csvFilePath);
 
         convertCSVtoTSV(csvString)
           .then((tsvString) => {
-            console.log(tsvString);
-
+            // console.log(tsvString);
             resolve();
           })
 
@@ -69,53 +100,44 @@ async function dentroZipitiCsv(data, csvFilePath) {
 }
 
 async function query(completion_text, nomeDb) {
-  return new Promise((resolve, reject) => {
-    connection_data.query("USE " + nomeDb, function (err, result) {
-      if (err) {
-        console.error("Error using the database: " + err.message);
-
-        connection_data.end();
-
-        reject(err);
-
-        return;
-      }
+  return new Promise(async (resolve, reject) => {
+    try {
+      const connection = await pool.getConnection();
+      await connection.query("USE " + nomeDb);
 
       const queries = completion_text.split(";").map((query) => query.trim());
-
       const validQueries = queries.filter((query) => query !== "");
 
-      const queryPromises = validQueries.map((queryString) => {
-        return new Promise((resolve, reject) => {
-          connection_data.query(queryString, function (err, result) {
-            if (err) {
-              reject(err);
-            } else {
-              resolve(result);
-            }
-          });
-        });
+      const queryPromises = validQueries.map(async (queryString) => {
+        try {
+          const [result] = await connection.execute(queryString);
+          return result;
+        } catch (err) {
+          throw err;
+        }
       });
 
       Promise.all(queryPromises)
-
         .then(async (results) => {
           for (const result of results) {
             await dentroZipitiCsv(result, "./dati.csv");
-            // await dentroZipitiTsv(result);
           }
-
           resolve(results);
         })
-
         .catch((err) => {
           console.error("Error executing queries:", err.message);
-
           reject(err);
+        })
+        .finally(() => {
+          connection.release(); // Release the connection back to the pool
         });
-    });
+    } catch (err) {
+      console.error("Error using the database:", err.message);
+      reject(err);
+    }
   });
 }
+
 // Logic goes here
 // Register
 app.post("/register", async (req, res) => {
@@ -208,14 +230,10 @@ app.post("/chat", auth, async (req, res) => {
   try {
     const { nomeDb, richiesta } = req.body;
     const db = fs.readFileSync(`dbz/${nomeDb}Tables.txt`, "utf-8");
-    const configuration = new Configuration({
-      apiKey: process.env.OPENAI_API_KEY,
-    });
-    const openai = new OpenAIApi(configuration);
+
     const regola = process.env.REGOLAMYSQL;
     var history = [
       [db, ""],
-
       [regola, ""],
     ];
     const messages = [];
@@ -226,13 +244,13 @@ app.post("/chat", auth, async (req, res) => {
     }
     messages.push({ role: "user", content: richiesta });
     try {
-      const completion = await openai.createChatCompletion({
+      const completion = await openai.chat.completions.create({
         model: "gpt-3.5-turbo",
-
         messages: messages,
       });
 
-      completion_text = completion.data.choices[0].message.content;
+      completion_text = completion.choices[0].message.content;
+      //   console.log(completion_text)
 
       let onlyquery = await extractQuery(completion_text);
       console.log(onlyquery + "\n");

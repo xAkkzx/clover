@@ -1,86 +1,81 @@
+import requests
 import getpass
-import requests
-import json
 
-import requests
+# Funzione per la registrazione
+def register():
+    username = input("Inserisci il nome utente: ")
+    password = getpass.getpass("Inserisci la password: ")
 
-def chiamaApi(token):
-    url = 'http://localhost:3000/welcome'  # Replace with your desired URL
-    try:
-        # Create headers with the token
-        headers = {
-            'x-access-token': token
-        }
-        # Send a GET request to the URL with the token in the headers
-        response = requests.post(url, headers=headers)
-        # Check the response status code
-        if response.status_code == 200:
-            # Request was successful, print and process the response
-            # print('POST request was successful')
-            # print('Response data:', response.text)
-            # data = json.loads(response.text)
-            # print(data["message"])
-            print(response.text)
-        else:
-            # Request failed with a non-200 status code, handle the error
-            print('GET request failed with status code:', response.status_code)
-            print('Response text:', response.text)
+    data = {
+        "username": username,
+        "password": password
+    }
 
-    except requests.exceptions.RequestException as e:
-        # An error occurred during the request, handle the exception
-        print('An error occurred during the request:', e)
+    response = requests.post("http://localhost:3000/register", json=data)
 
-# Define the URL for the POST request
-url = 'http://localhost:3000/login'
+    if response.status_code == 201:
+        print("Registrazione effettuata con successo!")
+        # Ottieni il token dalla risposta
+        token = response.json()["token"]
+        db_name, user_request = get_db_and_request()
+        chat(token, db_name, user_request)
+    elif response.status_code == 409:
+        print("Utente già esistente. Effettua l'accesso invece.")
+        login()
+    else:
+        print("Errore durante la registrazione")
 
-user = input("Username: ")
-psw = getpass.getpass("Password: ")
-# Define the JSON payload
-payload = {
-    "username": user,
-    "password": psw
-}
+# Funzione per l'accesso
+def login():
+    username = input("Inserisci il nome utente: ")
+    password = getpass.getpass("Inserisci la password: ")
 
-# Convert the payload dictionary to a JSON string
-payload_str = json.dumps(payload)
-a = False
-count = 5
-try:
-    while(not a and count != 1):
-        # Make the POST request
-        response = requests.post(url, data=payload_str, headers={"Content-Type": "application/json"})
+    data = {
+        "username": username,
+        "password": password
+    }
 
-        # Check the response status code
-        if response.status_code == 200:
-            a = True
-            # print('POST request was successful')
-            # print('Response data:', response.json())
+    response = requests.post("http://localhost:3000/login", json=data)
 
-            # Save the response to a file (authKey.txt)
-            # with open('authKey.txt', 'w') as file:
-            #     file.write(response.text)
-            # print(response.text)
-            data = json.loads(response.text)
-            token = data["token"]
-            # print(token)
-            # print("Benvenuto")
-            chiamaApi(token)
+    if response.status_code == 200:
+        token = response.json()["token"]
+        print(f"Accesso effettuato con successo. Token: {token}")
+        db_name, user_request = get_db_and_request()
+        chat(token, db_name, user_request)
+    elif response.status_code == 401:
+        print("Credenziali non valide. Riprova.")
+        login()
+    else:
+        print("Errore durante l'accesso")
 
-        else:
-            # print('POST request failed with status code:', response.status_code)
-            # print('Response text:', response.text)
-            count -= 1
-            print("Credenziali errate", count, "tentativi rimasti")
-            user = input("Username: ")
-            psw = getpass.getpass("Password: ")
-            # Define the JSON payload
-            payload = {
-                "username": user,
-                "password": psw
-            }
+# Funzione per richiedere il "Nome Database" e la "Richiesta"
+def get_db_and_request():
+    db_name = input("Inserisci il Nome Database: ")
+    user_request = input("Inserisci la Richiesta: ")
+    return db_name, user_request
 
-            # Convert the payload dictionary to a JSON string
-            payload_str = json.dumps(payload)
+# Funzione per chiamare /chat
+def chat(token, db_name, user_request):
+    chat_data = {"nomeDb": db_name, "richiesta": user_request}
+    chat_response = requests.post("http://localhost:3000/chat", headers={"x-access-token": token}, json=chat_data)
+    if chat_response.status_code == 200:
+        print("Chiamata a /chat effettuata con successo!")
+    else:
+        print("Errore durante la chiamata a /chat")
 
-except requests.exceptions.RequestException as e:
-    print('An error occurred during the request:', e)
+# Menu principale
+while True:
+    print("1. Registrati")
+    print("2. Accedi")
+    print("3. Esci")
+
+    choice = input("Scegli un'opzione: ")
+
+    if choice == "1":
+        register()
+    elif choice == "2":
+        login()
+    elif choice == "3":
+        break
+    else:
+        print("Opzione non valida. Riprova.")
