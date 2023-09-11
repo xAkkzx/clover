@@ -1,0 +1,88 @@
+CREATE TABLE allenatore 
+  id_allenatore   ,
+  nome  ,
+  id_nazione  ,
+  PRIMARY KEY id_allenatore,
+  CONSTRAINT allenatore_ibfk_1 FOREIGN KEY id_nazione REFERENCES nazione id_nazione
+
+
+CREATE TABLE capopalestra 
+  id_capopalestra   ,
+  nome  ,
+  PRIMARY KEY id_capopalestra
+
+
+CREATE TABLE citta 
+  id_citta   ,
+  nome  ,
+  descrizione  ,
+  PRIMARY KEY id_citta
+
+
+CREATE TABLE medaglia 
+  id_medaglia   ,
+  nome  ,
+  id_palestra  ,
+  PRIMARY KEY id_medaglia,
+  CONSTRAINT medaglia_ibfk_1 FOREIGN KEY id_palestra REFERENCES palestra id_palestra
+
+
+CREATE TABLE medagliexallenatore 
+  id_medxall   ,
+  id_allenatore  ,
+  id_medaglia  ,
+  PRIMARY KEY id_medxall,
+  CONSTRAINT medagliexallenatore_ibfk_1 FOREIGN KEY id_allenatore REFERENCES allenatore id_allenatore,
+  CONSTRAINT medagliexallenatore_ibfk_2 FOREIGN KEY id_medaglia REFERENCES medaglia id_medaglia
+
+
+CREATE TABLE nazione 
+  id_nazione   ,
+  nome  ,
+  PRIMARY KEY id_nazione
+
+
+CREATE TABLE palestra 
+  id_palestra   ,
+  nome  ,
+  id_capopalestra  ,
+  id_citta  ,
+  PRIMARY KEY id_palestra,
+  CONSTRAINT palestra_ibfk_1 FOREIGN KEY id_capopalestra REFERENCES capopalestra id_capopalestra,
+  CONSTRAINT palestra_ibfk_2 FOREIGN KEY id_citta REFERENCES citta id_citta
+
+
+CREATE TABLE percorso 
+  id_percorso   ,
+  nome  ,
+  id_citta  ,
+  PRIMARY KEY id_percorso,
+  CONSTRAINT percorso_ibfk_1 FOREIGN KEY id_citta REFERENCES citta id_citta
+
+
+CREATE TABLE pokeball 
+  id_pokeball   ,
+  nome  ,
+  descrizione  ,
+  PRIMARY KEY id_pokeball
+
+
+CREATE TABLE pokemon 
+  id_pokemon   ,
+  nome  ,
+  id_tipo  ,
+  id_percorso  ,
+  id_allenatore  ,
+  id_pokeball  ,
+  PRIMARY KEY id_pokemon,
+  CONSTRAINT pokemon_ibfk_1 FOREIGN KEY id_tipo REFERENCES tipo id_tipo,
+  CONSTRAINT pokemon_ibfk_2 FOREIGN KEY id_percorso REFERENCES percorso id_percorso,
+  CONSTRAINT pokemon_ibfk_3 FOREIGN KEY id_allenatore REFERENCES allenatore id_allenatore,
+  CONSTRAINT pokemon_ibfk_4 FOREIGN KEY id_pokeball REFERENCES pokeball id_pokeball
+
+
+CREATE TABLE tipo 
+  id_tipo   ,
+  nome  ,
+  PRIMARY KEY id_tipo
+
