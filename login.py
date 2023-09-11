@@ -1,5 +1,6 @@
 import requests
 import getpass
+import tabulate
 
 # Funzione per la registrazione
 def register():
@@ -60,8 +61,30 @@ def chat(token, db_name, user_request):
     chat_response = requests.post("http://localhost:3000/chat", headers={"x-access-token": token}, json=chat_data)
     if chat_response.status_code == 200:
         print("Chiamata a /chat effettuata con successo!")
+        print("Risposta:")
+        #print(chat_response.json())
+        list_of_dicts = [item for sublist in chat_response.json() for item in sublist]
+        format_and_print_response(list_of_dicts)  # Stampare il contenuto della risposta
     else:
         print("Errore durante la chiamata a /chat")
+
+def format_and_print_response(response_data):
+    # Verifica se ci sono dati nella risposta
+    if not response_data:
+        print("Nessun dato presente nella risposta.")
+    else:
+        # Assumiamo che ci sia almeno un dizionario nella lista
+        first_dict = response_data[0]
+
+        # Estrai dinamicamente le intestazioni (headers) dal primo dizionario
+        headers = list(first_dict.keys())
+
+        # Formatta i dati in una lista di liste per tabulate
+        table_data = [[entry[header] for header in headers] for entry in response_data]
+
+        # Formatta e stampa la tabella
+        table = tabulate.tabulate(table_data, headers, tablefmt="pretty")
+        print(table)
 
 # Menu principale
 while True:

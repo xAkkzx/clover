@@ -153,9 +153,11 @@ app.post("/register", async (req, res) => {
     }
 
     // Check if user already exists
-    const [rows] = await pool.query("SELECT * FROM utente WHERE username = ?", [
-      username,
-    ]);
+    await pool.query("USE autenticazione");
+
+    // Seconda query: SELECT * FROM utente WHERE username = 'm'
+    const [rows] = await pool.execute("SELECT * FROM utente WHERE username = ?", [username]);
+
 
     if (rows.length > 0) {
       return res.status(409).send("User Already Exists. Please Login");
@@ -191,10 +193,11 @@ app.post("/login", async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    // Fetch user from the database
-    const [rows] = await pool.query("SELECT * FROM utente WHERE username = ?", [
-      username,
-    ]);
+    await pool.query("USE autenticazione");
+
+    // Seconda query: SELECT * FROM utente WHERE username = 'm'
+    const [rows] = await pool.execute("SELECT * FROM utente WHERE username = ?", [username]);
+
 
     if (rows.length === 0) {
       return res.status(401).send("Invalid credentials");
