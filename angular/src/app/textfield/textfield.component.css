@@ -1,0 +1,6 @@
+/* Aggiungi stile al componente textfield */
+.custom-textfield {
+    border: 2px solid #000000;
+    padding: 10px;
+    border-radius: 500px;
+}
