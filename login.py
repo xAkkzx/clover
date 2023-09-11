@@ -5,21 +5,22 @@ import json
 import requests
 
 def chiamaApi(token):
-    url = 'http://localhost:3000/security/authentication'  # Replace with your desired URL
+    url = 'http://localhost:3000/welcome'  # Replace with your desired URL
     try:
         # Create headers with the token
         headers = {
-            'Authorization': f'Bearer {token}'
+            'x-access-token': token
         }
         # Send a GET request to the URL with the token in the headers
-        response = requests.get(url, headers=headers)
+        response = requests.post(url, headers=headers)
         # Check the response status code
         if response.status_code == 200:
             # Request was successful, print and process the response
-            # print('GET request was successful')
+            # print('POST request was successful')
             # print('Response data:', response.text)
-            data = json.loads(response.text)
+            # data = json.loads(response.text)
             # print(data["message"])
+            print(response.text)
         else:
             # Request failed with a non-200 status code, handle the error
             print('GET request failed with status code:', response.status_code)
@@ -30,7 +31,7 @@ def chiamaApi(token):
         print('An error occurred during the request:', e)
 
 # Define the URL for the POST request
-url = 'http://localhost:3000/security/login'
+url = 'http://localhost:3000/login'
 
 user = input("Username: ")
 psw = getpass.getpass("Password: ")
@@ -56,8 +57,8 @@ try:
             # print('Response data:', response.json())
 
             # Save the response to a file (authKey.txt)
-            with open('authKey.txt', 'w') as file:
-                file.write(response.text)
+            # with open('authKey.txt', 'w') as file:
+            #     file.write(response.text)
             # print(response.text)
             data = json.loads(response.text)
             token = data["token"]
