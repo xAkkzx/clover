@@ -18,6 +18,9 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { TextfieldComponent } from './textfield/textfield.component';
 import { FormsModule } from '@angular/forms';
 import { TitoloComponent } from './titolo/titolo.component';
+import { PulsanteComponent } from './pulsante/pulsante.component';
+import { RegisterComponent } from './register/register.component';
+import { LoginComponent } from './login/login.component';
 
 
 @NgModule({
@@ -25,7 +28,10 @@ import { TitoloComponent } from './titolo/titolo.component';
     AppComponent,
     ProvaComponent,
     TextfieldComponent,
-    TitoloComponent
+    TitoloComponent,
+    PulsanteComponent,
+    RegisterComponent,
+    LoginComponent
   ],
   imports: [
     FormsModule,

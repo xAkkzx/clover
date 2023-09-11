@@ -13,5 +13,6 @@ import { Input } from '@angular/core';
 export class TextfieldComponent {
   inputValue: string = ''; // Questa variabile conterrà il valore inserito nell'input
   @Input() placeholder: string = '';
+
   // Puoi aggiungere ulteriori logica o funzioni qui, se necessario
 }
