@@ -153,11 +153,17 @@ app.post("/register", async (req, res) => {
     }
     let a = await pool.query("USE autenticazione");
     // Check if user already exists
+<<<<<<< HEAD
     await pool.query("USE autenticazione");
 
     // Seconda query: SELECT * FROM utente WHERE username = 'm'
     const [rows] = await pool.execute("SELECT * FROM utente WHERE username = ?", [username]);
 
+=======
+    const [rows] = await pool.query("SELECT * FROM utente WHERE username = ?", [
+      username,
+    ]);
+>>>>>>> master
 
     if (rows.length > 0) {
       return res.status(409).send("User Already Exists. Please Login");
