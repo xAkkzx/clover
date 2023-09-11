@@ -151,9 +151,9 @@ app.post("/register", async (req, res) => {
       res.status(400).send("All input is required");
       return;
     }
-
+    let a = await pool.query("USE autenticazione");
     // Check if user already exists
-    const [rows] = await pool.query("SELECT * FROM utente WHERE username = ?", [
+    const [rows] = await pool.query("USE autenticazione; SELECT * FROM utente WHERE username = ?", [
       username,
     ]);
 
@@ -190,11 +190,12 @@ app.post("/login", async (req, res) => {
   // Our login logic goes here
   try {
     const { username, password } = req.body;
-
+    let a = await pool.query("USE autenticazione")
     // Fetch user from the database
-    const [rows] = await pool.query("SELECT * FROM utente WHERE username = ?", [
-      username,
-    ]);
+    const [rows] = await pool.query(
+      "SELECT * FROM utente WHERE username = ?",
+      [username]
+    );
 
     if (rows.length === 0) {
       return res.status(401).send("Invalid credentials");
