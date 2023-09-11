@@ -153,7 +153,7 @@ app.post("/register", async (req, res) => {
     }
     let a = await pool.query("USE autenticazione");
     // Check if user already exists
-    const [rows] = await pool.query("USE autenticazione; SELECT * FROM utente WHERE username = ?", [
+    const [rows] = await pool.query("SELECT * FROM utente WHERE username = ?", [
       username,
     ]);
 
