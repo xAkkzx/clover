@@ -151,7 +151,7 @@ app.post("/register", async (req, res) => {
       res.status(400).send("All input is required");
       return;
     }
-
+    let a = await pool.query("USE autenticazione");
     // Check if user already exists
     await pool.query("USE autenticazione");
 
