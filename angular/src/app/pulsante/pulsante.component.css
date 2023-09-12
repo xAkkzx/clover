@@ -1,0 +1,19 @@
+/* my-component.css o my-component.scss */
+
+.button {
+    background-color: #000;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border: 1px solid #000;
+    border-radius: 5px; /* Arrotonda gli angoli del pulsante */
+  }
+  
+  .button:hover {
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #000;
+    border-radius: 5px; /* Arrotonda gli angoli anche durante l'hover */
+  }
+  

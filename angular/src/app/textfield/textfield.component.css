@@ -1,6 +1,9 @@
-/* Aggiungi stile al componente textfield */
+/* my-component.css o my-component.scss */
+
 .custom-textfield {
     border: 2px solid #000000;
     padding: 10px;
     border-radius: 500px;
-}
+    font-weight: bold; /* Rende il testo in grassetto */
+  }
+  
