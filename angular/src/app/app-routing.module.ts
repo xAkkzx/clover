@@ -3,12 +3,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { RegisterComponent } from './register/register.component';
 import { LocalizedString } from '@angular/compiler';
 import { LoginComponent } from './login/login.component';
+import { GptComponent} from './gpt/gpt.component'
 const routes: Routes = [
-  { path: '', component: LoginComponent},
+
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent},
+  { path: 'gpt', component: GptComponent},
   { path: 'register', component: RegisterComponent }
   
-
 ];
 
 @NgModule({
