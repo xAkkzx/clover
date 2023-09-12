@@ -1,0 +1,13 @@
+<app-titolo [titolo]="'CLOVER'"/>
+
+<app-textfield  placeholder="Richiesta" style="position: absolute; top: 510px; left: 580px;"/>
+
+<app-pulsante pagina="login"  nome="Esci" style="position:absolute;top:20px;left:20px;"/>
+
+<button style="position:absolute;top:70px;left:20px;" mat-button [matMenuTriggerFor]="menu">Database</button>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item>Calciatori</button>
+  <button mat-menu-item>Pokemon</button>
+  <button mat-menu-item>Softeam</button>
+  <button mat-menu-item>Bookapp</button>
+</mat-menu>

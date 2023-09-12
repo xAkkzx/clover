@@ -21,17 +21,25 @@ import { TitoloComponent } from './titolo/titolo.component';
 import { PulsanteComponent } from './pulsante/pulsante.component';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
+import { GptComponent } from './gpt/gpt.component';
+
+import {Component} from '@angular/core';
+import {MatSelectModule} from '@angular/material/select';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+
 
 
 @NgModule({
   declarations: [
+    
     AppComponent,
     ProvaComponent,
     TextfieldComponent,
     TitoloComponent,
     PulsanteComponent,
     RegisterComponent,
-    LoginComponent
+    LoginComponent,
+    GptComponent
   ],
   imports: [
     FormsModule,
@@ -42,8 +50,10 @@ import { LoginComponent } from './login/login.component';
     MatMenuModule,
     MatToolbarModule,
     MatIconModule,
+    MatCheckboxModule,
     MatButtonModule,
     MatCardModule,
+    MatSelectModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
