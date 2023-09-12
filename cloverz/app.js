@@ -7,11 +7,14 @@ const fs = require("fs");
 const Papa = require("papaparse");
 const OpenAI = require("openai");
 const mssql = require("mssql");
+const cors = require('cors');
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
 const app = express();
+
+app.use(cors());
 
 app.use(express.json());
 
@@ -287,8 +290,16 @@ app.post("/login", async (req, res) => {
 });
 
 const auth = require("./middleware/auth");
-app.post("/welcome", auth, (req, res) => {
-  res.status(200).send("Welcome 🙌 ");
+app.get("/welcome", (req, res) => {
+  try{
+    console.log("aia")
+    res.status(200).send("Welcome 🙌 ");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+  
+  
 });
 
 app.post("/chat", auth, async (req, res) => {

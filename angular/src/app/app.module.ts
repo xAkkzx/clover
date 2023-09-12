@@ -26,6 +26,7 @@ import { GptComponent } from './gpt/gpt.component';
 import {Component} from '@angular/core';
 import {MatSelectModule} from '@angular/material/select';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import { HttpClientModule } from '@angular/common/http';
 
 
 
@@ -57,7 +58,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
