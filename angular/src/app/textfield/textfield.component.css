@@ -1,9 +1,10 @@
-/* my-component.css o my-component.scss */
-
+/* Stile per il campo di input (textfield) */
 .custom-textfield {
     border: 2px solid #000000;
     padding: 10px;
     border-radius: 500px;
-    font-weight: bold; /* Rende il testo in grassetto */
+    font-weight: bold;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
   }
-  

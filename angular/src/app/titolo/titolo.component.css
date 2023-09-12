@@ -1,4 +1,8 @@
-.custom-titolo{
+.custom-titolo {
     font-size: 60px;
     font-family: 'Courier New', Courier, monospace;
-}
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
