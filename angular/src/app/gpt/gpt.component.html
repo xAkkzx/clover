@@ -1,10 +1,10 @@
-<app-titolo [titolo]="'CLOVER'"/>
+<app-titolo [titolo]="'CLOVER'" style="position: absolute; top: 6%; left: 50%; transform: translate(-50%, -0%);" />
 
-<app-textfield  placeholder="Richiesta" style="position: absolute; top: 510px; left: 580px;"/>
+<app-textfield  placeholder="Richiesta" style="position: absolute; top: 80%; right: 57%; transform: translate(0%, -50%);"/>
 
-<app-pulsante pagina="login"  nome="Esci" style="position:absolute;top:20px;left:20px;"/>
+<app-pulsante pagina="login"  nome="Esci" style="position:absolute;top: 5%; right: 98%; transform: translate(0%, -50%);"/>
 
-<button style="position:absolute;top:70px;left:20px;" mat-button [matMenuTriggerFor]="menu">Database</button>
+<button style="position:absolute;top: 15%; right: 92%; transform: translate(0%, -50%);" mat-button [matMenuTriggerFor]="menu">Database</button>
 <mat-menu #menu="matMenu">
   <button mat-menu-item>Calciatori</button>
   <button mat-menu-item>Pokemon</button>
