@@ -5,6 +5,7 @@ import { LocalizedString } from '@angular/compiler';
 import { LoginComponent } from './login/login.component';
 const routes: Routes = [
   { path: '', component: LoginComponent},
+  { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent }
   
 

@@ -8,10 +8,11 @@ import { Router } from '@angular/router';
 })
 export class PulsanteComponent {
   @Input() nome: string = '';
+  @Input() pagina:string='';
   constructor(private router: Router) {}
 
-  registrati() {
-    this.router.navigate(['/register']);
+  cambiaPagina() {
+    this.router.navigate(['/',this.pagina]);
   }
 
 }
