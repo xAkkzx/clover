@@ -6,6 +6,7 @@ const mysql = require("mysql2/promise"); // Import mysql2
 const fs = require("fs");
 const Papa = require("papaparse");
 const OpenAI = require("openai");
+const mssql = require("mssql");
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -138,6 +139,68 @@ async function query(completion_text, nomeDb) {
   });
 }
 
+async function queryMSSQL(completion_text, dbName) {
+  const mssql_config = {
+    server: process.env.MSSQLBOOKAPPSRV,
+
+    user: process.env.MSSQLBOOKAPPUSR,
+
+    password: process.env.MSSQLBOOKAPPPSWD,
+
+    database: dbName,
+
+    options: {
+      trustServerCertificate: true,
+
+      crypto: {
+        rejectUnauthorized: false,
+      },
+    },
+  };
+
+  try {
+    const pool = await mssql.connect(mssql_config);
+
+    const request = pool.request();
+
+    const queries = completion_text.split(";").map((query) => query.trim());
+
+    const validQueries = queries.filter((query) => query !== "");
+
+    const queryPromises = validQueries.map((queryString) => {
+      return request
+
+        .query(queryString)
+
+        .then((result) => result)
+
+        .catch((err) => {
+          console.warn("Warning executing query:", err.message);
+
+          return null;
+        });
+    });
+
+    const results = await Promise.all(queryPromises);
+
+    for (const result of results) {
+      if (result !== null) {
+        console.log("!!!" + result);
+
+        await dentroZipitiCsv(result.recordset, "./dati.csv");
+      }
+    }
+
+    mssql.close();
+
+    return results.filter((result) => result !== null);
+  } catch (err) {
+    console.error("Error connecting to the MSSQL database:", err.message);
+
+    throw err;
+  }
+}
+
 // Logic goes here
 // Register
 app.post("/register", async (req, res) => {
@@ -230,9 +293,10 @@ app.post("/welcome", auth, (req, res) => {
 
 app.post("/chat", auth, async (req, res) => {
   try {
-    const { nomeDb, richiesta } = req.body;
+    const { nomeDb, tipoDb, richiesta } = req.body;
     const db = fs.readFileSync(`dbz/${nomeDb}Tables.txt`, "utf-8");
-
+    // const tipoDatabase = parseInt(tipoDb, 10)
+    var c; 
     const regola = process.env.REGOLAMYSQL;
     var history = [
       [db, ""],
@@ -256,7 +320,17 @@ app.post("/chat", auth, async (req, res) => {
 
       let onlyquery = await extractQuery(completion_text);
       console.log(onlyquery + "\n");
-      let c = await query(onlyquery, nomeDb);
+      if (tipoDb == "0")
+      {
+        c = await queryMSSQL(onlyquery, nomeDb);
+      }
+      else if (tipoDb == "1")
+      {
+        c = await query(onlyquery, nomeDb);
+      }
+      else{
+        res.status(500).send("Internal Server Error");
+      }
       res.status(200).send(c);
     } catch (err) {
       console.error(err);

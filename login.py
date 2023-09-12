@@ -18,8 +18,8 @@ def register():
         print("Registrazione effettuata con successo!")
         # Ottieni il token dalla risposta
         token = response.json()["token"]
-        db_name, user_request = get_db_and_request()
-        chat(token, db_name, user_request)
+        db_name, db_type, user_request = get_db_and_request()
+        chat(token, db_name, db_type, user_request)
     elif response.status_code == 409:
         print("Utente già esistente. Effettua l'accesso invece.")
         login()
@@ -41,8 +41,8 @@ def login():
     if response.status_code == 200:
         token = response.json()["token"]
         print(f"Accesso effettuato con successo. Token: {token}")
-        db_name, user_request = get_db_and_request()
-        chat(token, db_name, user_request)
+        db_name, db_type, user_request = get_db_and_request()
+        chat(token, db_name, db_type, user_request)
     elif response.status_code == 401:
         print("Credenziali non valide. Riprova.")
         login()
@@ -52,12 +52,13 @@ def login():
 # Funzione per richiedere il "Nome Database" e la "Richiesta"
 def get_db_and_request():
     db_name = input("Inserisci il Nome Database: ")
+    db_type = "1"
     user_request = input("Inserisci la Richiesta: ")
-    return db_name, user_request
+    return db_name, db_type, user_request
 
 # Funzione per chiamare /chat
-def chat(token, db_name, user_request):
-    chat_data = {"nomeDb": db_name, "richiesta": user_request}
+def chat(token, db_name, db_type, user_request):
+    chat_data = {"nomeDb": db_name, "tipoDb" : db_type, "richiesta": user_request}
     chat_response = requests.post("http://localhost:3000/chat", headers={"x-access-token": token}, json=chat_data)
     if chat_response.status_code == 200:
         print("Chiamata a /chat effettuata con successo!")
