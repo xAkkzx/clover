@@ -5,6 +5,4 @@
     border-radius: 500px;
     font-weight: bold;
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
   }
