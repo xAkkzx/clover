@@ -187,7 +187,7 @@ app.post("/register", async (req, res) => {
 });
 
 // Login
-app.post("/login", async (req, res) => {
+app.get("/login", async (req, res) => {
   // Our login logic goes here
   try {
     const { username, password } = req.body;
