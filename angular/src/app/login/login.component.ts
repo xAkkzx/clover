@@ -9,8 +9,6 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
-
-
   @Output() loginClicked: EventEmitter<void> = new EventEmitter<void>();
 
   username: string = 'm'; // Dichiarazione di variabili al di fuori della funzione
@@ -18,16 +16,15 @@ export class LoginComponent {
   azione: string = '';
   getJsonValue: any;
 
-  constructor(private router: Router, private http: HttpClient) {
-  }
+  constructor(private router: Router, private http: HttpClient) {}
 
   public eseguiAzione() {
     eval(`this.${this.azione}()`);
-}
+  }
 
-  getValue(val:string){
-    return val
-   }
+  getValue(val: string) {
+    return val;
+  }
 
   public login(usr: string, psw: string) {
     // Create an HttpHeaders object with the "Access-Control-Allow-Origin" and "Content-Type" headers
@@ -54,12 +51,21 @@ export class LoginComponent {
     };
 
     this.http
-      .post('http://localhost:3000/login', requestBodyJSON, httpOptions)
-      .subscribe((data) => {
-        console.log(data);
-        this.getJsonValue = data;
-      });
+  .post('http://localhost:3000/login', requestBodyJSON, { ...httpOptions, observe: 'response' })
+  .subscribe({
+    next: (response) => {
+      console.log(response);
+      
+      if (response.status === 200) {
+        console.log('Ok - Login effettuato');
+        this.router.navigate(['/', "gpt"])
+      }
+    },
+    error: (error) => {
+      console.error('Errore durante la richiesta:', error);
+      // Puoi gestire gli errori di rete o altri errori qui
+    }
+  });
+
   }
-
-
 }
