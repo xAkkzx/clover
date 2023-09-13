@@ -1,4 +1,4 @@
 <button style="position:absolute;top: 15%; right: 92%; transform: translate(0%, -50%);" mat-button [matMenuTriggerFor]="menu">Database</button>
 <mat-menu #menu="matMenu">
-  <button *ngFor="let item of items" mat-menu-item>{{ item }}</button>
+  <button *ngFor="let item of items" mat-menu-item (click)="onMenuItemClick(item)">{{ item }}</button>
 </mat-menu>

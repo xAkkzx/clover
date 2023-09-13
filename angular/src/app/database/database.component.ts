@@ -8,4 +8,8 @@ import { Component,Input } from '@angular/core';
 export class DatabaseComponent {
 
   @Input() items: string[] = [];
+  onMenuItemClick(item: string): void {
+    console.log(`Hai cliccato su: ${item}`);
+  }
+
 }
