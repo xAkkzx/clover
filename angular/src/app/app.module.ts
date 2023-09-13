@@ -44,6 +44,7 @@ import { ToastrModule } from 'ngx-toastr';
     GptComponent
   ],
   imports: [
+    ToastrModule,
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
