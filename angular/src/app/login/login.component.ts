@@ -3,12 +3,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { CustomToastrService } from '../custom-toastr.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
+
 export class LoginComponent {
   @Output() loginClicked: EventEmitter<void> = new EventEmitter<void>();
 
@@ -20,7 +22,8 @@ export class LoginComponent {
   constructor(
     private router: Router,
     private http: HttpClient,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private customToastrService: CustomToastrService
   ) {}
 
   public eseguiAzione() {
@@ -72,7 +75,16 @@ export class LoginComponent {
         },
         error: (error) => {
           if (error.status===401)
-              this.toastr.error(error.error, 'Errore', { positionClass: 'toast-bottom-right'});
+              if(error.error.includes('Sign In'))
+              {
+                this.customToastrService.showErrorWithLink(
+                  error.error.replace("Sign In", ""),
+                  'Sign In',
+                  'http://localhost:4200/register'
+                );
+              }else{
+                this.toastr.error(error.error, 'Error', { positionClass: 'toast-bottom-right'});
+              }
           console.log(error.status);
           console.error('Errore durante la richiesta:', error);
           // Puoi gestire gli errori di rete o altri errori qui

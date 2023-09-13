@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { CustomToastrService } from '../custom-toastr.service';
 
 @Component({
   selector: 'app-register',
@@ -21,7 +22,8 @@ export class RegisterComponent {
   constructor(
     private router: Router,
     private http: HttpClient,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private customToastrService: CustomToastrService
   ) {}
 
   public eseguiAzione() {
@@ -76,7 +78,11 @@ export class RegisterComponent {
             this.toastr.error(error.error, 'Error', { positionClass: 'toast-bottom-right'});
           else{
             if(error.status === 409){
-              this.toastr.warning(error.error, 'Warning', { positionClass: 'toast-bottom-right'});
+              this.customToastrService.showWarningWithLink(
+                error.error.replace("Login", ""),
+                'Login',
+                'http://localhost:4200/register'
+              );
             }
           }
           console.log(error.status);

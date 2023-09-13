@@ -28,6 +28,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
+import { CustomToastrService } from './custom-toastr.service';
 import { DatabaseComponent } from './database/database.component';
 
 
@@ -66,9 +67,9 @@ import { DatabaseComponent } from './database/database.component';
     ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    ToastrModule.forRoot() // ToastrModule added
+    ToastrModule.forRoot(), // ToastrModule added
   ],
-  providers: [],
+  providers: [CustomToastrService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
