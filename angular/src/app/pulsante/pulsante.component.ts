@@ -6,15 +6,21 @@ import { Router } from '@angular/router';
   selector: 'app-pulsante',
   templateUrl: './pulsante.component.html',
   styleUrls: ['./pulsante.component.css'],
+  template: '<button (click)="eseguiAzione()">{{nome}}</button>',
 })
 export class PulsanteComponent {
   @Input() nome: string = '';
   @Input() pagina:string='';
+  @Input() azione:string='';
 
   public getJsonValue: any;
   public postJsonValue: any;
 
   constructor(private router: Router, private http: HttpClient) {}
+
+  public eseguiAzione() {
+      eval(`this.${this.azione}()`);
+  }
 
   cambiaPagina() {
     this.router.navigate(['/',this.pagina]);
