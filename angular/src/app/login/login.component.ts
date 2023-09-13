@@ -2,6 +2,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,11 @@ export class LoginComponent {
   azione: string = '';
   getJsonValue: any;
 
-  constructor(private router: Router, private http: HttpClient) {}
+  constructor(
+    private router: Router,
+    private http: HttpClient,
+    private toastr: ToastrService
+  ) {}
 
   public eseguiAzione() {
     eval(`this.${this.azione}()`);
@@ -51,21 +56,27 @@ export class LoginComponent {
     };
 
     this.http
-  .post('http://localhost:3000/login', requestBodyJSON, { ...httpOptions, observe: 'response' })
-  .subscribe({
-    next: (response) => {
-      console.log(response);
-      
-      if (response.status === 200) {
-        console.log('Ok - Login effettuato');
-        this.router.navigate(['/', "gpt"])
-      }
-    },
-    error: (error) => {
-      console.error('Errore durante la richiesta:', error);
-      // Puoi gestire gli errori di rete o altri errori qui
-    }
-  });
+      .post('http://localhost:3000/login', requestBodyJSON, {
+        ...httpOptions,
+        observe: 'response',
+      })
+      .subscribe({
+        next: (response) => {
+          console.log(response);
 
+          if (response.status === 200) {
+            this.toastr.success('Login effettuato', 'Benvenuto!', { positionClass: 'toast-bottom-right'});
+            console.log('Ok - Login effettuato');
+            this.router.navigate(['/', 'gpt']);
+          }
+        },
+        error: (error) => {
+          if (error.status===401)
+              this.toastr.error(error.error, 'Errore', { positionClass: 'toast-bottom-right'});
+          console.log(error.status);
+          console.error('Errore durante la richiesta:', error);
+          // Puoi gestire gli errori di rete o altri errori qui
+        },
+      });
   }
 }
