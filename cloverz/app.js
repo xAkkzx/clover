@@ -7,7 +7,7 @@ const fs = require("fs");
 const Papa = require("papaparse");
 const OpenAI = require("openai");
 const mssql = require("mssql");
-const cors = require('cors');
+const cors = require("cors");
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -99,7 +99,7 @@ async function query(completion_text, nomeDb) {
     host: process.env.MYSQL_HOST,
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD,
-    database: nomeDb
+    database: nomeDb,
   };
   // Create a MySQL pool for handling connections
   const pool = mysql.createPool(dbConfig);
@@ -221,9 +221,16 @@ app.post("/register", async (req, res) => {
     const { username, password } = req.body;
 
     // Validate user input
-    if (!(username && password)) {
-      res.status(400).send("All input is required");
-      return;
+    if (!(username || password)) {
+      return res.status(400).send("All input is required");
+    } else {
+      if (!username) {
+        return res.status(400).send("Username required");
+      } else {
+        if (!password) {
+          return res.status(400).send("Password required");
+        }
+      }
     }
     // let a = await pool.query("USE autenticazione");
     // Check if user already exists
@@ -280,6 +287,18 @@ app.post("/login", async (req, res) => {
   try {
     const { username, password } = req.body;
 
+    if (username === "" && password === "") {
+      return res.status(401).send("Missing credentials");
+    } else {
+      if (username === "") {
+        return res.status(401).send("Missing username");
+      } else {
+        if (password === "") {
+          return res.status(401).send("Missing password");
+        }
+      }
+    }
+
     // await pool.query("USE autenticazione");
     // Seconda query: SELECT * FROM utente WHERE username = 'm'
     const [rows] = await pool.execute(
@@ -288,7 +307,7 @@ app.post("/login", async (req, res) => {
     );
 
     if (rows.length === 0) {
-      return res.status(401).send("Invalid credentials");
+      return res.status(401).send("User not found, please Sign In");
     }
 
     const user = rows[0];
@@ -297,7 +316,7 @@ app.post("/login", async (req, res) => {
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
-      return res.status(401).send("Invalid credentials");
+      return res.status(401).send("Invalid Password");
     }
 
     // Create token
@@ -332,7 +351,7 @@ app.post("/chat", auth, async (req, res) => {
     const { nomeDb, tipoDb, richiesta } = req.body;
     const db = fs.readFileSync(`dbz/${nomeDb}Tables.txt`, "utf-8");
     // const tipoDatabase = parseInt(tipoDb, 10)
-    var c; 
+    var c;
     const regola = process.env.REGOLAMYSQL;
     var history = [
       [db, ""],
@@ -356,15 +375,11 @@ app.post("/chat", auth, async (req, res) => {
 
       let onlyquery = await extractQuery(completion_text);
       console.log(onlyquery + "\n");
-      if (tipoDb == "0")
-      {
+      if (tipoDb == "0") {
         c = await queryMSSQL(onlyquery, nomeDb);
-      }
-      else if (tipoDb == "1")
-      {
+      } else if (tipoDb == "1") {
         c = await query(onlyquery, nomeDb);
-      }
-      else{
+      } else {
         res.status(500).send("Internal Server Error");
       }
       res.status(200).send(c);

@@ -22,12 +22,12 @@ import { PulsanteComponent } from './pulsante/pulsante.component';
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { GptComponent } from './gpt/gpt.component';
-
 import {Component} from '@angular/core';
 import {MatSelectModule} from '@angular/material/select';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ToastrModule } from 'ngx-toastr';
 
 
 
@@ -61,7 +61,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     BrowserAnimationsModule,
     MatSlideToggleModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot() // ToastrModule added
   ],
   providers: [],
   bootstrap: [AppComponent]
