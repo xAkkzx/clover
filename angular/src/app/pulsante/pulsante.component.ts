@@ -35,8 +35,8 @@ export class PulsanteComponent {
     this.http.get('http://localhost:3000/welcome', httpOptions).subscribe((data) => {
       console.log(data)
       this.getJsonValue = data
-      console.log("aia")
-      console.log(this.getJsonValue)
+      // console.log("aia")
+      // console.log(this.getJsonValue)
     });
     
   }

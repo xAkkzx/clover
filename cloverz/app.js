@@ -291,15 +291,17 @@ app.post("/login", async (req, res) => {
 
 const auth = require("./middleware/auth");
 app.get("/welcome", (req, res) => {
-  try{
-    console.log("aia")
-    res.status(200).send("Welcome 🙌 ");
+  try {
+    console.log("aia");
+    // Create a JSON payload and send it as the response
+    const jsonResponse = {
+      message: "Welcome nigg",
+    };
+    res.status(200).json(jsonResponse);
   } catch (err) {
     console.error(err);
     res.status(500).send("Internal Server Error");
   }
-  
-  
 });
 
 app.post("/chat", auth, async (req, res) => {
