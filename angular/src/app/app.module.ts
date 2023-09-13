@@ -27,6 +27,7 @@ import {Component} from '@angular/core';
 import {MatSelectModule} from '@angular/material/select';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -59,6 +60,7 @@ import { HttpClientModule } from '@angular/common/http';
     AppRoutingModule,
     BrowserAnimationsModule,
     MatSlideToggleModule,
+    ReactiveFormsModule,
     HttpClientModule
   ],
   providers: [],

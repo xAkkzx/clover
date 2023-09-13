@@ -1,10 +1,11 @@
 <app-titolo [titolo]="'LOGIN'" style="position: absolute; top: 8%; left: 50%; transform: translate(-50%, -0%);" />
 
-<app-pulsante pagina="gpt" nome="Accedi" azione="getMethod" style="position:absolute; top:58%; right:53.5%; transform: translate(0%, -50%);"  class="custom-button"/>
+<app-pulsante pagina="gpt" nome="Accedi" (click)="login(getValue(textfield.inputValue), getValue(textfieldpsw.inputValue))" style="position:absolute; top:58%; right:53.5%; transform: translate(0%, -50%);"  class="custom-button"/>
 
 
-<app-textfield placeholder="Username" style="position: absolute;top: 35%; right: 57%; transform: translate(0%, -50%);" />
+<app-textfield placeholder="Username" #textfield  style="position: absolute;top: 35%; right: 57%; transform: translate(0%, -50%); margin-bottom: 10px;" />
 
-<app-textfield placeholder="Password" style="position: absolute;top: 45%; right: 57%; transform: translate(0%, -50%);" />
+<app-textfield placeholder="Password" #textfieldpsw  style="position: absolute;top: 45%; right: 57%; transform: translate(0%, -50%); margin-top: 10px;" />
+
 
 <app-pulsante pagina="register" nome="Registrati" azione="cambiaPagina" style="position:absolute;top:5%;right:8%; transform: translate(0%, -50%);"  class="pagina-button" />
