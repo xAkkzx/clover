@@ -18,16 +18,6 @@ app.use(cors());
 
 app.use(express.json());
 
-// Database configuration
-const dbConfig = {
-  host: process.env.MYSQL_HOST,
-  user: process.env.MYSQL_USER,
-  password: process.env.MYSQL_PASSWORD,
-  database: process.env.MYSQL_DATABASE,
-};
-// Create a MySQL pool for handling connections
-const pool = mysql.createPool(dbConfig);
-
 function extractQuery(text) {
   const queryRegex = /SELECT[\s\S]*;/i;
 
@@ -104,10 +94,19 @@ async function dentroZipitiCsv(data, csvFilePath) {
 }
 
 async function query(completion_text, nomeDb) {
+  // Database configuration
+  const dbConfig = {
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: nomeDb
+  };
+  // Create a MySQL pool for handling connections
+  const pool = mysql.createPool(dbConfig);
   return new Promise(async (resolve, reject) => {
     try {
       const connection = await pool.getConnection();
-      await connection.query("USE " + nomeDb);
+      // await connection.query("USE " + nomeDb);
 
       const queries = completion_text.split(";").map((query) => query.trim());
       const validQueries = queries.filter((query) => query !== "");
@@ -207,6 +206,15 @@ async function queryMSSQL(completion_text, dbName) {
 // Logic goes here
 // Register
 app.post("/register", async (req, res) => {
+  // Database configuration
+  const dbConfig = {
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE,
+  };
+  // Create a MySQL pool for handling connections
+  const pool = mysql.createPool(dbConfig);
   // Our register logic starts here
   try {
     // Get user input
@@ -217,12 +225,15 @@ app.post("/register", async (req, res) => {
       res.status(400).send("All input is required");
       return;
     }
-    let a = await pool.query("USE autenticazione");
+    // let a = await pool.query("USE autenticazione");
     // Check if user already exists
-    await pool.query("USE autenticazione");
+    // await pool.query("USE autenticazione");
 
     // Seconda query: SELECT * FROM utente WHERE username = 'm'
-    const [rows] = await pool.execute("SELECT * FROM utente WHERE username = ?", [username]);
+    const [rows] = await pool.execute(
+      "SELECT * FROM utente WHERE username = ?",
+      [username]
+    );
 
     if (rows.length > 0) {
       return res.status(409).send("User Already Exists. Please Login");
@@ -254,15 +265,27 @@ app.post("/register", async (req, res) => {
 
 // Login
 app.post("/login", async (req, res) => {
+  // Database configuration
+  const dbConfig = {
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE,
+  };
+  // Create a MySQL pool for handling connections
+  const pool = mysql.createPool(dbConfig);
   // Our login logic goes here
+
+  console.log(req.body);
   try {
     const { username, password } = req.body;
 
-    await pool.query("USE autenticazione");
-
+    // await pool.query("USE autenticazione");
     // Seconda query: SELECT * FROM utente WHERE username = 'm'
-    const [rows] = await pool.execute("SELECT * FROM utente WHERE username = ?", [username]);
-
+    const [rows] = await pool.execute(
+      "SELECT * FROM utente WHERE username = ?",
+      [username]
+    );
 
     if (rows.length === 0) {
       return res.status(401).send("Invalid credentials");
@@ -295,7 +318,7 @@ app.get("/welcome", (req, res) => {
     console.log("aia");
     // Create a JSON payload and send it as the response
     const jsonResponse = {
-      message: "Welcome nigg",
+      message: "Welcome",
     };
     res.status(200).json(jsonResponse);
   } catch (err) {

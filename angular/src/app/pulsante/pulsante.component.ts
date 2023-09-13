@@ -30,7 +30,6 @@ export class PulsanteComponent {
     const httpOptions = {
       headers: headers
     };
-  
     // Send the GET request with the specified headers
     this.http.get('http://localhost:3000/welcome', httpOptions).subscribe((data) => {
       console.log(data)
@@ -38,7 +37,34 @@ export class PulsanteComponent {
       // console.log("aia")
       // console.log(this.getJsonValue)
     });
-    
   }
 
+  public login() {
+  // Create an HttpHeaders object with the "Access-Control-Allow-Origin" and "Content-Type" headers
+    const headers = new HttpHeaders({
+      'Access-Control-Allow-Origin': '*',
+      'Content-Type': 'application/json' // Set the content type to JSON
+    });
+
+    // Define the data to be sent in the request body
+    const requestBody = {
+      "username": 'admin',
+      "password": 'admin'
+    };
+
+    // Convert the requestBody object to a JSON string
+    const requestBodyJSON = JSON.stringify(requestBody);
+
+    // Define the options for the HTTP POST request, including the headers and the body
+    const httpOptions = {
+      headers: headers,
+      body: requestBodyJSON // Include the JSON request body here
+    };
+
+    this.http.post('http://localhost:3000/login', requestBodyJSON, httpOptions).subscribe((data) => {
+    console.log(data);
+    this.getJsonValue = data;
+    });
+
+  }
 }
