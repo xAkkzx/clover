@@ -6,11 +6,4 @@
 
 <app-pulsante nome="Cerca" style="position:absolute;top: 92%; right: 53%; transform: translate(0%, -50%);"/>
 
-
-<button style="position:absolute;top: 15%; right: 92%; transform: translate(0%, -50%);" mat-button [matMenuTriggerFor]="menu">Database</button>
-<mat-menu #menu="matMenu">
-  <button mat-menu-item>Calciatori</button>
-  <button mat-menu-item>Pokemon</button>
-  <button mat-menu-item>Softeam</button>
-  <button mat-menu-item>Bookapp</button>
-</mat-menu>
+<app-database [items]="['Calciatori', 'Pokemon', 'Softeam', 'Bookapp']"></app-database>

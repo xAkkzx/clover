@@ -28,6 +28,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
+import { DatabaseComponent } from './database/database.component';
 
 
 
@@ -41,7 +42,8 @@ import { ToastrModule } from 'ngx-toastr';
     PulsanteComponent,
     RegisterComponent,
     LoginComponent,
-    GptComponent
+    GptComponent,
+    DatabaseComponent
   ],
   imports: [
     ToastrModule,
