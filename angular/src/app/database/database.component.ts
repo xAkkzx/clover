@@ -6,9 +6,10 @@ import { Component,Input } from '@angular/core';
   styleUrls: ['./database.component.css']
 })
 export class DatabaseComponent {
-
+  @Input() nome:string ='';
   @Input() items: string[] = [];
   onMenuItemClick(item: string): void {
+    this.nome= item;
     console.log(`Hai cliccato su: ${item}`);
   }
 
