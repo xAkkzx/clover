@@ -4,7 +4,7 @@
 
 <app-pulsante (click)="esci()" nome="Esci" style="position:absolute;top: 15%; right: 98%; transform: translate(0%, -50%);"/>
 
-<app-pulsante nome="Cerca"  (click)="gptRes(getValue(sceltaDb.nome),getValue(richiesta.inputValue))" style="position:absolute;top: 92%; right: 53%; transform: translate(0%, -50%);"/>
+<app-pulsante nome="Cerca"  (click)="chat(getValue(sceltaDb.nome), '1', getValue(richiesta.inputValue))" style="position:absolute;top: 92%; right: 53%; transform: translate(0%, -50%);"/>
 
 <app-database nome="Database" #sceltaDb [items]="['Calciatori', 'Pokemon', 'Softeam', 'Bookapp']"></app-database>
 
