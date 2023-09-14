@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Output, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Output,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+} from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -7,17 +14,17 @@ import { CustomToastrService } from '../custom-toastr.service';
 import { GlobalService } from '../global.service';
 import { TextfieldComponent } from '../textfield/textfield.component';
 
-
 @Component({
   selector: 'app-gpt',
   templateUrl: './gpt.component.html',
-  styleUrls: ['./gpt.component.css']
+  styleUrls: ['./gpt.component.css'],
 })
-export class GptComponent implements AfterViewInit{
-  token : string;
-  @ViewChild(TextfieldComponent, { static: false }) textfieldRic!: TextfieldComponent;
+export class GptComponent implements AfterViewInit {
+  token: string;
+  @ViewChild(TextfieldComponent, { static: false })
+  textfieldRic!: TextfieldComponent;
   chatMessages: { text: string; type: string }[] = [];
-  
+
   @Output() loginClicked: EventEmitter<void> = new EventEmitter<void>();
 
   username: string = 'm'; // Dichiarazione di variabili al di fuori della funzione
@@ -33,9 +40,10 @@ export class GptComponent implements AfterViewInit{
     private globalService: GlobalService,
     private el: ElementRef
   ) {
-    this.token = this.globalService.getGlobalVariable();
+    this.token =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im0iLCJpYXQiOjE2OTQ3MDI2NDIsImV4cCI6MTY5NDcwOTg0Mn0.7kd-UXugooKvpRLYfk-cDqHsO8T8epX3r8orAiE7bYE';
   }
-   @ViewChild('chatContainer') private chatContainer!: ElementRef;
+  @ViewChild('chatContainer') private chatContainer!: ElementRef;
 
   ngAfterViewInit() {
     if (this.textfieldRic) {
@@ -45,7 +53,7 @@ export class GptComponent implements AfterViewInit{
       //console.log("aa");
       const chatContainerElement = this.chatContainer.nativeElement;
       // Use chatContainerElement as needed
-    }else{
+    } else {
       //console.log("suca")
     }
   }
@@ -58,18 +66,21 @@ export class GptComponent implements AfterViewInit{
     return val;
   }
 
-  public chat(nomeDbz : any, tipoDbz : any, richiestaz : any){
+  public chat(nomeDbz: any, tipoDbz: any, richiestaz: any) {
+    let res = '';
+
+    let ndb = nomeDbz.toLowerCase();
 
     const headers = new HttpHeaders({
       'Access-Control-Allow-Origin': '*',
       'Content-Type': 'application/json', // Set the content type to JSON
-      'x-access-token': this.token
+      'x-access-token': this.token,
     });
 
     const requestBody = {
-      nomeDb : nomeDbz,
-      tipoDb : tipoDbz,
-      richiesta: richiestaz // Usa this.password per ottenere il valore dall'input
+      nomeDb: ndb,
+      tipoDb: tipoDbz,
+      richiesta: richiestaz, // Usa this.password per ottenere il valore dall'input
     };
     // Convert the requestBody object to a JSON string
     const requestBodyJSON = JSON.stringify(requestBody);
@@ -96,11 +107,9 @@ export class GptComponent implements AfterViewInit{
       lines.push(currentLine);
     }
     const formattedRequest = lines.join('\n');
-    const response = 'This is a simulated response for:\n' + formattedRequest;
     this.chatMessages.push({ text: formattedRequest, type: 'request' });
-    this.chatMessages.push({ text: response, type: 'response' });
     setTimeout(() => {
-      console.log("A");
+      console.log('A');
       this.scrollToBottom();
     });
 
@@ -112,34 +121,45 @@ export class GptComponent implements AfterViewInit{
       .subscribe({
         next: (response) => {
           console.log(response);
-          
+
           if (response.status === 200) {
             // this.toastr.success('Login effettuato', 'Benvenuto!', { positionClass: 'toast-bottom-right'});
+            ///console.log(response.body);
             console.log('Risposta arrivata');
+            res = JSON.stringify(response.body);
+            //console.log(this.formatJSONToTable(res))
+           this.tab(response.body);
+           this.formatAndPrintResponse(response.body);
+
+            this.chatMessages.push({
+              text: res,
+              type: 'response',
+            });
+
             // this.router.navigate(['/', 'gpt']);
           }
         },
         error: (error) => {
-          if (error.status===500)
-              if(error.error.includes('Sign In'))
-              {
-                this.customToastrService.showErrorWithLink(
-                  error.error.replace("Sign In", ""),
-                  'Sign In',
-                  'http://localhost:4200/register'
-                );
-              }else{
-                this.toastr.error(error.error, 'Error', { positionClass: 'toast-bottom-right'});
-              }
-          if(error.status === 401)
-          {
+          if (error.status === 500)
+            if (error.error.includes('Sign In')) {
+              this.customToastrService.showErrorWithLink(
+                error.error.replace('Sign In', ''),
+                'Sign In',
+                'http://localhost:4200/register'
+              );
+            } else {
+              this.toastr.error(error.error, 'Error', {
+                positionClass: 'toast-bottom-right',
+              });
+            }
+          if (error.status === 401) {
             this.customToastrService.showErrorWithLink(
-                  error.error.replace("Sign In", ""),
-                  'Sign In',
-                  'http://localhost:4200/login'
-                );
+              error.error.replace('Sign In', ''),
+              'Sign In',
+              'http://localhost:4200/login'
+            );
           }
-            
+
           console.log(error.status);
           console.error('Errore durante la richiesta:', error);
           // Puoi gestire gli errori di rete o altri errori qui
@@ -147,9 +167,8 @@ export class GptComponent implements AfterViewInit{
       });
   }
 
-  public esci()
-  {
-    this.globalService.setGlobalVariable("");
+  public esci() {
+    this.globalService.setGlobalVariable('');
     this.router.navigate(['/', 'login']);
   }
 
@@ -157,16 +176,49 @@ export class GptComponent implements AfterViewInit{
     this.chatMessages = [];
   }
 
-
-
   private scrollToBottom() {
-      if (this.chatContainer && this.chatContainer.nativeElement) {
-        console.log("chatContainer and nativeElement exist");
-        const chatContainerElement = this.chatContainer.nativeElement;
-        console.log("chatContainerElement:", chatContainerElement);
-        chatContainerElement.scrollTop = chatContainerElement.scrollHeight;
-      } else {
-        console.log("chatContainer or nativeElement is missing");
-      }
+    if (this.chatContainer && this.chatContainer.nativeElement) {
+      console.log('chatContainer and nativeElement exist');
+      const chatContainerElement = this.chatContainer.nativeElement;
+      console.log('chatContainerElement:', chatContainerElement);
+      chatContainerElement.scrollTop = chatContainerElement.scrollHeight;
+    } else {
+      console.log('chatContainer or nativeElement is missing');
+    }
   }
+
+  private tab(dataObject: any) {
+    // Initialize an empty string to store the table as a string
+    let tableString = '';
+  
+    // Get the keys of the dataObject
+    const keys = Object.keys(dataObject);
+  
+    // Iterate through the keys to dynamically generate headers and add rows
+    keys.forEach((key) => {
+      // Generate headers
+      tableString += key + '\t';
+  
+      // Generate values for the current key
+      const value = dataObject[key];
+      tableString += value + '\t';
+    });
+  
+    // Print the table
+    console.log(tableString);
+  }
+
+  private formatAndPrintResponse(responseData: any): void {
+    if (!responseData || responseData.length === 0) {
+      console.log('Nessun dato presente nella risposta.');
+    } else {
+      responseData.forEach((object:any, index:any) => {
+        const formattedObject = Object.keys(object)
+          .map((key) => `${key}: ${object[key]}`)
+          .join(', ');
+        console.log(`${index}: ${formattedObject}`);
+      });
+    }
+  }
+  
 }
