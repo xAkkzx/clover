@@ -157,8 +157,6 @@ export class GptComponent implements AfterViewInit{
     this.chatMessages = [];
   }
 
-
-
   private scrollToBottom() {
       if (this.chatContainer && this.chatContainer.nativeElement) {
         console.log("chatContainer and nativeElement exist");
