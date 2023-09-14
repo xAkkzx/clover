@@ -1,4 +1,5 @@
 /* Styles for the chat container */
+@import "~bootstrap-icons/font/bootstrap-icons.css";
 #chatContainer {
     position: relative;
     width: 800px;
