@@ -30,6 +30,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { CustomToastrService } from './custom-toastr.service';
 import { DatabaseComponent } from './database/database.component';
+import { MenuComponent } from './menu/menu.component';
 
 
 
@@ -44,7 +45,8 @@ import { DatabaseComponent } from './database/database.component';
     RegisterComponent,
     LoginComponent,
     GptComponent,
-    DatabaseComponent
+    DatabaseComponent,
+    MenuComponent
   ],
   imports: [
     ToastrModule,
