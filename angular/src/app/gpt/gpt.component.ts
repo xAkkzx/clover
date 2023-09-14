@@ -7,6 +7,7 @@ import { CustomToastrService } from '../custom-toastr.service';
 import { GlobalService } from '../global.service';
 import { TextfieldComponent } from '../textfield/textfield.component';
 
+
 @Component({
   selector: 'app-gpt',
   templateUrl: './gpt.component.html',
@@ -41,11 +42,11 @@ export class GptComponent implements AfterViewInit{
       this.textfieldRic.resetValue();
     }
     if (this.chatContainer && this.chatContainer.nativeElement) {
-      console.log("aa");
+      //console.log("aa");
       const chatContainerElement = this.chatContainer.nativeElement;
       // Use chatContainerElement as needed
     }else{
-      console.log("suca")
+      //console.log("suca")
     }
   }
 
@@ -151,6 +152,13 @@ export class GptComponent implements AfterViewInit{
     this.globalService.setGlobalVariable("");
     this.router.navigate(['/', 'login']);
   }
+
+  public pulisciChat() {
+    this.chatMessages = [];
+  }
+
+
+
   private scrollToBottom() {
       if (this.chatContainer && this.chatContainer.nativeElement) {
         console.log("chatContainer and nativeElement exist");

@@ -2,15 +2,16 @@
 
 <app-textfield  placeholder="Richiesta" #richiesta style="position: absolute; top: 80%; right: 57%; transform: translate(0%, -50%);"/>
 
-<app-pulsante (click)="esci()" nome="Esci" style="position:absolute;top: 15%; right: 98%; transform: translate(0%, -50%);"/>
+<app-pulsante nome="Esci" pagina="login" azione="cambiaPagina" style="position:absolute;top: 15%; right: 98%; transform: translate(0%, -50%);"/>
 
 <app-pulsante nome="Cerca"  (click)="chat(getValue(sceltaDb.nome), '1', getValue(richiesta.inputValue))" style="position:absolute;top: 92%; right: 53%; transform: translate(0%, -50%);"/>
+
+<app-pulsante nome="Pulisci" (click)="pulisciChat()" style="position:absolute;top: 92%; right: 63%; transform: translate(0%, -50%);"/>
 
 <app-database nome="Database" #sceltaDb [items]="['Calciatori', 'Pokemon', 'Softeam', 'Bookapp']"></app-database>
 
 <div id="chatContainer" #chatContainer style="position: absolute; bottom: 20%; right: 20%; transform: translate(0%, -20%); ;">
     <div *ngFor="let message of chatMessages" [class]="message.type === 'request' ? 'request-message' : 'response-message'">{{ message.text }}</div>
-  </div>
+  </div> 
 
-  
   
