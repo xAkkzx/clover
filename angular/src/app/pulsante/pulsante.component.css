@@ -1,4 +1,5 @@
 /* my-component.css o my-component.scss */
+@import "~bootstrap-icons/font/bootstrap-icons.css";
 
 .button {
   background-color: #000;
