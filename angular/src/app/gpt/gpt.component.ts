@@ -1,18 +1,21 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CustomToastrService } from '../custom-toastr.service';
 import { GlobalService } from '../global.service';
+import { TextfieldComponent } from '../textfield/textfield.component';
 
 @Component({
   selector: 'app-gpt',
   templateUrl: './gpt.component.html',
   styleUrls: ['./gpt.component.css']
 })
-export class GptComponent {
+export class GptComponent implements AfterViewInit{
   token : string;
+  @ViewChild(TextfieldComponent, { static: false }) textfieldRic!: TextfieldComponent;
+  private ngAfterViewInitExecuted = false;
 
   constructor(
     private router: Router,
@@ -22,6 +25,14 @@ export class GptComponent {
     private globalService: GlobalService
   ) {
     this.token = this.globalService.getGlobalVariable();
+  }
+
+  ngAfterViewInit() {
+    // Access this.textfieldRic.nativeElement here
+    if (this.textfieldRic) {
+      // Reset the text field's value to an empty string
+      this.textfieldRic.resetValue();
+    }
   }
 
   getValue(val: string) {
@@ -48,6 +59,8 @@ export class GptComponent {
       headers: headers,
       body: requestBodyJSON, // Include the JSON request body here
     };
+
+    this.ngAfterViewInit();
 
     this.http
       .post('http://localhost:3000/chat', requestBodyJSON, {
@@ -76,10 +89,25 @@ export class GptComponent {
               }else{
                 this.toastr.error(error.error, 'Error', { positionClass: 'toast-bottom-right'});
               }
+          if(error.status === 401)
+          {
+            this.customToastrService.showErrorWithLink(
+                  error.error.replace("Sign In", ""),
+                  'Sign In',
+                  'http://localhost:4200/login'
+                );
+          }
+            
           console.log(error.status);
           console.error('Errore durante la richiesta:', error);
           // Puoi gestire gli errori di rete o altri errori qui
         },
       });
+  }
+
+  public esci()
+  {
+    this.globalService.setGlobalVariable("");
+    this.router.navigate(['/', 'login']);
   }
 }

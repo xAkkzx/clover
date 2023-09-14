@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class GlobalService {
-  private globalVariable: any; // Define your global variable here
+  private globalVariable: any = "a"; // Define your global variable here
 
   setGlobalVariable(value: any): void {
     this.globalVariable = value;

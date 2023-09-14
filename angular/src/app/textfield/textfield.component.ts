@@ -15,4 +15,7 @@ export class TextfieldComponent {
   @Input() placeholder: string = '';
 
   // Puoi aggiungere ulteriori logica o funzioni qui, se necessario
+  resetValue(){
+    this.inputValue = '';
+  }
 }
