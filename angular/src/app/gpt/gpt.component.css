@@ -1,0 +1,11 @@
+#mioDiv {
+    position: relative; /* Imposta la posizione relativa */
+    top: 120px; /* Sposta l'elemento verso il basso di 20 pixel */
+    left: 410px; /* Sposta l'elemento verso destra di 30 pixel */
+    background-color: rgb(0, 0, 10); 
+    color: rgb(221, 37, 37); 
+    width: 540px; /* Imposta la larghezza a 200 pixel */
+    height: 310px; /* Imposta l'altezza a 100 pixel */
+    overflow-y: scroll; /* Aggiunge una barra di scorrimento verticale se necessario */
+    border: 1px solid #ccc;
+}

@@ -1,0 +1,8 @@
+.example-spacer {
+    flex: 1 1 auto;
+}
+
+.custom-image {
+    width: 50px; /* Larghezza desiderata in pixel */
+    height: 50px; /* Altezza desiderata in pixel */
+}
