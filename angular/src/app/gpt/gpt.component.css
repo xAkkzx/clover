@@ -1,11 +1,73 @@
-#mioDiv {
-    position: relative; /* Imposta la posizione relativa */
-    top: 120px; /* Sposta l'elemento verso il basso di 20 pixel */
-    left: 410px; /* Sposta l'elemento verso destra di 30 pixel */
-    background-color: rgb(0, 0, 10); 
-    color: rgb(221, 37, 37); 
-    width: 540px; /* Imposta la larghezza a 200 pixel */
-    height: 310px; /* Imposta l'altezza a 100 pixel */
-    overflow-y: scroll; /* Aggiunge una barra di scorrimento verticale se necessario */
-    border: 1px solid #ccc;
+/* Styles for the chat container */
+#chatContainer {
+    position: relative;
+    width: 800px;
+   height: 300px;
+    overflow-y: auto;
+    background-color: black;
+    color: white;
+    border: 2px solid #ccc;
+    display: flex;
+    flex-direction: column; /* Keep the default column direction */
+    align-items: flex-end; /* Align items to the right */
+    padding: 4px; /* Add some padding to the chat container */
+    border-radius: 30px; /* Rounded corners for the chat box */
+    margin-right: auto; /* Push response messages to the left */
+
+  }
+  
+  /* Styles for each chat message */
+  .chat-message {
+    margin-bottom: 8px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    max-width: 70%; /* Adjust as needed */
+  }
+  
+  /* Styles for request messages (aligned to the right) */
+  .request-message {
+    text-align: right;
+    background-color: #007bff; /* Blue background for requests */
+    color: white; /* White text color for requests */
+    border-radius: 10px; /* Rounded corners for the message box */
+    padding: 10px; /* Add padding for spacing within the message box */
+    margin-left: auto; /* Push request messages to the right */
+    max-width: 45ch; /* Limit the width to 23 characters */
+    margin-bottom: 5px; /* Add space between request and response messages */
+  }
+  
+  /* Styles for response messages (aligned to the left) */
+  .response-message {
+    text-align: left;
+    background-color: #505355; /* Gray background for responses */
+    color: white; /* Black text color for responses */
+    border-radius: 10px; /* Rounded corners for the message box */
+    padding: 10px; /* Add padding for spacing within the message box */
+    margin-right: auto; /* Push response messages to the left */
+    margin-bottom: 5px; /* Add space between request and response messages */
+  }
+  
+  
+  /* Styling for the scrollbar */
+  #chatContainer::-webkit-scrollbar {
+    width: 8px; /* Set the width of the scrollbar */
+  }
+  
+  #chatContainer::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, grey, white); /* Gradient from black to white */
+    border-radius: 4px; /* Rounded corners for the thumb */
+  }
+  
+  #chatContainer::-webkit-scrollbar-track {
+    background-color: transparent; /* Background color of the track */
+    border-radius: 4px; /* Rounded corners for the track */
+  }
+
+  /* Adjust the right padding for the scrollbar */
+#chatContainer::after {
+    content: '';
+    width: 8px; /* Set the width to match scrollbar width */
+    flex: none; /* Ensure the element doesn't affect layout */
 }
+  

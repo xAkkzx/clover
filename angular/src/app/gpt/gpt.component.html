@@ -1,14 +1,16 @@
 <app-titolo [titolo]="'CLOVER'" style="position: absolute; top: 6%; left: 50%; transform: translate(-50%, -0%);" />
 
-<app-textfield  placeholder="Richiesta" #textfieldRic style="position: absolute; top: 80%; right: 57%; transform: translate(0%, -50%);"/>
+<app-textfield  placeholder="Richiesta" #richiesta style="position: absolute; top: 80%; right: 57%; transform: translate(0%, -50%);"/>
 
 <app-pulsante (click)="esci()" nome="Esci" style="position:absolute;top: 15%; right: 98%; transform: translate(0%, -50%);"/>
 
-<app-pulsante nome="Cerca" (click)="chat('pokemon', '1', getValue(textfieldRic.inputValue))" style="position:absolute;top: 92%; right: 53%; transform: translate(0%, -50%);"/>
+<app-pulsante nome="Cerca"  (click)="gptRes(getValue(sceltaDb.nome),getValue(richiesta.inputValue))" style="position:absolute;top: 92%; right: 53%; transform: translate(0%, -50%);"/>
 
-<app-database nome="Database" [items]="['Calciatori', 'Pokemon', 'Softeam', 'Bookapp']"></app-database>
+<app-database nome="Database" #sceltaDb [items]="['Calciatori', 'Pokemon', 'Softeam', 'Bookapp']"></app-database>
 
-<div id="mioDiv">
-    <h1>CIAODs</h1>
+<div id="chatContainer" #chatContainer style="position: absolute; bottom: 20%; right: 20%; transform: translate(0%, -20%); ;">
+    <div *ngFor="let message of chatMessages" [class]="message.type === 'request' ? 'request-message' : 'response-message'">{{ message.text }}</div>
+  </div>
 
-</div>
+  
+  
