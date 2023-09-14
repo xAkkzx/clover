@@ -4,6 +4,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CustomToastrService } from '../custom-toastr.service';
+import { GlobalService } from '../global.service';
 
 @Component({
   selector: 'app-register',
@@ -23,7 +24,8 @@ export class RegisterComponent {
     private router: Router,
     private http: HttpClient,
     private toastr: ToastrService,
-    private customToastrService: CustomToastrService
+    private customToastrService: CustomToastrService,
+    private globalService: GlobalService
   ) {}
 
   public eseguiAzione() {
@@ -32,6 +34,14 @@ export class RegisterComponent {
 
   getValue(val: string) {
     return val;
+  }
+
+  extractTokenFromResponse(response: any): string | null {
+    if (response && response.body && response.body.token) {
+      return response.body.token;
+    } else {
+      return null;
+    }
   }
 
   public registra(usr: string, psw: string) {
@@ -70,6 +80,8 @@ export class RegisterComponent {
           if (response.status === 201) {
             this.toastr.success('Registrazione effettuata', 'Benvenuto!', { positionClass: 'toast-bottom-right'} );
             console.log('Ok - Registrazione effettuata');
+            let token = this.extractTokenFromResponse(response)
+            this.globalService.setGlobalVariable(token);
             this.router.navigate(['/', 'gpt']);
           }
         },

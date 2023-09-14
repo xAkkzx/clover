@@ -283,7 +283,7 @@ app.post("/login", async (req, res) => {
   const pool = mysql.createPool(dbConfig);
   // Our login logic goes here
 
-  console.log(req.body);
+  // console.log(req.body);
   try {
     const { username, password } = req.body;
 
@@ -392,5 +392,15 @@ app.post("/chat", auth, async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+app.get("/protected", auth, (req, res) => {
+  try{
+    res.json({ message: "Access granted!" });
+  } catch(err)
+  {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
+})
 
 module.exports = app;

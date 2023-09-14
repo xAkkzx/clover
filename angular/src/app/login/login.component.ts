@@ -4,6 +4,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CustomToastrService } from '../custom-toastr.service';
+import { GlobalService } from '../global.service';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +24,8 @@ export class LoginComponent {
     private router: Router,
     private http: HttpClient,
     private toastr: ToastrService,
-    private customToastrService: CustomToastrService
+    private customToastrService: CustomToastrService,
+    private globalService: GlobalService
   ) {}
 
   public eseguiAzione() {
@@ -32,6 +34,14 @@ export class LoginComponent {
 
   getValue(val: string) {
     return val;
+  }
+
+  extractTokenFromResponse(response: any): string | null {
+    if (response && response.body && response.body.token) {
+      return response.body.token;
+    } else {
+      return null;
+    }
   }
 
   public login(usr: string, psw: string) {
@@ -66,10 +76,12 @@ export class LoginComponent {
       .subscribe({
         next: (response) => {
           console.log(response);
-
+          
           if (response.status === 200) {
             this.toastr.success('Login effettuato', 'Benvenuto!', { positionClass: 'toast-bottom-right'});
             console.log('Ok - Login effettuato');
+            let token = this.extractTokenFromResponse(response)
+            this.globalService.setGlobalVariable(token);
             this.router.navigate(['/', 'gpt']);
           }
         },
