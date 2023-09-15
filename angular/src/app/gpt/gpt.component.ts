@@ -40,8 +40,7 @@ export class GptComponent implements AfterViewInit {
     private globalService: GlobalService,
     private el: ElementRef
   ) {
-    this.token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImEiLCJpYXQiOjE2OTQ3Nzk2MzksImV4cCI6MTY5NDc4NjgzOX0.7YcP8zk7ALT9If2qEsChyutnjB9DoHWmgOWiBj2rmMc';
+    this.token = globalService.getGlobalVariable();
   }
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
 
