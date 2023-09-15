@@ -41,7 +41,7 @@ export class GptComponent implements AfterViewInit {
     private el: ElementRef
   ) {
     this.token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im0iLCJpYXQiOjE2OTQ3MDI2NDIsImV4cCI6MTY5NDcwOTg0Mn0.7kd-UXugooKvpRLYfk-cDqHsO8T8epX3r8orAiE7bYE';
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im0iLCJpYXQiOjE2OTQ3NjE4OTksImV4cCI6MTY5NDc2OTA5OX0.ruaEV7WHDzKgppEq06luzP0f5o6htvwkMdvzdtpCuiQ';
   }
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
 
@@ -67,15 +67,18 @@ export class GptComponent implements AfterViewInit {
   }
 
   public chat(nomeDbz: any, tipoDbz: any, richiestaz: any) {
-    let res = '';
+    console.log("suca")
+    let res = 'x';
 
     let ndb = nomeDbz.toLowerCase();
-
+    console.log("suca1")
     const headers = new HttpHeaders({
       'Access-Control-Allow-Origin': '*',
       'Content-Type': 'application/json', // Set the content type to JSON
       'x-access-token': this.token,
     });
+
+    console.log("suca2")
 
     const requestBody = {
       nomeDb: ndb,
@@ -108,10 +111,7 @@ export class GptComponent implements AfterViewInit {
     }
     const formattedRequest = lines.join('\n');
     this.chatMessages.push({ text: formattedRequest, type: 'request' });
-    setTimeout(() => {
-      console.log('A');
-      this.scrollToBottom();
-    });
+
 
     this.http
       .post('http://localhost:3000/chat', requestBodyJSON, {
@@ -126,14 +126,25 @@ export class GptComponent implements AfterViewInit {
             // this.toastr.success('Login effettuato', 'Benvenuto!', { positionClass: 'toast-bottom-right'});
             ///console.log(response.body);
             console.log('Risposta arrivata');
-            res = JSON.stringify(response.body);
-            //console.log(this.formatJSONToTable(res))
-           this.tab(response.body);
-           this.formatAndPrintResponse(response.body);
+            if (typeof response.body === 'object') {
+              res = JSON.stringify(response.body);
+            }
+            // console.log(this.formatJSONToTable(res))
+            console.log(response.body);
+            console.log(this.formatResponseAsTable(response.body));
+            res = this.formatResponseAsTable(response.body)
+            console.log("AO\n" + res + "\nAO");
+          //  this.tab(response.body);
+          //  this.formatAndPrintResponse(response.body);
 
             this.chatMessages.push({
               text: res,
               type: 'response',
+            });
+
+            setTimeout(() => {
+              console.log('A');
+              this.scrollToBottom();
             });
 
             // this.router.navigate(['/', 'gpt']);
@@ -220,5 +231,36 @@ export class GptComponent implements AfterViewInit {
       });
     }
   }
+
+  private formatResponseAsTable(responseBody: any): string {
+    if (Array.isArray(responseBody) && responseBody.length === 1) {
+      const pokemonData = responseBody[0] as { [key: string]: any }[];
+  
+      const columns = Object.keys(pokemonData[0]);
+      const headerRow = `<tr>${columns.map((column) => `<th>${column}</th>`).join('</th><th>')}</th>`;
+      
+      const dataRows = pokemonData.map((pokemon) => {
+        const rowContent = columns.map((column) => `<td>${pokemon[column]}</td>`).join('</td><td>');
+        return `<tr>${rowContent}</td>`;
+      });
+  
+      const tableString = `<table class="center-table">${headerRow}${dataRows.join('</tr><tr>')}</tr>`; // Aggiungi la classe "center-table" alla tabella
+  
+      return tableString;
+    } else {
+      return '';
+    }
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
 }
