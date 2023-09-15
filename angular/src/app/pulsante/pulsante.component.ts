@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-pulsante',
@@ -13,11 +14,12 @@ export class PulsanteComponent {
   @Input() pagina: string = '';
   @Input() azione: string = '';
   @Input() parametri: string = '';
+  @Input() img:string='';
 
   public getJsonValue: any;
   public postJsonValue: any;
 
-  constructor(private router: Router, private http: HttpClient) {}
+  constructor(private router: Router, private http: HttpClient,private toastr: ToastrService,) {}
 
   public eseguiAzione() {
     if(this.azione!='')
@@ -26,6 +28,11 @@ export class PulsanteComponent {
     }
       
   }
+
+niente(){
+  this.toastr.warning('Funzione non ancora implementata','Attenzione', { positionClass: 'toast-bottom-right'});
+}
+
 
   cambiaPagina() {
     this.router.navigate(['/', this.pagina]);
