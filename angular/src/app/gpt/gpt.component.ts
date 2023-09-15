@@ -151,18 +151,37 @@ export class GptComponent implements AfterViewInit {
         },
         error: (error) => {
           if (error.status === 500)
-            if (error.error.includes('Sign In')) {
-              this.customToastrService.showErrorWithLink(
-                error.error.replace('Sign In', ''),
-                'Sign In',
-                'http://localhost:4200/register'
-              );
-            } else {
-              this.toastr.error(error.error, 'Error', {
-                positionClass: 'toast-bottom-right',
-              });
-            }
+            // if (error.error.includes('Sign In')) {
+            //   this.customToastrService.showErrorWithLink(
+            //     error.error.replace('Sign In', ''),
+            //     'Sign In',
+            //     'http://localhost:4200/register'
+            //   );
+            // } else {
+            //   this.toastr.error(error.error, 'Error', {
+            //     positionClass: 'toast-bottom-right',
+            //   });
+            // }
+
+            this.chatMessages.push({
+              text: 'errore durante elaborazione messaggio',
+              type: 'response',
+            })
+
+            setTimeout(() => {
+              this.scrollToBottom();
+            });
+            
           if (error.status === 401) {
+            this.chatMessages.push({
+              text: 'Accesso non autorizzato',
+              type: 'response',
+            })
+
+            setTimeout(() => {
+              this.scrollToBottom();
+            });
+
             this.customToastrService.showErrorWithLink(
               error.error.replace('Sign In', ''),
               'Sign In',
