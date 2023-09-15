@@ -2,7 +2,7 @@
 
 <app-textfield  placeholder="Richiesta" #richiesta style="position: absolute; top: 80%; right: 57%; transform: translate(0%, -50%);"/>
 
-<app-pulsante img="bi bi-box-arrow-left" pagina="login" azione="cambiaPagina" style="position:absolute;top: 15%; right: 98%; transform: translate(0%, -50%);"/>
+<app-pulsante img="bi bi-box-arrow-left" pagina="login" (click)="esci()" style="position:absolute;top: 15%; right: 98%; transform: translate(0%, -50%);"/>
 
 <app-pulsante img="bi bi-send-fill" (click)="chat(getValue(sceltaDb.nome), '1', getValue(richiesta.inputValue))" style="position:absolute;top: 92%; right: 42%; transform: translate(0%, -50%);"/>
 
