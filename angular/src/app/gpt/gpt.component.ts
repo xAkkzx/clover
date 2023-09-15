@@ -150,7 +150,19 @@ export class GptComponent implements AfterViewInit {
           }
         },
         error: (error) => {
+          if (error.status === 405)
+          {
+            this.chatMessages.push({
+              text: 'Non è stato possibile eseguire la tua richiesta.',
+              type: 'response',
+            })
+
+            setTimeout(() => {
+              this.scrollToBottom();
+            });
+          }
           if (error.status === 500)
+          {
             // if (error.error.includes('Sign In')) {
             //   this.customToastrService.showErrorWithLink(
             //     error.error.replace('Sign In', ''),
@@ -171,7 +183,7 @@ export class GptComponent implements AfterViewInit {
             setTimeout(() => {
               this.scrollToBottom();
             });
-            
+          }
           if (error.status === 401) {
             this.chatMessages.push({
               text: 'Accesso non autorizzato',
