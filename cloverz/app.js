@@ -11,6 +11,9 @@ const cors = require("cors");
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
+var messages = [];
+let numRichiesta = 0;
+let dataBaseVecchio = "";
 
 const app = express();
 
@@ -350,28 +353,54 @@ app.post("/chat", auth, async (req, res) => {
   try {
     const { nomeDb, tipoDb, richiesta } = req.body;
     const db = fs.readFileSync(`dbz/${nomeDb}Tables.txt`, "utf-8");
-    // const tipoDatabase = parseInt(tipoDb, 10)
     var c;
     const regola = process.env.REGOLAMYSQL;
-    var history = [
-      [db, ""],
-      [regola, ""],
-    ];
-    const messages = [];
-    for (const [input_text, completion_text] of history) {
-      messages.push({ role: "user", content: input_text });
+    // const tipoDatabase = parseInt(tipoDb, 10)
 
-      messages.push({ role: "assistant", content: completion_text });
+    if(numRichiesta == 0)
+    {
+      dataBaseVecchio = nomeDb;
+      messages = [];
+      var history = [
+        [db, ""],
+        [regola, ""],
+      ];
+      for (const [input_text, completion_text] of history) {
+        messages.push({ role: "user", content: input_text });
+
+        messages.push({ role: "assistant", content: completion_text });
+      }
+      numRichiesta++;
     }
+    else if (dataBaseVecchio != nomeDb) {
+      numRichiesta = 1;
+      messages = [];
+      var history = [
+        [db, ""],
+        [regola, ""],
+      ];
+      for (const [input_text, completion_text] of history) {
+        messages.push({ role: "user", content: input_text });
+
+        messages.push({ role: "assistant", content: completion_text });
+      }
+      dataBaseVecchio = nomeDb;
+    } else if (dataBaseVecchio == nomeDb) {
+      numRichiesta++;
+    }
+
     messages.push({ role: "user", content: richiesta });
+
     try {
       const completion = await openai.chat.completions.create({
-        model: "gpt-3.5-turbo",
+        model: "gpt-3.5-turbo-16k",
         messages: messages,
       });
 
       completion_text = completion.choices[0].message.content;
+      messages.push({ role: "assistant", content: completion_text });
       //   console.log(completion_text)
+      // console.log("uooo");
 
       let onlyquery = await extractQuery(completion_text);
       console.log(onlyquery + "\n");
