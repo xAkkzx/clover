@@ -41,7 +41,7 @@ export class GptComponent implements AfterViewInit {
     private el: ElementRef
   ) {
     this.token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im0iLCJpYXQiOjE2OTQ3NjE4OTksImV4cCI6MTY5NDc2OTA5OX0.ruaEV7WHDzKgppEq06luzP0f5o6htvwkMdvzdtpCuiQ';
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImEiLCJpYXQiOjE2OTQ3Nzk2MzksImV4cCI6MTY5NDc4NjgzOX0.7YcP8zk7ALT9If2qEsChyutnjB9DoHWmgOWiBj2rmMc';
   }
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
 
@@ -152,18 +152,37 @@ export class GptComponent implements AfterViewInit {
         },
         error: (error) => {
           if (error.status === 500)
-            if (error.error.includes('Sign In')) {
-              this.customToastrService.showErrorWithLink(
-                error.error.replace('Sign In', ''),
-                'Sign In',
-                'http://localhost:4200/register'
-              );
-            } else {
-              this.toastr.error(error.error, 'Error', {
-                positionClass: 'toast-bottom-right',
-              });
-            }
+            // if (error.error.includes('Sign In')) {
+            //   this.customToastrService.showErrorWithLink(
+            //     error.error.replace('Sign In', ''),
+            //     'Sign In',
+            //     'http://localhost:4200/register'
+            //   );
+            // } else {
+            //   this.toastr.error(error.error, 'Error', {
+            //     positionClass: 'toast-bottom-right',
+            //   });
+            // }
+
+            this.chatMessages.push({
+              text: 'errore durante elaborazione messaggio',
+              type: 'response',
+            })
+
+            setTimeout(() => {
+              this.scrollToBottom();
+            });
+            
           if (error.status === 401) {
+            this.chatMessages.push({
+              text: 'Accesso non autorizzato',
+              type: 'response',
+            })
+
+            setTimeout(() => {
+              this.scrollToBottom();
+            });
+
             this.customToastrService.showErrorWithLink(
               error.error.replace('Sign In', ''),
               'Sign In',
