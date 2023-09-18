@@ -5,6 +5,7 @@ import {
   ViewChild,
   ElementRef,
   AfterViewInit,
+  Renderer2,
 } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormGroup, FormControl } from '@angular/forms';
@@ -43,11 +44,12 @@ export class GptComponent implements AfterViewInit {
     private toastr: ToastrService,
     private customToastrService: CustomToastrService,
     private globalService: GlobalService,
-    private el: ElementRef
+    private el: ElementRef,
+    private renderer: Renderer2
   ) {
     this.token = globalService.getGlobalVariable();
     this.token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImEiLCJpYXQiOjE2OTUwMzg5MzYsImV4cCI6MTY5NTA0NjEzNn0.wZtqHp1SgJy9WCbO0sdwmwiM-n8tbRXmSHWWSfPkC64';
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im0iLCJpYXQiOjE2OTUwNDg4NzcsImV4cCI6MTY5NTA1NjA3N30.AtH4Hsn-HhAKNaKO0RQXevmS4iKczlHqcPktQ5O2GnE';
   }
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
 
@@ -59,8 +61,6 @@ export class GptComponent implements AfterViewInit {
       console.log("fattobene");
       const chatContainerElement = this.chatContainer.nativeElement;
       // Use chatContainerElement as needed
-    } else {
-      //console.log("suca")
     }
   }
 
@@ -90,19 +90,17 @@ export class GptComponent implements AfterViewInit {
     return val;
   }
 
-  public chat(nomeDbz: any, tipoDbz: any, richiestaz: any) {
-    console.log("suca")
+  public chat(nomeDbz: string, tipoDbz: any, richiestaz: any) {
+    
     let res = 'x';
 
-    let ndb = nomeDbz;
+    let ndb = nomeDbz.toLocaleLowerCase();
     console.log(ndb);
     const headers = new HttpHeaders({
       'Access-Control-Allow-Origin': '*',
       'Content-Type': 'application/json', // Set the content type to JSON
       'x-access-token': this.token,
     });
-
-    console.log("suca2")
 
     const requestBody = {
       nomeDb: ndb,

@@ -5,69 +5,89 @@
     width: 1000px;
     height: 430px;
     overflow-y: auto;
+    overflow-x: auto; /* Abilita la barra di scorrimento orizzontale */
     background-color: black;
     color: white;
     border: 2px solid #ccc;
     display: flex;
-    flex-direction: column; /* Keep the default column direction */
-    align-items: flex-end; /* Align items to the right */
-    padding: 4px; /* Add some padding to the chat container */
-    border-radius: 30px; /* Rounded corners for the chat box */
-    margin-right: auto; /* Push response messages to the left */
+    flex-direction: column; /* Mantieni la direzione di colonna predefinita */
+    align-items: flex-end; /* Allinea gli elementi a destra */
+    padding: 4px; /* Aggiungi un po' di padding al container della chat */
+    border-radius: 30px; /* Angoli arrotondati per la chat */
+    margin-right: auto; /* Spingi i messaggi di risposta a sinistra */
+}
 
-  }
-  
-  /* Styles for each chat message */
-  .chat-message {
+/* Styles for each chat message */
+.chat-message {
     margin-bottom: 8px;
     display: flex;
     flex-direction: row;
     align-items: center;
-    max-width: 70%; /* Adjust as needed */
-  }
-  
-  /* Styles for request messages (aligned to the right) */
-  .request-message {
-    text-align: right;
-    background-color: #007bff; /* Blue background for requests */
-    color: white; /* White text color for requests */
-    border-radius: 10px; /* Rounded corners for the message box */
-    padding: 10px; /* Add padding for spacing within the message box */
-    margin-left: auto; /* Push request messages to the right */
-    max-width: 45ch; /* Limit the width to 23 characters */
-    margin-bottom: 5px; /* Add space between request and response messages */
-  }
-  
-  /* Styles for response messages (aligned to the left) */
-  .response-message {
-    text-align: left;
-    background-color: #505355; /* Gray background for responses */
-    color: white; /* Black text color for responses */
-    border-radius: 10px; /* Rounded corners for the message box */
-    padding: 10px; /* Add padding for spacing within the message box */
-    margin-right: auto; /* Push response messages to the left */
-    margin-bottom: 5px; /* Add space between request and response messages */
-  }
-  
-  
-  /* Styling for the scrollbar */
-  #chatContainer::-webkit-scrollbar {
-    width: 8px; /* Set the width of the scrollbar */
-  }
-  
-  #chatContainer::-webkit-scrollbar-thumb {
-    background: linear-gradient(to bottom, grey, white); /* Gradient from black to white */
-    border-radius: 4px; /* Rounded corners for the thumb */
-  }
-  
-  #chatContainer::-webkit-scrollbar-track {
-    background-color: transparent; /* Background color of the track */
-    border-radius: 4px; /* Rounded corners for the track */
-  }
+    max-width: 70%; /* Regola se necessario */
+}
 
-  /* Adjust the right padding for the scrollbar */
+/* Styles for request messages (aligned to the right) */
+.request-message {
+    text-align: right;
+    background-color: #007bff; /* Sfondo blu per le richieste */
+    color: white; /* Testo bianco per le richieste */
+    border-radius: 10px; /* Angoli arrotondati per il messaggio */
+    padding: 10px; /* Aggiungi padding per lo spazio all'interno del messaggio */
+    margin-left: auto; /* Spingi i messaggi di richiesta a destra */
+    max-width: 45ch; /* Limita la larghezza a 45 caratteri */
+    margin-bottom: 5px; /* Aggiungi spazio tra i messaggi di richiesta e risposta */
+}
+
+/* Styles for response messages (aligned to the left) */
+.response-message {
+    text-align: left;
+    background-color: #505355; /* Sfondo grigio per le risposte */
+    color: white; /* Testo nero per le risposte */
+    border-radius: 10px; /* Angoli arrotondati per il messaggio */
+    padding: 10px; /* Aggiungi padding per lo spazio all'interno del messaggio */
+    margin-right: auto; /* Spingi i messaggi di risposta a sinistra */
+    margin-bottom: 5px; /* Aggiungi spazio tra i messaggi di richiesta e risposta */
+}
+
+#chatContainer::-webkit-scrollbar-horizontal {
+  height: 4px; /* Riduci l'altezza della barra di scorrimento orizzontale */
+}
+
+#chatContainer::-webkit-scrollbar-thumb-horizontal {
+  background: linear-gradient(to right, grey, white);
+  border-radius: 2px; /* Riduci la dimensione dei bordi del cursore orizzontale */
+}
+
+#chatContainer::-webkit-scrollbar-track-horizontal {
+  background-color: transparent;
+  border-radius: 2px; /* Riduci la dimensione dei bordi della traccia orizzontale */
+}
+
+/* Styling for the scrollbar */
+#chatContainer::-webkit-scrollbar {
+    width: 8px; /* Imposta la larghezza della barra di scorrimento verticale */
+}
+
+#chatContainer::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, grey, white); /* Gradiente da grigio a bianco */
+    border-radius: 4px; /* Angoli arrotondati per il cursore */
+}
+
+#chatContainer::-webkit-scrollbar-track {
+    background-color: transparent; /* Colore di sfondo della traccia */
+    border-radius: 4px; /* Angoli arrotondati per la traccia */
+}
+
+/* Regola il padding destro per la barra di scorrimento verticale */
 #chatContainer::after {
     content: '';
-    width: 8px; /* Set the width to match scrollbar width */
-    flex: none; /* Ensure the element doesn't affect layout */
+    width: 8px; /* Imposta la larghezza per corrispondere alla larghezza della barra di scorrimento */
+    flex: none; /* Assicura che l'elemento non influisca sul layout */
+}
+
+/* Regola il padding inferiore per la barra di scorrimento orizzontale */
+#chatContainer::after {
+    content: '';
+    height: 8px; /* Imposta l'altezza per corrispondere all'altezza della barra di scorrimento */
+    flex: none; /* Assicura che l'elemento non influisca sul layout */
 }
