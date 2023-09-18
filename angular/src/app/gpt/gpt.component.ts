@@ -17,19 +17,21 @@ import { TextfieldComponent } from '../textfield/textfield.component';
 @Component({
   selector: 'app-gpt',
   templateUrl: './gpt.component.html',
-  styleUrls: ['./gpt.component.css'],
+  styleUrls: ['./gpt.component.css', '../textfield/textfield.component.css'],
 })
 export class GptComponent implements AfterViewInit {
   token: string;
   @ViewChild(TextfieldComponent, { static: false })
   textfieldRic!: TextfieldComponent;
   chatMessages: { text: string; type: string }[] = [];
+  isRequestEmpty: boolean = false;
 
   @Output() loginClicked: EventEmitter<void> = new EventEmitter<void>();
 
   username: string = 'm'; // Dichiarazione di variabili al di fuori della funzione
   password: string = 'z'; // Dichiarazione di variabili al di fuori della funzione
   azione: string = '';
+  selectedDb: string = ''; // Inizializzala con un valore vuoto
   getJsonValue: any;
 
   constructor(
@@ -41,6 +43,8 @@ export class GptComponent implements AfterViewInit {
     private el: ElementRef
   ) {
     this.token = globalService.getGlobalVariable();
+    this.token =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im0iLCJpYXQiOjE2OTQ3Nzk1NDIsImV4cCI6MTY5NDc4Njc0Mn0.2NJRRKqEG-HXAkjLlegXXD3G6nGxFa_ZMCZvK2v0Jo8';
   }
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
 
@@ -57,6 +61,20 @@ export class GptComponent implements AfterViewInit {
     }
   }
 
+
+  onTextFieldKeyPress(event: KeyboardEvent, nomedb: any) {
+    if (event.key === 'Enter') { // Verifica se il tasto premuto è "Invio"
+      this.isRequestEmpty = true; // Imposta la variabile a true se la richiesta è vuota
+      console.log(nomedb)
+      this.chat(nomedb, '1', this.getValue(this.textfieldRic.inputValue));
+      setTimeout(() => {
+        this.isRequestEmpty = false;
+      }, 400);
+      return;
+    }
+  }
+
+
   public eseguiAzione() {
     eval(`this.${this.azione}()`);
   }
@@ -69,8 +87,8 @@ export class GptComponent implements AfterViewInit {
     console.log("suca")
     let res = 'x';
 
-    let ndb = nomeDbz.toLowerCase();
-    console.log("suca1")
+    let ndb = nomeDbz;
+    console.log(ndb);
     const headers = new HttpHeaders({
       'Access-Control-Allow-Origin': '*',
       'Content-Type': 'application/json', // Set the content type to JSON
@@ -110,6 +128,24 @@ export class GptComponent implements AfterViewInit {
     }
     const formattedRequest = lines.join('\n');
     this.chatMessages.push({ text: formattedRequest, type: 'request' });
+
+    if(ndb === "Database"){
+      this.chatMessages.push({
+        text: "Ricorda, devi prima selezionare il DataBase su cui agire.",
+        type: 'response',
+      });
+
+      return;
+    }else{
+      if(richiestaz == ''){
+        this.chatMessages.push({
+          text: "Non posso rispondere se non mi chiedi niente.",
+          type: 'response',
+        });
+
+        return; 
+      }
+    }
 
 
     this.http
@@ -250,6 +286,9 @@ export class GptComponent implements AfterViewInit {
       return '';
     }
   }
+
+
+  
   
   
   

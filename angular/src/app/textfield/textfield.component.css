@@ -1,8 +1,26 @@
 /* Stile per il campo di input (textfield) */
 .custom-textfield {
-    border: 2px solid #000000;
-    padding: 10px;
-    border-radius: 500px;
-    font-weight: bold;
-    position: absolute;
+  border: 2px solid #000000;
+  padding: 10px;
+  border-radius: 500px;
+  font-weight: bold;
+  position: absolute;
+}
+
+.vibrate {
+  animation: vibrate 0.3s infinite alternate; /* Remove the changeBorderColor animation */
+}
+
+@keyframes vibrate {
+  0%, 100% {
+    transform: translateX(0); /* Start and end position */
   }
+
+  25% {
+    transform: translateX(4px);
+  }
+
+  75% {
+    transform: translateX(-4px);
+  }
+}
