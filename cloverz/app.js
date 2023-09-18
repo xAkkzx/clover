@@ -409,12 +409,14 @@ app.post("/chat", auth, async (req, res) => {
       } else if (tipoDb == "1") {
         c = await query(onlyquery, nomeDb);
       } else {
-        res.status(500).send("Internal Server Error");
+        res
+          .status(405)
+          .send("Non è stato possibile eseguire la tua richiesta.");
       }
       res.status(200).send(c);
     } catch (err) {
       console.error(err);
-      res.status(500).send("Internal Server Error");
+      res.status(405).send("Non è stato possibile eseguire la tua richiesta.");
     }
   } catch (err) {
     console.error(err);
