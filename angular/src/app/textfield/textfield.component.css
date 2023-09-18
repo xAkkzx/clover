@@ -6,6 +6,7 @@
   font-weight: bold;
   position: absolute;
   animation: vibrate 0.3s infinite alternate;
+  
 }
 
 .custom-textfield {
@@ -18,7 +19,15 @@
   /* Add a transition for smooth border color change */
 }
 
-
+.custom-ricerca {
+  border: 2px solid rgb(15, 18, 221);
+  padding: 10px;
+  border-radius: 500px;
+  font-weight: bold;
+  position: absolute;
+  /* transition: border-color 0.3s; */
+  /* Add a transition for smooth border color change */
+}
 
 @keyframes vibrate {
 

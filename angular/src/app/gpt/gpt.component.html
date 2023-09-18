@@ -2,13 +2,13 @@
 <!--  [ngClass]="{'input-error': isRequestEmpty}" -->
  <app-textfield #richiestaInput placeholder="Richiesta"
 
- (keypress)="onTextFieldKeyPress($event, getValue(sceltaDb.nome))"
- style="position: absolute; top: 80%; right: 57%; transform: translate(0%, -50%);">
+ (keypress)="onTextFieldKeyPress($event, getValue(sceltaDb.nome))" style="position: absolute; top: 81%; right: 57%; transform: translate(0%, -50%);" >
 </app-textfield>
 
 
 
 <app-pulsante img="bi bi-box-arrow-left" pagina="login" azione="cambiaPagina" style="position:absolute;top: 15%; right: 98%; transform: translate(0%, -50%);"/>
+
 
 <app-pulsante img="bi bi-send-fill" (click)="chat(getValue(sceltaDb.nome), '1', getValue(richiestaInput.inputValue))" style="position:absolute;top: 92%; right: 42%; transform: translate(0%, -50%);"/>
 

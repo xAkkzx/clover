@@ -29,9 +29,17 @@ export class PulsanteComponent {
       
   }
 
-niente(){
-  this.toastr.warning('Funzione non ancora implementata','Attenzione', { positionClass: 'toast-bottom-right'});
-}
+  cambiaSVG(){
+    if(this.img=="bi bi-eye-fill"){
+      this.img="bi bi-eye-slash-fill";
+    }else{
+      this.img="bi bi-eye-fill";
+    }
+  }
+
+  niente(){
+    this.toastr.warning('Funzione non ancora implementata','Attenzione', { positionClass: 'toast-bottom-right'});
+  }
 
 
   cambiaPagina() {

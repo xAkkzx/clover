@@ -47,7 +47,7 @@ export class GptComponent implements AfterViewInit {
   ) {
     this.token = globalService.getGlobalVariable();
     this.token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImEiLCJpYXQiOjE2OTUwMjc5ODAsImV4cCI6MTY5NTAzNTE4MH0.dyLiGBO-oZkxDxEXr6h26F3AZpp8SjJtd9xe2klh6mU';
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImEiLCJpYXQiOjE2OTUwMzg5MzYsImV4cCI6MTY5NTA0NjEzNn0.wZtqHp1SgJy9WCbO0sdwmwiM-n8tbRXmSHWWSfPkC64';
   }
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
 
@@ -76,6 +76,7 @@ export class GptComponent implements AfterViewInit {
       setTimeout(() => {
         this.isRequestEmpty = false;
       }, 400);
+      
       return;
     }
   }
@@ -302,6 +303,8 @@ export class GptComponent implements AfterViewInit {
             if(this.textfieldRic.inputValue== ''){
               this.isRequestEmpty = true; // Imposta la variabile a true se la richiesta è vuota
             }
+
+            
             setTimeout(() => {
               this.isRequestEmpty = false;
             }, 400);
