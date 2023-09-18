@@ -6,9 +6,10 @@
 <app-textfield #textfieldpsw  [type]="passwordFieldType" placeholder="Password" class="custom-textfield unselectable"
   style="position: absolute;top: 45%; right: 57%; transform: translate(0%, -50%); margin-top: 10px;" (keypress)="onTextFieldKeyPress($event, getValue(textfield.inputValue), getValue(textfieldpsw.inputValue))"></app-textfield>
 
-  <button (click)="togglePasswordVisibility()">Mostra/Nascondi Password</button>
-
 <app-textfield placeholder="Username" #textfield type = "text"  style="position: absolute;top: 35%; right: 57%; transform: translate(0%, -50%); margin-bottom: 10px;" />
+
+<app-pulsante img="bi bi-eye-fill" azione="cambiaSVG" (click)="togglePasswordVisibility()"  style="position:absolute;top: 48%; right: 41%; transform: translate(0%, -50%);">
+</app-pulsante>
 
 
 <app-pulsante pagina="login" nome="Login" azione="cambiaPagina" style="position:absolute;top:5%;right:8%; transform: translate(0%, -50%);"  class="pagina-button" />

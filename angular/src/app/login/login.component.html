@@ -16,9 +16,8 @@
     (click)="login(getValue(textfield.inputValue), getValue(textfieldpsw.inputValue))"
     class="custom-button login-button"></app-pulsante>
 
-  <app-pulsante pagina="register" nome="Register" azione="cambiaPagina" class="pagina-button register-button">
+  <app-pulsante pagina="register" nome="Register" azione="cambiaPagina"  class="pagina-button register-button">
   </app-pulsante>
-    <app-pulsante img="bi bi-eye-fill" azione="cambiaSVG"   style="position:absolute;top: 48%; right: 41%; transform: translate(0%, -50%);">
+    <app-pulsante img="bi bi-eye-fill" azione="cambiaSVG" (click)="togglePasswordVisibility()"  style="position:absolute;top: 48%; right: 41%; transform: translate(0%, -50%);">
     </app-pulsante>
-  <button (click)="togglePasswordVisibility()">Mostra/Nascondi Password</button>
 </div>
