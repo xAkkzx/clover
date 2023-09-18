@@ -1,6 +1,6 @@
 /* Stile per il campo di input (textfield) */
 .input-error {
-  border: 2px solid red;
+  border: 2px solid red !important;
   padding: 10px;
   border-radius: 500px;
   font-weight: bold;
@@ -9,7 +9,7 @@
 }
 
 .custom-textfield {
-  border: 2px solid black;
+  border: 2px solid rgb(0, 0, 0);
   padding: 10px;
   border-radius: 500px;
   font-weight: bold;

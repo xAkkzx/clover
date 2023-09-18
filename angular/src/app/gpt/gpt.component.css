@@ -3,7 +3,7 @@
 #chatContainer {
     position: relative;
     width: 1000px;
-   height: 430px;
+    height: 430px;
     overflow-y: auto;
     background-color: black;
     color: white;

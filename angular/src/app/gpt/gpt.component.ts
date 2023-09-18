@@ -47,7 +47,7 @@ export class GptComponent implements AfterViewInit {
   ) {
     this.token = globalService.getGlobalVariable();
     this.token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNjk1MDIwNTg2LCJleHAiOjE2OTUwMjc3ODZ9.Zlc-ecL9jCAqS3GZfeOWuXOpbpF_Mf-X34miYT14WdU';
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImEiLCJpYXQiOjE2OTUwMjc5ODAsImV4cCI6MTY5NTAzNTE4MH0.dyLiGBO-oZkxDxEXr6h26F3AZpp8SjJtd9xe2klh6mU';
   }
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
 
@@ -71,6 +71,7 @@ export class GptComponent implements AfterViewInit {
         this.isRequestEmpty = true; // Imposta la variabile a true se la richiesta è vuota
       }
       console.log(nomedb)
+
       this.chat(nomedb, '1', this.getValue(this.textfieldRic.inputValue));
       setTimeout(() => {
         this.isRequestEmpty = false;
@@ -143,6 +144,7 @@ export class GptComponent implements AfterViewInit {
       if(this.textfieldRic.inputValue== ''){
         this.isRequestEmpty = true; // Imposta la variabile a true se la richiesta è vuota
       }
+
       setTimeout(() => {
         this.isRequestEmpty = false;
       }, 400);
@@ -150,6 +152,13 @@ export class GptComponent implements AfterViewInit {
       setTimeout(() => {
         this.scrollToBottom();
       });
+
+      this.textfieldRic.cambia(true);
+
+      setTimeout(() => {
+        this.textfieldRic.cambia(false);
+      }, 400);
+
 
       return;
     }else{
@@ -169,6 +178,14 @@ export class GptComponent implements AfterViewInit {
         setTimeout(() => {
           this.scrollToBottom();
         });
+
+        this.textfieldRic.cambia(true);
+
+        setTimeout(() => {
+          this.textfieldRic.cambia(false);
+        }, 400);
+  
+
         return; 
       }
     }
@@ -229,6 +246,14 @@ export class GptComponent implements AfterViewInit {
             setTimeout(() => {
               this.scrollToBottom();
             });
+
+            this.textfieldRic.cambia(true);
+
+            setTimeout(() => {
+              this.textfieldRic.cambia(false);
+            }, 400);
+      
+
           }
           if (error.status === 500)
           {
@@ -247,6 +272,7 @@ export class GptComponent implements AfterViewInit {
             if(this.textfieldRic.inputValue== ''){
               this.isRequestEmpty = true; // Imposta la variabile a true se la richiesta è vuota
             }
+
             setTimeout(() => {
               this.isRequestEmpty = false;
             }, 400);
@@ -259,6 +285,13 @@ export class GptComponent implements AfterViewInit {
             setTimeout(() => {
               this.scrollToBottom();
             });
+
+            this.textfieldRic.cambia(true);
+
+            setTimeout(() => {
+              this.textfieldRic.cambia(false);
+            }, 400);
+
           }
           if (error.status === 401) {
             this.chatMessages.push({
@@ -276,6 +309,13 @@ export class GptComponent implements AfterViewInit {
             setTimeout(() => {
               this.scrollToBottom();
             });
+
+            this.textfieldRic.cambia(true);
+
+            setTimeout(() => {
+              this.textfieldRic.cambia(false);
+            }, 400);
+
 
             this.customToastrService.showErrorWithLink(
               error.error.replace('Sign In', ''),
