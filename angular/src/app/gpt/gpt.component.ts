@@ -44,7 +44,7 @@ export class GptComponent implements AfterViewInit {
   ) {
     this.token = globalService.getGlobalVariable();
     this.token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im0iLCJpYXQiOjE2OTQ3Nzk1NDIsImV4cCI6MTY5NDc4Njc0Mn0.2NJRRKqEG-HXAkjLlegXXD3G6nGxFa_ZMCZvK2v0Jo8';
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im0iLCJpYXQiOjE2OTUwMjA2OTYsImV4cCI6MTY5NTAyNzg5Nn0.aq0C8nmpo-Cz-f-EUCEt5JDGErBVCuCeMvFYpJk87yE';
   }
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
 
@@ -83,19 +83,19 @@ export class GptComponent implements AfterViewInit {
     return val;
   }
 
-  public chat(nomeDbz: any, tipoDbz: any, richiestaz: any) {
-    console.log("suca")
+  public chat(nomeDbz: string, tipoDbz: any, richiestaz: any) {
+    //console.log("suca")
     let res = 'x';
 
-    let ndb = nomeDbz;
-    console.log(ndb);
+    let ndb = nomeDbz.toLocaleLowerCase();
+    console.log(ndb+"Aaaaa");
     const headers = new HttpHeaders({
       'Access-Control-Allow-Origin': '*',
       'Content-Type': 'application/json', // Set the content type to JSON
       'x-access-token': this.token,
     });
 
-    console.log("suca2")
+    //console.log("suca2")
 
     const requestBody = {
       nomeDb: ndb,
@@ -135,6 +135,9 @@ export class GptComponent implements AfterViewInit {
         type: 'response',
       });
 
+      setTimeout(() => {
+        this.scrollToBottom();
+      });
       return;
     }else{
       if(richiestaz == ''){
@@ -143,10 +146,15 @@ export class GptComponent implements AfterViewInit {
           type: 'response',
         });
 
+        setTimeout(() => {
+          this.scrollToBottom();
+        });
+
         return; 
       }
     }
-
+     
+    console.log(requestBodyJSON);
 
     this.http
       .post('http://localhost:3000/chat', requestBodyJSON, {
@@ -165,10 +173,10 @@ export class GptComponent implements AfterViewInit {
               res = JSON.stringify(response.body);
             }
             // console.log(this.formatJSONToTable(res))
-            console.log(response.body);
-            console.log(this.formatResponseAsTable(response.body));
+            //console.log(response.body);
+            //console.log(this.formatResponseAsTable(response.body));
             res = this.formatResponseAsTable(response.body)
-            console.log("AO\n" + res + "\nAO");
+            //console.log("AO\n" + res + "\nAO");
           //  this.tab(response.body);
           //  this.formatAndPrintResponse(response.body);
 
