@@ -13,7 +13,7 @@ const connectionData = mysql_package.createConnection({
 
   user: "root",
 
-  password: "Grandesql.77",
+  password: "grossoSql.77",
 });
 
 const args = process.argv.slice(2);
