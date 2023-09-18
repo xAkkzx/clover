@@ -20,6 +20,9 @@ import { TextfieldComponent } from '../textfield/textfield.component';
   styleUrls: ['./gpt.component.css', '../textfield/textfield.component.css'],
 })
 export class GptComponent implements AfterViewInit {
+  formControls = new FormGroup({
+    option1: new FormControl('', [/* Validators if needed */])
+  });
   token: string;
   @ViewChild(TextfieldComponent, { static: false })
   textfieldRic!: TextfieldComponent;
@@ -44,7 +47,7 @@ export class GptComponent implements AfterViewInit {
   ) {
     this.token = globalService.getGlobalVariable();
     this.token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im0iLCJpYXQiOjE2OTUwMjA2OTYsImV4cCI6MTY5NTAyNzg5Nn0.aq0C8nmpo-Cz-f-EUCEt5JDGErBVCuCeMvFYpJk87yE';
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImEiLCJpYXQiOjE2OTUwMzg5MzYsImV4cCI6MTY5NTA0NjEzNn0.wZtqHp1SgJy9WCbO0sdwmwiM-n8tbRXmSHWWSfPkC64';
   }
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
 
@@ -64,12 +67,16 @@ export class GptComponent implements AfterViewInit {
 
   onTextFieldKeyPress(event: KeyboardEvent, nomedb: any) {
     if (event.key === 'Enter') { // Verifica se il tasto premuto è "Invio"
-      this.isRequestEmpty = true; // Imposta la variabile a true se la richiesta è vuota
+      if(this.textfieldRic.inputValue== ''){
+        this.isRequestEmpty = true; // Imposta la variabile a true se la richiesta è vuota
+      }
       console.log(nomedb)
+
       this.chat(nomedb, '1', this.getValue(this.textfieldRic.inputValue));
       setTimeout(() => {
         this.isRequestEmpty = false;
       }, 400);
+      
       return;
     }
   }
@@ -83,19 +90,19 @@ export class GptComponent implements AfterViewInit {
     return val;
   }
 
-  public chat(nomeDbz: string, tipoDbz: any, richiestaz: any) {
-    //console.log("suca")
+  public chat(nomeDbz: any, tipoDbz: any, richiestaz: any) {
+    console.log("suca")
     let res = 'x';
 
-    let ndb = nomeDbz.toLocaleLowerCase();
-    console.log(ndb+"Aaaaa");
+    let ndb = nomeDbz;
+    console.log(ndb);
     const headers = new HttpHeaders({
       'Access-Control-Allow-Origin': '*',
       'Content-Type': 'application/json', // Set the content type to JSON
       'x-access-token': this.token,
     });
 
-    //console.log("suca2")
+    console.log("suca2")
 
     const requestBody = {
       nomeDb: ndb,
@@ -135,9 +142,25 @@ export class GptComponent implements AfterViewInit {
         type: 'response',
       });
 
+      if(this.textfieldRic.inputValue== ''){
+        this.isRequestEmpty = true; // Imposta la variabile a true se la richiesta è vuota
+      }
+
+      setTimeout(() => {
+        this.isRequestEmpty = false;
+      }, 400);
+
       setTimeout(() => {
         this.scrollToBottom();
       });
+
+      this.textfieldRic.cambia(true);
+
+      setTimeout(() => {
+        this.textfieldRic.cambia(false);
+      }, 400);
+
+
       return;
     }else{
       if(richiestaz == ''){
@@ -146,15 +169,28 @@ export class GptComponent implements AfterViewInit {
           type: 'response',
         });
 
+        if(this.textfieldRic.inputValue== ''){
+          this.isRequestEmpty = true; // Imposta la variabile a true se la richiesta è vuota
+        }
+        setTimeout(() => {
+          this.isRequestEmpty = false;
+        }, 400);
+
         setTimeout(() => {
           this.scrollToBottom();
         });
 
+        this.textfieldRic.cambia(true);
+
+        setTimeout(() => {
+          this.textfieldRic.cambia(false);
+        }, 400);
+  
+
         return; 
       }
     }
-     
-    console.log(requestBodyJSON);
+
 
     this.http
       .post('http://localhost:3000/chat', requestBodyJSON, {
@@ -173,10 +209,10 @@ export class GptComponent implements AfterViewInit {
               res = JSON.stringify(response.body);
             }
             // console.log(this.formatJSONToTable(res))
-            //console.log(response.body);
-            //console.log(this.formatResponseAsTable(response.body));
+            console.log(response.body);
+            console.log(this.formatResponseAsTable(response.body));
             res = this.formatResponseAsTable(response.body)
-            //console.log("AO\n" + res + "\nAO");
+            console.log("AO\n" + res + "\nAO");
           //  this.tab(response.body);
           //  this.formatAndPrintResponse(response.body);
 
@@ -201,9 +237,24 @@ export class GptComponent implements AfterViewInit {
               type: 'response',
             })
 
+            if(this.textfieldRic.inputValue== ''){
+              this.isRequestEmpty = true; // Imposta la variabile a true se la richiesta è vuota
+            }
+            setTimeout(() => {
+              this.isRequestEmpty = false;
+            }, 400);
+
             setTimeout(() => {
               this.scrollToBottom();
             });
+
+            this.textfieldRic.cambia(true);
+
+            setTimeout(() => {
+              this.textfieldRic.cambia(false);
+            }, 400);
+      
+
           }
           if (error.status === 500)
           {
@@ -219,6 +270,14 @@ export class GptComponent implements AfterViewInit {
             //   });
             // }
 
+            if(this.textfieldRic.inputValue== ''){
+              this.isRequestEmpty = true; // Imposta la variabile a true se la richiesta è vuota
+            }
+
+            setTimeout(() => {
+              this.isRequestEmpty = false;
+            }, 400);
+
             this.chatMessages.push({
               text: 'errore durante elaborazione messaggio',
               type: 'response',
@@ -227,6 +286,13 @@ export class GptComponent implements AfterViewInit {
             setTimeout(() => {
               this.scrollToBottom();
             });
+
+            this.textfieldRic.cambia(true);
+
+            setTimeout(() => {
+              this.textfieldRic.cambia(false);
+            }, 400);
+
           }
           if (error.status === 401) {
             this.chatMessages.push({
@@ -234,9 +300,25 @@ export class GptComponent implements AfterViewInit {
               type: 'response',
             })
 
+            if(this.textfieldRic.inputValue== ''){
+              this.isRequestEmpty = true; // Imposta la variabile a true se la richiesta è vuota
+            }
+
+            
+            setTimeout(() => {
+              this.isRequestEmpty = false;
+            }, 400);
+
             setTimeout(() => {
               this.scrollToBottom();
             });
+
+            this.textfieldRic.cambia(true);
+
+            setTimeout(() => {
+              this.textfieldRic.cambia(false);
+            }, 400);
+
 
             this.customToastrService.showErrorWithLink(
               error.error.replace('Sign In', ''),

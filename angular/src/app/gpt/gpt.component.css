@@ -2,8 +2,8 @@
 @import "~bootstrap-icons/font/bootstrap-icons.css";
 #chatContainer {
     position: relative;
-    width: 800px;
-   height: 300px;
+    width: 1000px;
+    height: 430px;
     overflow-y: auto;
     background-color: black;
     color: white;

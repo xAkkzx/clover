@@ -18,14 +18,16 @@ export class TextfieldComponent {
   changetype:boolean =true;
 
 
+  cambiacss=false;
   // Puoi aggiungere ulteriori logica o funzioni qui, se necessario
   
   resetValue(){
     this.inputValue = '';
   }
 
-  
+  cambia(v: boolean){
 
+    this.cambiacss=v;
 
-
+  }
 }

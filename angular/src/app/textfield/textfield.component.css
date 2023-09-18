@@ -1,19 +1,39 @@
 /* Stile per il campo di input (textfield) */
-.custom-textfield {
-  border: 2px solid #000000;
+.input-error {
+  border: 2px solid red !important;
   padding: 10px;
   border-radius: 500px;
   font-weight: bold;
   position: absolute;
+  animation: vibrate 0.3s infinite alternate;
+  
 }
 
-.vibrate {
-  animation: vibrate 0.3s infinite alternate; /* Remove the changeBorderColor animation */
+.custom-textfield {
+  border: 2px solid rgb(0, 0, 0);
+  padding: 10px;
+  border-radius: 500px;
+  font-weight: bold;
+  position: absolute;
+  /* transition: border-color 0.3s; */
+  /* Add a transition for smooth border color change */
+}
+
+.custom-ricerca {
+  border: 2px solid rgb(15, 18, 221);
+  padding: 10px;
+  border-radius: 500px;
+  font-weight: bold;
+  position: absolute;
+  /* transition: border-color 0.3s; */
+  /* Add a transition for smooth border color change */
 }
 
 @keyframes vibrate {
-  0%, 100% {
-    transform: translateX(0); /* Start and end position */
+
+  0%,
+  100% {
+    transform: translateX(0);
   }
 
   25% {
@@ -23,8 +43,4 @@
   75% {
     transform: translateX(-4px);
   }
-}
-
-.custom-textfield.unselectable {
-  user-select: none;
 }
