@@ -1,4 +1,4 @@
-<app-titolo [titolo]="'CLOVER'" style="position: absolute; top: 6%; left: 50%; transform: translate(-50%, -0%);" />
+ <!-- <app-titolo [titolo]="'CLOVER'" style="position: absolute; top: 6%; left: 50%; transform: translate(-50%, -0%);" /> -->
 
 <app-textfield #richiestaInput placeholder="Richiesta"
   [ngClass]="{'input-error': isRequestEmpty}"
@@ -20,8 +20,7 @@
 <app-database nome="Database" #sceltaDb [items]="['Calcio', 'Pokemon', 'Softeam', 'Bookapp']"></app-database>
 
 
+
 <div id="chatContainer" #chatContainer style="position: absolute; bottom: 20%; right: 20%; transform: translate(0%, -20%); ;">
     <div *ngFor="let message of chatMessages" [class]="message.type === 'request' ? 'request-message' : 'response-message'" [innerHTML]="message.text" ></div>
-  </div> 
-
-  
+</div> 

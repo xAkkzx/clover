@@ -143,6 +143,10 @@ export class GptComponent implements AfterViewInit {
         type: 'response',
       });
 
+      setTimeout(() => {
+        this.scrollToBottom();
+      });
+
       return;
     }else{
       if(richiestaz == ''){
@@ -150,7 +154,9 @@ export class GptComponent implements AfterViewInit {
           text: "Non posso rispondere se non mi chiedi niente.",
           type: 'response',
         });
-
+        setTimeout(() => {
+          this.scrollToBottom();
+        });
         return; 
       }
     }
@@ -325,4 +331,19 @@ export class GptComponent implements AfterViewInit {
       return '';
     }
   }
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 }
