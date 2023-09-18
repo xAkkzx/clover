@@ -20,6 +20,9 @@ import { TextfieldComponent } from '../textfield/textfield.component';
   styleUrls: ['./gpt.component.css', '../textfield/textfield.component.css'],
 })
 export class GptComponent implements AfterViewInit {
+  formControls = new FormGroup({
+    option1: new FormControl('', [/* Validators if needed */])
+  });
   token: string;
   @ViewChild(TextfieldComponent, { static: false })
   textfieldRic!: TextfieldComponent;
@@ -44,7 +47,7 @@ export class GptComponent implements AfterViewInit {
   ) {
     this.token = globalService.getGlobalVariable();
     this.token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im0iLCJpYXQiOjE2OTQ3Nzk1NDIsImV4cCI6MTY5NDc4Njc0Mn0.2NJRRKqEG-HXAkjLlegXXD3G6nGxFa_ZMCZvK2v0Jo8';
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNjk1MDIwNTg2LCJleHAiOjE2OTUwMjc3ODZ9.Zlc-ecL9jCAqS3GZfeOWuXOpbpF_Mf-X34miYT14WdU';
   }
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
 
@@ -64,7 +67,12 @@ export class GptComponent implements AfterViewInit {
 
   onTextFieldKeyPress(event: KeyboardEvent, nomedb: any) {
     if (event.key === 'Enter') { // Verifica se il tasto premuto è "Invio"
-      this.isRequestEmpty = true; // Imposta la variabile a true se la richiesta è vuota
+      let a = this.textfieldRic.inputValue
+      if(a === ''){
+        this.isRequestEmpty = true;
+        
+      }
+       // Imposta la variabile a true se la richiesta è vuota
       console.log(nomedb)
       this.chat(nomedb, '1', this.getValue(this.textfieldRic.inputValue));
       setTimeout(() => {
@@ -317,19 +325,4 @@ export class GptComponent implements AfterViewInit {
       return '';
     }
   }
-
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
 }
