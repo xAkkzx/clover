@@ -53,7 +53,7 @@ export class GptComponent implements AfterViewInit {
       this.textfieldRic.resetValue();
     }
     if (this.chatContainer && this.chatContainer.nativeElement) {
-      //console.log("aa");
+      console.log("fattobene");
       const chatContainerElement = this.chatContainer.nativeElement;
       // Use chatContainerElement as needed
     } else {
@@ -129,7 +129,7 @@ export class GptComponent implements AfterViewInit {
     const formattedRequest = lines.join('\n');
     this.chatMessages.push({ text: formattedRequest, type: 'request' });
 
-    if(ndb === "Database"){
+    if(ndb === "database"){
       this.chatMessages.push({
         text: "Ricorda, devi prima selezionare il DataBase su cui agire.",
         type: 'response',

@@ -18,6 +18,7 @@ export class RegisterComponent {
   username: string = 'm'; // Dichiarazione di variabili al di fuori della funzione
   password: string = 'z'; // Dichiarazione di variabili al di fuori della funzione
   azione: string = '';
+  passwordFieldType: string = 'password'; // Inizialmente impostato su 'password'
   getJsonValue: any;
 
   constructor(
@@ -42,6 +43,17 @@ export class RegisterComponent {
     } else {
       return null;
     }
+  }
+
+  onTextFieldKeyPress(event: KeyboardEvent, usr: any, psw: any) {
+    if (event.key === 'Enter') { // Verifica se il tasto premuto è "Invio"
+      this.registra(usr, psw);
+    }
+  }
+
+  togglePasswordVisibility() {
+    this.passwordFieldType = this.passwordFieldType === 'text' ? 'password' : 'text';
+    console.log(this.passwordFieldType);
   }
 
   public registra(usr: string, psw: string) {

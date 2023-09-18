@@ -1,31 +1,32 @@
 <app-titolo [titolo]="'CLOVER'" style="position: absolute; top: 6%; left: 50%; transform: translate(-50%, -0%);" />
 
-<app-textfield #richiestaInput
-              placeholder="Richiesta"
-              class=".custom-textfield"
-              [class.vibrate]="isRequestEmpty"
-              (keypress)="onTextFieldKeyPress($event, getValue(sceltaDb.nome))"
-              style="position: absolute; top: 80%; right: 57%; transform: translate(0%, -50%);"
-></app-textfield>
+<app-textfield #richiestaInput placeholder="Richiesta" class=".custom-textfield" [class.vibrate]="isRequestEmpty"
+  (keypress)="onTextFieldKeyPress($event, getValue(sceltaDb.nome))"
+  style="position: absolute; top: 80%; right: 57%; transform: translate(0%, -50%);">
+</app-textfield>
 
 
 
-<app-pulsante img="bi bi-box-arrow-left" pagina="login" azione="cambiaPagina" style="position:absolute;top: 15%; right: 98%; transform: translate(0%, -50%);"/>
+<app-pulsante img="bi bi-box-arrow-left" pagina="login" azione="cambiaPagina"
+  style="position:absolute;top: 15%; right: 98%; transform: translate(0%, -50%);" />
 
-<app-pulsante img="bi bi-send-fill" (click)="chat(getValue(sceltaDb.nome), '1', getValue(richiestaInput.inputValue))" style="position:absolute;top: 92%; right: 42%; transform: translate(0%, -50%);"/>
+<app-pulsante img="bi bi-send-fill" (click)="chat(getValue(sceltaDb.nome), '1', getValue(richiestaInput.inputValue))"
+  style="position:absolute;top: 92%; right: 42%; transform: translate(0%, -50%);" />
 
 
-<app-pulsante img="bi bi-trash3-fill" (click)="pulisciChat()" style="position:absolute;top: 92%; right: 62%; transform: translate(0%, -50%);"/>
+<app-pulsante img="bi bi-trash3-fill" (click)="pulisciChat()"
+  style="position:absolute;top: 92%; right: 62%; transform: translate(0%, -50%);" />
 
 
-<app-pulsante img="bi bi-box-arrow-in-down" azione='niente' style="position:absolute;top: 92%; right: 52%; transform: translate(0%, -50%);"/>
+<app-pulsante img="bi bi-box-arrow-in-down" azione='niente'
+  style="position:absolute;top: 92%; right: 52%; transform: translate(0%, -50%);" />
 
 <app-database nome="Database" #sceltaDb [items]="['Calcio', 'Pokemon', 'Softeam', 'Bookapp']"></app-database>
 
 
 
-<div id="chatContainer" #chatContainer style="position: absolute; bottom: 20%; right: 20%; transform: translate(0%, -20%); ;">
-    <div *ngFor="let message of chatMessages" [class]="message.type === 'request' ? 'request-message' : 'response-message'" [innerHTML]="message.text" ></div>
-  </div> 
-
-  
+<div id="chatContainer" #chatContainer
+  style="position: absolute; bottom: 20%; right: 20%; transform: translate(0%, -20%); ;">
+  <div *ngFor="let message of chatMessages"
+    [class]="message.type === 'request' ? 'request-message' : 'response-message'" [innerHTML]="message.text"></div>
+</div>

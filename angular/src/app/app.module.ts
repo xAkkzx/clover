@@ -46,7 +46,7 @@ import { MenuComponent } from './menu/menu.component';
     LoginComponent,
     GptComponent,
     DatabaseComponent,
-    MenuComponent
+    MenuComponent,
   ],
   imports: [
     ToastrModule,

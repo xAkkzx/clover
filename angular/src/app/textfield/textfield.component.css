@@ -24,3 +24,7 @@
     transform: translateX(-4px);
   }
 }
+
+.custom-textfield.unselectable {
+  user-select: none;
+}
