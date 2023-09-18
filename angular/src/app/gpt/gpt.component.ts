@@ -64,7 +64,9 @@ export class GptComponent implements AfterViewInit {
 
   onTextFieldKeyPress(event: KeyboardEvent, nomedb: any) {
     if (event.key === 'Enter') { // Verifica se il tasto premuto è "Invio"
-      this.isRequestEmpty = true; // Imposta la variabile a true se la richiesta è vuota
+      if(this.textfieldRic.inputValue== ''){
+        this.isRequestEmpty = true; // Imposta la variabile a true se la richiesta è vuota
+      }
       console.log(nomedb)
       this.chat(nomedb, '1', this.getValue(this.textfieldRic.inputValue));
       setTimeout(() => {
@@ -135,6 +137,13 @@ export class GptComponent implements AfterViewInit {
         type: 'response',
       });
 
+      if(this.textfieldRic.inputValue== ''){
+        this.isRequestEmpty = true; // Imposta la variabile a true se la richiesta è vuota
+      }
+      setTimeout(() => {
+        this.isRequestEmpty = false;
+      }, 400);
+
       setTimeout(() => {
         this.scrollToBottom();
       });
@@ -146,6 +155,14 @@ export class GptComponent implements AfterViewInit {
           text: "Non posso rispondere se non mi chiedi niente.",
           type: 'response',
         });
+
+        if(this.textfieldRic.inputValue== ''){
+          this.isRequestEmpty = true; // Imposta la variabile a true se la richiesta è vuota
+        }
+        setTimeout(() => {
+          this.isRequestEmpty = false;
+        }, 400);
+
         setTimeout(() => {
           this.scrollToBottom();
         });
@@ -199,6 +216,13 @@ export class GptComponent implements AfterViewInit {
               type: 'response',
             })
 
+            if(this.textfieldRic.inputValue== ''){
+              this.isRequestEmpty = true; // Imposta la variabile a true se la richiesta è vuota
+            }
+            setTimeout(() => {
+              this.isRequestEmpty = false;
+            }, 400);
+
             setTimeout(() => {
               this.scrollToBottom();
             });
@@ -217,6 +241,13 @@ export class GptComponent implements AfterViewInit {
             //   });
             // }
 
+            if(this.textfieldRic.inputValue== ''){
+              this.isRequestEmpty = true; // Imposta la variabile a true se la richiesta è vuota
+            }
+            setTimeout(() => {
+              this.isRequestEmpty = false;
+            }, 400);
+
             this.chatMessages.push({
               text: 'errore durante elaborazione messaggio',
               type: 'response',
@@ -231,6 +262,13 @@ export class GptComponent implements AfterViewInit {
               text: 'Accesso non autorizzato',
               type: 'response',
             })
+
+            if(this.textfieldRic.inputValue== ''){
+              this.isRequestEmpty = true; // Imposta la variabile a true se la richiesta è vuota
+            }
+            setTimeout(() => {
+              this.isRequestEmpty = false;
+            }, 400);
 
             setTimeout(() => {
               this.scrollToBottom();
