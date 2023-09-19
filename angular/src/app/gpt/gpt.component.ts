@@ -15,9 +15,10 @@ import { CustomToastrService } from '../custom-toastr.service';
 import { GlobalService } from '../global.service';
 import { TextfieldComponent } from '../textfield/textfield.component';
 import { DatabaseComponent } from '../database/database.component'
+import { catchError, throwError } from 'rxjs';
 
 @Component({
-  selector: 'app-gpt',
+  selector: 'app-gpt',          
   templateUrl: './gpt.component.html',
   styleUrls: ['./gpt.component.css', '../textfield/textfield.component.css'],
 })
@@ -39,6 +40,7 @@ export class GptComponent implements AfterViewInit {
   azione: string = '';
   selectedDb: string = ''; // Inizializzala con un valore vuoto
   getJsonValue: any;
+  selectedFile: File | null = null;
 
   constructor(
     private router: Router,
@@ -51,7 +53,7 @@ export class GptComponent implements AfterViewInit {
   ) {
     this.token = globalService.getGlobalVariable();
     this.token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImEiLCJpYXQiOjE2OTUxMDc3NzksImV4cCI6MTY5NTExNDk3OX0.H06iNJR8GMuxM-puW1lEDLHHeMVWPdASMOz5A4cWRp0';
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNjk1MTI3NDM2LCJleHAiOjE2OTUxMzQ2MzZ9.JYuSmGumQId9u0FSfNq1aDmL1UKTdvfJIFp212_6GSw';
   }
   @ViewChild('chatContainer') private chatContainer!: ElementRef;
 
@@ -63,6 +65,78 @@ export class GptComponent implements AfterViewInit {
       console.log("fattobene");
       const chatContainerElement = this.chatContainer.nativeElement;
       // Use chatContainerElement as needed
+    }
+  }
+
+  onFileSelected(event: any): void {
+    this.selectedFile = event.target.files[0];
+  }
+  uploadFile(): void {
+    if (this.selectedFile) {
+      const formData = new FormData();
+      formData.append('file', this.selectedFile);
+      const headers = new HttpHeaders({
+      'Access-Control-Allow-Origin': '*',
+      // 'Content-Type': 'application/json', // Set the content type to JSON
+      'x-access-token': this.token,
+      });
+      const httpOptions = {
+        headers: headers
+        // body: formData, // Include the JSON request body here
+      };
+      let res = 'x';
+
+      this.http.post('http://localhost:3000/upload', formData,  {
+        ...httpOptions,
+        observe: 'response',
+      })
+      .subscribe({
+        next: (response) => {
+          console.log(response);
+
+          if (response.status === 200) {
+            console.log('File caricato correttamente');
+            if (typeof response.body === 'object') {
+              res = JSON.stringify(response.body);
+            }
+            // console.log(this.formatJSONToTable(res))
+            console.log(response.body);
+            console.log(this.formatResponseAsTable(response.body));
+            res = this.formatResponseAsTable(response.body)
+            console.log("AO\n" + res + "\nAO");
+          }
+        },
+        error: (error) => {
+          if (error.status === 405)
+          {
+            console.log("Nessun file è stato caricato");
+            console.log(error.status);
+            console.error(error);
+          }
+          if (error.status === 400)
+          {
+            console.log("Errore nell'upload del file");
+            console.log(error.status);
+            console.error(error);
+          }
+          if (error.status === 401) {
+            console.log("Accesso non autorizzato");
+            console.log(error.status);
+            console.error(error);
+            this.customToastrService.showErrorWithLink(
+              error.error.replace('Sign In', ''),
+              'Sign In',
+              'http://localhost:4200/login'
+            );
+          }
+
+          console.log(error.status);
+          // console.error('Errore durante la richiesta:', error);
+          // Puoi gestire gli errori di rete o altri errori qui
+        },
+      });
+    } else {
+      alert('Please select a file to upload.');
     }
   }
 
