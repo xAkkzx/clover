@@ -1,9 +1,6 @@
 /* Styles for the chat container */
 @import "~bootstrap-icons/font/bootstrap-icons.css";
 #chatContainer {
-    position: relative;
-    width: 1000px;
-    height: 430px;
     overflow-y: auto;
     overflow-x: auto; /* Abilita la barra di scorrimento orizzontale */
     background-color: black;

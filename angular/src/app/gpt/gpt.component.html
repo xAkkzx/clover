@@ -1,32 +1,25 @@
  <!-- <app-titolo [titolo]="'CLOVER'" style="position: absolute; top: 6%; left: 50%; transform: translate(-50%, -0%);" /> -->
 <!--  [ngClass]="{'input-error': isRequestEmpty}" -->
-<app-textfield #richiestaInput placeholder="Richiesta"
-type = "text"
- (keypress)="onTextFieldKeyPress($event, sceltaDb)" css="custom-ricerca" style="position: absolute; top: 81%; right: 77%; transform: translate(0%, -50%);" >
-</app-textfield>
 
-
-
-<app-pulsante img="bi bi-box-arrow-left" pagina="login" (click)="esci()"
-  style="position:absolute;top: 15%; right: 98%; transform: translate(0%, -50%);" />
-
-
-<app-pulsante img="bi bi-send-fill" (click)="chat(sceltaDb, '1', getValue(richiestaInput.inputValue))" style="position:absolute;top: 92%; right: 42%; transform: translate(0%, -50%);"/>
-
-
-<app-pulsante img="bi bi-trash3-fill" (click)="pulisciChat()"
-  style="position:absolute;top: 92%; right: 62%; transform: translate(0%, -50%);" />
-
-
-<app-pulsante img="bi bi-box-arrow-in-down" (click)="uploadFile()"
-  style="position:absolute;top: 92%; right: 52%; transform: translate(0%, -50%);" />
-
-<app-database nome="Database" #sceltaDb [items]="['Calcio', 'Pokemon', 'Softeam', 'Bookapp']"></app-database>
-
-<input type="file" (change)="onFileSelected($event)" style="position:absolute;top: 92%; right: 72%; transform: translate(0%, -50%);">
-
-<div id="chatContainer" #chatContainer style="position: absolute; bottom: 7%; right: 11%; transform: translate(0%, -20%); ;">
-    <div *ngFor="let message of chatMessages" [class]="message.type === 'request' ? 'request-message' : 'response-message'" [innerHTML]="message.text" ></div>
-  </div> 
-
-  
+<div style="width:100%; height: 70% !important; display: flex; position: relative; background-color: aqua;"> 
+  <div style="width:15%;">
+    <app-pulsante img="bi bi-box-arrow-left" pagina="login" (click)="esci()" />
+    <app-database nome="Database" #sceltaDb [items]="['Calcio', 'Pokemon', 'Softeam', 'Bookapp']"></app-database>
+  </div>
+  <div style="width:85%;height: 100%">
+    <div id="chatContainer" #chatContainer style="height: 90%; margin-top: 1.8%; margin-left: 7%; width: 60%;">
+      <div *ngFor="let message of chatMessages" [class]="message.type === 'request' ? 'request-message' : 'response-message'" [innerHTML]="message.text" ></div>
+    </div> 
+  </div>
+</div>
+<div style="width:100%; height: 10%; align-items: center;  background-color: red;">
+  <app-textfield #richiestaInput placeholder="Richiesta" type = "text"
+    (keypress)="onTextFieldKeyPress($event, sceltaDb)" css="custom-ricerca" style="width: 1000px; margin-left: 23%; " >
+  </app-textfield>
+</div>
+<div style="width:100%; height: 10%; background-color: bisque;">
+  <app-pulsante img="bi bi-send-fill" (click)="chat(sceltaDb, '1', getValue(richiestaInput.inputValue))"/>
+  <app-pulsante img="bi bi-trash3-fill" (click)="pulisciChat()"/>
+  <app-pulsante img="bi bi-box-arrow-in-down" (click)="uploadFile()" />
+  <input type="file" (change)="onFileSelected($event)">
+</div>

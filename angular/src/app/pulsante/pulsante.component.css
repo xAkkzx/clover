@@ -30,9 +30,6 @@
   cursor: pointer;
   border: 1px solid #000;
   border-radius: 5px;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
 }
 
 .custom-button:hover {
@@ -52,9 +49,6 @@
     cursor: pointer;
     border: 1px solid #000;
     border-radius: 5px;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
   }
   
   .pagina-button:hover {

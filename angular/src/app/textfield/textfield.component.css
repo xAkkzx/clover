@@ -4,7 +4,6 @@
   padding: 10px;
   border-radius: 500px;
   font-weight: bold;
-  position: absolute;
   animation: vibrate 0.3s infinite alternate;
   
 }
@@ -14,7 +13,6 @@
   padding: 10px;
   border-radius: 500px;
   font-weight: bold;
-  position: absolute;
   /* transition: border-color 0.3s; */
   /* Add a transition for smooth border color change */
 }
@@ -25,7 +23,6 @@
   border-radius: 500px;
   width: 700px;
   font-weight: bold;
-  position: absolute;
   /* transition: border-color 0.3s; */
   /* Add a transition for smooth border color change */
 }
