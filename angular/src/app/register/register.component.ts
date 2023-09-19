@@ -1,10 +1,17 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Output,
+  ViewChild,
+  ElementRef,
+} from "@angular/core";
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CustomToastrService } from '../custom-toastr.service';
 import { GlobalService } from '../global.service';
+import { TextfieldComponent } from "../textfield/textfield.component";
 
 @Component({
   selector: 'app-register',
@@ -20,13 +27,18 @@ export class RegisterComponent {
   azione: string = '';
   passwordFieldType: string = 'password'; // Inizialmente impostato su 'password'
   getJsonValue: any;
+  @ViewChild("textfieldpsw", { static: false })
+  textfieldRic!: TextfieldComponent;
+  @ViewChild("textfield", { static: false })
+  textfieldUsr!: TextfieldComponent;
 
   constructor(
     private router: Router,
     private http: HttpClient,
     private toastr: ToastrService,
     private customToastrService: CustomToastrService,
-    private globalService: GlobalService
+    private globalService: GlobalService,
+    private el: ElementRef
   ) {}
 
   public eseguiAzione() {
@@ -57,6 +69,26 @@ export class RegisterComponent {
   }
 
   public registra(usr: string, psw: string) {
+
+
+    if (psw === "") {
+      this.textfieldRic.cambia(true);
+
+      setTimeout(() => {
+        this.textfieldRic.cambia(false);
+      }, 400);
+    }
+
+    if (usr === "") {
+      this.textfieldUsr.cambia(true);
+
+      setTimeout(() => {
+        this.textfieldUsr.cambia(false);
+      }, 400);
+    }
+
+
+
     // Create an HttpHeaders object with the "Access-Control-Allow-Origin" and "Content-Type" headers
     const headers = new HttpHeaders({
       'Access-Control-Allow-Origin': '*',
@@ -102,6 +134,14 @@ export class RegisterComponent {
             this.toastr.error(error.error, 'Error', { positionClass: 'toast-bottom-right'});
           else{
             if(error.status === 409){
+
+              this.textfieldUsr.cambia(true);
+
+              setTimeout(() => {
+                this.textfieldUsr.cambia(false);
+              }, 400);
+
+              
               this.customToastrService.showWarningWithLink(
                 error.error.replace("Login", ""),
                 'Login',
