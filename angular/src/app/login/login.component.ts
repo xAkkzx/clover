@@ -130,6 +130,7 @@ export class LoginComponent {
           console.log(response);
 
           if (response.status === 200) {
+            this.globalService.setGlbUsr(usr);
             this.toastr.success("Login effettuato", "Benvenuto!", {
               positionClass: "toast-bottom-right",
             });

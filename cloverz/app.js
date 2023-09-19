@@ -435,4 +435,114 @@ app.get("/protected", auth, (req, res) => {
   }
 })
 
+
+app.post("/save", async (req, res) => {
+  const dbConfig = {
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE,
+  };
+  
+  // Create a MySQL pool for handling connections
+  const pool = mysql.createPool(dbConfig);
+
+  try {
+    const { userId, role, message, timestamp } = req.body;
+
+    // Verifica che tutti i parametri siano definiti
+    if (userId !== undefined && role !== undefined && message !== undefined && timestamp !== undefined) {
+      // Esegui un'operazione di inserimento nella tabella "chat_history"
+      await pool.execute(
+        "INSERT INTO chat (id_utente, messaggio, mittente, data_ora) VALUES (?, ?, ?, ?)",
+        [userId, message, role,timestamp]
+      );
+
+      res.status(200).send("Messaggio salvato con successo nella cronologia della chat.");
+    } else {
+      // Se almeno uno dei parametri è undefined, restituisci un errore 400 Bad Request
+      res.status(406).send("I parametri della richiesta contengono valori undefined.");
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err);
+  }
+});
+
+
+app.post("/loadMessages", async (req, res) => {
+
+  const dbConfig = {
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE,
+  };
+  
+  // Create a MySQL pool for handling connections
+  const pool = mysql.createPool(dbConfig);
+
+  try {
+    const { userId } = req.body;
+
+    // Esegui un'operazione di query per recuperare i messaggi dell'utente
+    const [messages] = await pool.execute(
+      "SELECT * FROM chat WHERE id_utente = ?",
+      [userId]
+    );
+
+    res.status(200).json(messages);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Errore durante il recupero dei messaggi.");
+  }
+});
+
+app.post("/uid", async (req, res) => {
+  const dbConfig = {
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE,
+  };
+  
+  // Create a MySQL pool for handling connections
+  const pool = mysql.createPool(dbConfig);
+
+  try {
+    const { username } = req.body;
+
+    // Verifica che l'username sia presente nella richiesta
+    if (!username) {
+      return res.status(402).send("Username non presente in richiesta");
+    }
+
+    // Esegui una query per ottenere l'ID dell'utente in base all'username
+    const [rows] = await pool.execute(
+      "SELECT id__utente FROM utente WHERE username = ?",
+      [username]
+    );
+
+    if (rows.length > 0) {
+      const userId = rows[0].id__utente;
+      console.log(userId)
+      return res.status(200).json({userId});
+    } else {
+      return res.status(404).send("Utente non trovato" );
+    }
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send("Errore durante la ricerca dell'utente");
+  }
+});
+
+
+
+
+
+
+
+
+
+
 module.exports = app;
