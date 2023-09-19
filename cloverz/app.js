@@ -8,12 +8,48 @@ const Papa = require("papaparse");
 const OpenAI = require("openai");
 const mssql = require("mssql");
 const cors = require("cors");
+const multer = require("multer");
+const path = require("path");
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 var messages = [];
 let numRichiesta = 0;
 let dataBaseVecchio = "";
+const uploadDir = "./dbz";
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    const originalName = path.parse(file.originalname).name;
+    const fileExtension = path.extname(file.originalname);
+    const uniqueFilename = `${originalName}${fileExtension}`;
+
+    // Check if the file already exists.
+    if (fs.existsSync(path.join(uploadDir, uniqueFilename))) {
+      return cb(new Error("File with this name already exists."));
+    }
+
+    cb(null, uniqueFilename);
+  },
+});
+const upload = multer({
+  storage: storage,
+  fileFilter: (req, file, cb) => {
+    const allowedFileExtensions = [".txt"];
+    // Check if the file extension is allowed.
+    const isValidExtension = allowedFileExtensions.includes(
+      path.extname(file.originalname).toLowerCase()
+    );
+    if (!isValidExtension) {
+      // Return an error if the file extension is not allowed.
+      return cb(new Error("Only .txt files are allowed."));
+    }
+    cb(null, true);
+  },
+});
 
 const app = express();
 
@@ -544,5 +580,21 @@ app.post("/uid", async (req, res) => {
 
 
 
+
+app.post("/upload", upload.single("file"), auth, (req, res) => {
+  if (!req.file) {
+    return res.status(405).send("No file uploaded.");
+  }
+  // You can process the uploaded file here (e.g., save it to a database or perform other operations).
+  // Respond with a success message.
+  res.status(200).send("File uploaded successfully.");
+});
+
+app.use((err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    return res.status(400).send("File upload error: " + err.message);
+  }
+  return next(err);
+});
 
 module.exports = app;

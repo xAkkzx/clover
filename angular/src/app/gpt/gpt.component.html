@@ -18,12 +18,12 @@ type = "text"
   style="position:absolute;top: 92%; right: 62%; transform: translate(0%, -50%);" />
 
 
-<app-pulsante img="bi bi-box-arrow-in-down" azione='niente'
+<app-pulsante img="bi bi-box-arrow-in-down" (click)="uploadFile()"
   style="position:absolute;top: 92%; right: 52%; transform: translate(0%, -50%);" />
 
 <app-database nome="Database" #sceltaDb [items]="['Calcio', 'Pokemon', 'Softeam', 'Bookapp']"></app-database>
 
-
+<input type="file" (change)="onFileSelected($event)" style="position:absolute;top: 92%; right: 72%; transform: translate(0%, -50%);">
 
 <div id="chatContainer" #chatContainer style="position: absolute; bottom: 7%; right: 11%; transform: translate(0%, -20%); ;">
     <div *ngFor="let message of chatMessages" [class]="message.type === 'request' ? 'request-message' : 'response-message'" [innerHTML]="message.text" ></div>
