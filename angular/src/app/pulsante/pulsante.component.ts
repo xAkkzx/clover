@@ -31,7 +31,7 @@ export class PulsanteComponent {
 
   cambiaSVG(){
     if(this.img=="bi bi-eye-fill"){
-      this.img="bi bi-eye-slash-fill";
+      this.img="bi bi-eye-slash-fill ";
     }else{
       this.img="bi bi-eye-fill";
     }

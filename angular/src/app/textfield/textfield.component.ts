@@ -16,6 +16,7 @@ export class TextfieldComponent {
   @Input() type: string = 'password'; // Default to 'text'
   visible:boolean = true;
   changetype:boolean =true;
+  @Input() css:string='custom-textfield';
 
 
   cambiacss=false;
