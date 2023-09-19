@@ -15,6 +15,7 @@ import { CustomToastrService } from "../custom-toastr.service";
 import { GlobalService } from "../global.service";
 import { TextfieldComponent } from "../textfield/textfield.component";
 import { timestamp } from "rxjs";
+import { DatabaseComponent } from '../database/database.component'
 
 @Component({
   selector: "app-gpt",
@@ -30,6 +31,7 @@ export class GptComponent implements AfterViewInit {
   token: string;
   @ViewChild(TextfieldComponent, { static: false })
   textfieldRic!: TextfieldComponent;
+  menudata!: DatabaseComponent;
   chatMessages: { text: string; type: string }[] = [];
   isRequestEmpty: boolean = false;
 
@@ -53,7 +55,7 @@ export class GptComponent implements AfterViewInit {
   ) {
     this.token = globalService.getGlobalVariable();
     this.token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im0iLCJpYXQiOjE2OTUxMjQ5OTgsImV4cCI6MTY5NTEzMjE5OH0.g2uHNEn_O_P_m3hrw7GXvvooMufp1XmeO9tBnZQYoHc";
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im0iLCJpYXQiOjE2OTUwNDg4NzcsImV4cCI6MTY5NTA1NjA3N30.AtH4Hsn-HhAKNaKO0RQXevmS4iKczlHqcPktQ5O2GnE';
   }
   @ViewChild("chatContainer") private chatContainer!: ElementRef;
 
@@ -158,15 +160,15 @@ export class GptComponent implements AfterViewInit {
     }
   }
 
-  onTextFieldKeyPress(event: KeyboardEvent, nomedb: any) {
-    if (event.key === "Enter") {
-      // Verifica se il tasto premuto è "Invio"
-      if (this.textfieldRic.inputValue == "") {
+
+  onTextFieldKeyPress(event: KeyboardEvent, Dbz: any) {
+    if (event.key === 'Enter') { // Verifica se il tasto premuto è "Invio"
+      if(this.textfieldRic.inputValue== ''){
         this.isRequestEmpty = true; // Imposta la variabile a true se la richiesta è vuota
       }
-      console.log(nomedb);
+      //console.log(Dbz)
 
-      this.chat(nomedb, "1", this.getValue(this.textfieldRic.inputValue));
+      this.chat(Dbz, '1', this.getValue(this.textfieldRic.inputValue));
       setTimeout(() => {
         this.isRequestEmpty = false;
       }, 400);
@@ -183,10 +185,11 @@ export class GptComponent implements AfterViewInit {
     return val;
   }
 
-  public chat(nomeDbz: string, tipoDbz: any, richiestaz: any) {
-    let res = "x";
-    const timestamp = new Date().toISOString();
-    let ndb = nomeDbz.toLocaleLowerCase();
+  public chat(Dbz: any, tipoDbz: any, richiestaz: any) {
+    
+    let res = 'x';
+    this.menudata=Dbz;
+    let ndb = Dbz.nome.toLocaleLowerCase();
     console.log(ndb);
     const headers = new HttpHeaders({
       "Access-Control-Allow-Origin": "*",
@@ -248,16 +251,25 @@ export class GptComponent implements AfterViewInit {
         this.scrollToBottom();
       });
 
+      console.log(Dbz.nome);
       this.textfieldRic.cambia(true);
 
       setTimeout(() => {
         this.textfieldRic.cambia(false);
       }, 400);
 
+      this.menudata.change(true);
       this.currentSessionMessages.push({
         message: "Ricorda, devi prima selezionare il DataBase su cui agire.",
         role: "ai",
       });
+
+      setTimeout(() => {
+        this.menudata.change(false);
+      }, 400);
+
+
+
 
       return;
     } else {

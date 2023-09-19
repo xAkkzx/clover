@@ -1,8 +1,8 @@
  <!-- <app-titolo [titolo]="'CLOVER'" style="position: absolute; top: 6%; left: 50%; transform: translate(-50%, -0%);" /> -->
 <!--  [ngClass]="{'input-error': isRequestEmpty}" -->
- <app-textfield #richiestaInput placeholder="Richiesta"
+<app-textfield #richiestaInput placeholder="Richiesta"
 type = "text"
- (keypress)="onTextFieldKeyPress($event, getValue(sceltaDb.nome))" style="position: absolute; top: 81%; right: 57%; transform: translate(0%, -50%);" >
+ (keypress)="onTextFieldKeyPress($event, sceltaDb)" css="custom-ricerca" style="position: absolute; top: 81%; right: 77%; transform: translate(0%, -50%);" >
 </app-textfield>
 
 
@@ -11,7 +11,7 @@ type = "text"
   style="position:absolute;top: 15%; right: 98%; transform: translate(0%, -50%);" />
 
 
-<app-pulsante img="bi bi-send-fill" (click)="chat(getValue(sceltaDb.nome), '1', getValue(richiestaInput.inputValue))" style="position:absolute;top: 92%; right: 42%; transform: translate(0%, -50%);"/>
+<app-pulsante img="bi bi-send-fill" (click)="chat(sceltaDb, '1', getValue(richiestaInput.inputValue))" style="position:absolute;top: 92%; right: 42%; transform: translate(0%, -50%);"/>
 
 
 <app-pulsante img="bi bi-trash3-fill" (click)="pulisciChat()"
@@ -25,7 +25,7 @@ type = "text"
 
 
 
-<div id="chatContainer" #chatContainer style="position: absolute; bottom: 20%; right: 20%; transform: translate(0%, -20%); ;">
+<div id="chatContainer" #chatContainer style="position: absolute; bottom: 7%; right: 11%; transform: translate(0%, -20%); ;">
     <div *ngFor="let message of chatMessages" [class]="message.type === 'request' ? 'request-message' : 'response-message'" [innerHTML]="message.text" ></div>
   </div> 
 

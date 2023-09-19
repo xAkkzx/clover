@@ -1,0 +1,28 @@
+.custom-db {
+    border: 2px solid black; 
+    border-radius: 500px;
+}
+
+.input-error{
+    border: 2px solid red;
+    border-radius: 500px;
+    /*animation: vibrate 0.3s infinite alternate;*/
+
+}
+
+/*
+@keyframes vibrate {
+
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+  
+    25% {
+      transform: translateX(4px);
+    }
+  
+    75% {
+      transform: translateX(-4px);
+    }
+  } */
