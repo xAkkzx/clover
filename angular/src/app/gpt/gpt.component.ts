@@ -56,8 +56,7 @@ export class GptComponent implements AfterViewInit {
     private renderer: Renderer2
   ) {
     this.token = globalService.getGlobalVariable();
-    this.token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im0iLCJpYXQiOjE2OTUwNDg4NzcsImV4cCI6MTY5NTA1NjA3N30.AtH4Hsn-HhAKNaKO0RQXevmS4iKczlHqcPktQ5O2GnE';
+    // this.token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im0iLCJpYXQiOjE2OTUwNDg4NzcsImV4cCI6MTY5NTA1NjA3N30.AtH4Hsn-HhAKNaKO0RQXevmS4iKczlHqcPktQ5O2GnE';
   }
   @ViewChild("chatContainer") private chatContainer!: ElementRef;
 
@@ -609,7 +608,7 @@ export class GptComponent implements AfterViewInit {
   public saveChatMessage(userId: number, role: string, messageText: string) {
     console.log("!!!!!!!!!!" + userId);
     const currentDate = new Date(); // Ottieni la data e l'ora correnti
-    const formattedDate = currentDate.toISOString(); // Formatta la data e l'ora in una stringa ISO
+    const formattedDate = currentDate.toISOString().slice(0, 19).replace('T', ' '); //  Formatta la data e l'ora in una stringa ISO
     console.log(formattedDate);
     const requestBody = {
       userId: userId,
