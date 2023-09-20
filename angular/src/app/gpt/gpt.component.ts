@@ -57,7 +57,7 @@ export class GptComponent implements AfterViewInit {
   ) {
     this.token = globalService.getGlobalVariable();
     this.token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImEiLCJpYXQiOjE2OTUxOTUxMDEsImV4cCI6MTY5NTIwMjMwMX0.lXF6hLseM9XKEBY67iTclBwtWPG-1GonGldJZDfbRAM';
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImEiLCJpYXQiOjE2OTUyMTE4MzAsImV4cCI6MTY5NTIxOTAzMH0.P7Kw8wBeoOw-5ciqwaRd4mosI2y_qYrgOSfhBvJoYYg';
   }
   @ViewChild("chatContainer") private chatContainer!: ElementRef;
 

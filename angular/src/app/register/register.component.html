@@ -16,26 +16,26 @@
 
 <div style="width: 100%;height: 90% !important;display: flex;position:relative">
 
-  <div style="width: 33%;background-color: red;">
+  <div style="width: 33%;">
     
   </div>
 
 
-  <div style="width: 33%;height:100%;background-color:blue;align-items: center;">
+  <div style="width: 33%;height:100%;align-items: center;">
     <app-titolo [titolo]="'REGISTER'" style="position: relative"/>
     
-    <app-textfield placeholder="Username" #textfield type = "text"  style="position: relative;margin-left:27% ; top:5%;" />
+    <app-textfield placeholder="Username" #textfield type = "text"  style="position: relative;margin-left:27% ; top:8%;" />
 
 
     <app-textfield #textfieldpsw  [type]="passwordFieldType" placeholder="Password" class="custom-textfield unselectable"
      style="position: relative; top:20% ;margin-left:27%" (keypress)="onTextFieldKeyPress($event, getValue(textfield.inputValue), getValue(textfieldpsw.inputValue))"></app-textfield>
 
    
-   <app-pulsante pagina="gpt" nome="SignUp" (click)="registra  (getValue(textfield.inputValue), getValue(textfieldpsw.inputValue))" style="position:relative;margin-left:40%;top:35%" />
+   <app-pulsante pagina="gpt" nome="SignUp" (click)="registra  (getValue(textfield.inputValue), getValue(textfieldpsw.inputValue))" style="position:relative;margin-left:40%;top:26.5%" />
 
   </div>
 
-  <div style="width: 33%;background-color: yellowgreen;">
+  <div style="width: 33%;">
     <app-pulsante pagina="login" nome="Login" azione="cambiaPagina" style="position:relative;margin-left:80%; top:8.5% ;"  class="pagina-button" />
   </div>
 
