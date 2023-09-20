@@ -573,6 +573,37 @@ app.post("/uid", async (req, res) => {
 });
 
 
+app.post("/clear", async (req, res) => {
+  const dbConfig = {
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE,
+  };
+
+  // Create a MySQL pool for handling connections
+  const pool = mysql.createPool(dbConfig);
+
+  try {
+    const { userId } = req.body;
+
+    // Verifica che l'userId sia presente nella richiesta
+    if (!userId) {
+      return res.status(400).send("L'ID utente (userId) deve essere fornito nella richiesta.");
+    }
+
+    // Esegui un'operazione di cancellazione dei messaggi dell'utente in base all'userId
+    await pool.execute("DELETE FROM chat WHERE id_utente = ?", [userId]);
+
+    return res.status(200).send("Tutti i messaggi dell'utente sono stati cancellati con successo.");
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send("Errore durante la cancellazione dei messaggi dell'utente.");
+  }
+});
+
+
+
 
 
 

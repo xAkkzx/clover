@@ -6,7 +6,9 @@ import {
   ElementRef,
   AfterViewInit,
   Renderer2,
+  HostListener,
 } from "@angular/core";
+import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { FormGroup, FormControl } from "@angular/forms";
 import { Router } from "@angular/router";
@@ -15,8 +17,8 @@ import { CustomToastrService } from "../custom-toastr.service";
 import { GlobalService } from "../global.service";
 import { TextfieldComponent } from "../textfield/textfield.component";
 import { timestamp } from "rxjs";
-import { DatabaseComponent } from '../database/database.component'
-import { catchError, throwError } from 'rxjs';
+import { DatabaseComponent } from "../database/database.component";
+import { map, catchError, throwError } from "rxjs";
 
 @Component({
   selector: "app-gpt",
@@ -55,11 +57,24 @@ export class GptComponent implements AfterViewInit {
     private el: ElementRef,
     private renderer: Renderer2
   ) {
+    window.addEventListener("popstate", this.onPopState.bind(this));
+    window.addEventListener("beforeunload", this.onBeforeUnload.bind(this));
     this.token = globalService.getGlobalVariable();
-    this.token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImEiLCJpYXQiOjE2OTUxOTUxMDEsImV4cCI6MTY5NTIwMjMwMX0.lXF6hLseM9XKEBY67iTclBwtWPG-1GonGldJZDfbRAM';
   }
   @ViewChild("chatContainer") private chatContainer!: ElementRef;
+
+  // Modify the onBeforeUnload method to call esci() when the window is closed
+  onBeforeUnload(event: BeforeUnloadEvent) {
+    this.esci();
+    // Optionally, you can return a custom message to prompt the user
+    event.returnValue = "Are you sure you want to leave this page?";
+  }
+
+  // Define the popstate event handler
+  onPopState(event: PopStateEvent) {
+    // Call the esci() method when the user navigates backward or forward
+    this.esci();
+  }
 
   ngOnInit() {
     if (this.loggedInUsername === "") {
@@ -67,58 +82,18 @@ export class GptComponent implements AfterViewInit {
         positionClass: "toast-bottom-right",
       });
     } else {
-      const requestBody = {
-        username: this.loggedInUsername,
-      };
-
-      const headers = new HttpHeaders({
-        "Content-Type": "application/json",
+      this.getId().subscribe((userId: any) => {
+        console.log("UserID:", userId);
+        console.log("arrivederci" + userId);
+        this.loadMessages(userId);
+        // Esegui altre azioni qui con l'ID dell'utente
       });
-
-      const requestBodyJSON = JSON.stringify(requestBody);
-
-      interface ApiResponse {
-        userId: number;
-        // Altri campi se presenti nella risposta
-      }
-
-      this.http
-        .post<ApiResponse>("http://localhost:3000/uid", requestBodyJSON, {
-          headers: headers,
-          observe: "response",
-        })
-        .subscribe((response) => {
-          console.log(response.status);
-
-          if (response.status === 200) {
-            console.log("Messaggio di chat salvato con successo:", response);
-
-            if (response.body) {
-              console.log(response.body);
-              const userId = response.body.userId;
-              console.log("UserId:", userId);
-
-              // Ora che hai ottenuto l'ID dell'utente, carica i messaggi
-              this.loadMessages(userId);
-            } else {
-              console.error(
-                "Il corpo della risposta non contiene dati validi."
-              );
-            }
-          } else {
-            if (response.status === 404 || response.status === 500) {
-              console.error(
-                "Errore durante il salvataggio del messaggio di chat:",
-                response
-              );
-            }
-          }
-        });
     }
   }
 
   private loadMessages(userId: number) {
     // All'interno della funzione per caricare i messaggi
+    console.log("ciao" + userId);
     this.http.post("http://localhost:3000/loadMessages", { userId }).subscribe({
       next: (response: any) => {
         console.log("Messaggi caricati con successo:", response);
@@ -168,81 +143,80 @@ export class GptComponent implements AfterViewInit {
   uploadFile(): void {
     if (this.selectedFile) {
       const formData = new FormData();
-      formData.append('file', this.selectedFile);
+      formData.append("file", this.selectedFile);
       const headers = new HttpHeaders({
-      'Access-Control-Allow-Origin': '*',
-      // 'Content-Type': 'application/json', // Set the content type to JSON
-      'x-access-token': this.token,
+        "Access-Control-Allow-Origin": "*",
+        // 'Content-Type': 'application/json', // Set the content type to JSON
+        "x-access-token": this.token,
       });
       const httpOptions = {
-        headers: headers
+        headers: headers,
         // body: formData, // Include the JSON request body here
       };
-      let res = 'x';
+      let res = "x";
 
-      this.http.post('http://localhost:3000/upload', formData,  {
-        ...httpOptions,
-        observe: 'response',
-      })
-      .subscribe({
-        next: (response) => {
-          console.log(response);
+      this.http
+        .post("http://localhost:3000/upload", formData, {
+          ...httpOptions,
+          observe: "response",
+        })
+        .subscribe({
+          next: (response) => {
+            console.log(response);
 
-          if (response.status === 200) {
-            console.log('File caricato correttamente');
-            if (typeof response.body === 'object') {
-              res = JSON.stringify(response.body);
+            if (response.status === 200) {
+              console.log("File caricato correttamente");
+              if (typeof response.body === "object") {
+                res = JSON.stringify(response.body);
+              }
+              // console.log(this.formatJSONToTable(res))
+              console.log(response.body);
+              console.log(this.formatResponseAsTable(response.body));
+              res = this.formatResponseAsTable(response.body);
+              console.log("AO\n" + res + "\nAO");
             }
-            // console.log(this.formatJSONToTable(res))
-            console.log(response.body);
-            console.log(this.formatResponseAsTable(response.body));
-            res = this.formatResponseAsTable(response.body)
-            console.log("AO\n" + res + "\nAO");
-          }
-        },
-        error: (error) => {
-          if (error.status === 405)
-          {
-            console.log("Nessun file è stato caricato");
-            console.log(error.status);
-            console.error(error);
-          }
-          if (error.status === 400)
-          {
-            console.log("Errore nell'upload del file");
-            console.log(error.status);
-            console.error(error);
-          }
-          if (error.status === 401) {
-            console.log("Accesso non autorizzato");
-            console.log(error.status);
-            console.error(error);
-            this.customToastrService.showErrorWithLink(
-              error.error.replace('Sign In', ''),
-              'Sign In',
-              'http://localhost:4200/login'
-            );
-          }
+          },
+          error: (error) => {
+            if (error.status === 405) {
+              console.log("Nessun file è stato caricato");
+              console.log(error.status);
+              console.error(error);
+            }
+            if (error.status === 400) {
+              console.log("Errore nell'upload del file");
+              console.log(error.status);
+              console.error(error);
+            }
+            if (error.status === 401) {
+              console.log("Accesso non autorizzato");
+              console.log(error.status);
+              console.error(error);
+              this.customToastrService.showErrorWithLink(
+                error.error.replace("Sign In", ""),
+                "Sign In",
+                "http://localhost:4200/login"
+              );
+            }
 
-          console.log(error.status);
-          // console.error('Errore durante la richiesta:', error);
-          // Puoi gestire gli errori di rete o altri errori qui
-        },
-      });
+            console.log(error.status);
+            // console.error('Errore durante la richiesta:', error);
+            // Puoi gestire gli errori di rete o altri errori qui
+          },
+        });
     } else {
-      alert('Please select a file to upload.');
+      alert("Please select a file to upload.");
     }
   }
 
-
   onTextFieldKeyPress(event: KeyboardEvent, Dbz: any) {
-    if (event.key === 'Enter') { // Verifica se il tasto premuto è "Invio"
-      if(this.textfieldRic.inputValue== ''){
+    if (event.key === "Enter") {
+      // Verifica se il tasto premuto è "Invio"
+      if (this.textfieldRic.inputValue == "") {
         this.isRequestEmpty = true; // Imposta la variabile a true se la richiesta è vuota
       }
       //console.log(Dbz)
 
-      this.chat(Dbz, '1', this.getValue(this.textfieldRic.inputValue));
+      this.chat(Dbz, "1", this.getValue(this.textfieldRic.inputValue));
       setTimeout(() => {
         this.isRequestEmpty = false;
       }, 400);
@@ -260,9 +234,8 @@ export class GptComponent implements AfterViewInit {
   }
 
   public chat(Dbz: any, tipoDbz: any, richiestaz: any) {
-    
-    let res = 'x';
-    this.menudata=Dbz;
+    let res = "x";
+    this.menudata = Dbz;
     let ndb = Dbz.nome.toLocaleLowerCase();
     console.log(ndb);
     const headers = new HttpHeaders({
@@ -341,9 +314,6 @@ export class GptComponent implements AfterViewInit {
       setTimeout(() => {
         this.menudata.change(false);
       }, 400);
-
-
-
 
       return;
     } else {
@@ -532,8 +502,7 @@ export class GptComponent implements AfterViewInit {
   }
 
   public esci() {
-
-    if(this.loggedInUsername === ""){
+    if (this.loggedInUsername === "") {
       this.globalService.setGlobalVariable("");
       this.router.navigate(["/", "login"]);
       return;
@@ -541,60 +510,11 @@ export class GptComponent implements AfterViewInit {
 
     console.log("AAAAIAAAAAAAAAA");
 
-    const requestBody = {
-      username: this.loggedInUsername,
-    };
-
-    const headers = new HttpHeaders({
-      "Content-Type": "application/json",
+    this.getId().subscribe((userId: any) => {
+      console.log("UserID:", userId);
+      this.saveChatMessagesAndExit(userId);
+      // Esegui altre azioni qui con l'ID dell'utente
     });
-
-    const requestBodyJSON = JSON.stringify(requestBody);
-
-    interface ApiResponse {
-      userId: number;
-      // Altri campi se presenti nella risposta
-    }
-    console.log("AAAAIUUUUUUUUUA");
-    this.http
-      .post<ApiResponse>("http://localhost:3000/uid", requestBodyJSON, {
-        headers: headers,
-        observe: "response",
-      })
-
-      .subscribe({
-        next: (response) => {
-          if (response.status === 200) {
-            console.log("Messaggio di chat salvato con successo:", response);
-
-            if (response.body) {
-              console.log(response.body);
-              const userId = response.body.userId;
-              console.log("UserId:", userId);
-      //        console.log("chrimitic");
-              // Chiamata alla funzione saveChatMessage dopo aver ottenuto l'ID dell'utente
-              this.saveChatMessagesAndExit(userId);
-            } else {
-              console.error(
-                "Il corpo della risposta non contiene dati validi."
-              );
-            }
-          } else {
-            if (response.status === 400 || response.status === 500) {
-              console.error(
-                "Errore durante il salvataggio del messaggio di chat:",
-                response
-              );
-              // Aggiungi qui la logica per gestire l'errore, ad esempio mostrare un messaggio all'utente o eseguire altre azioni necessarie
-            }
-          }
-        },
-        error: (error) => {
-          console.error("Errore durante la richiesta HTTP:", error);
-          // Gestisci l'errore qui se necessario, ad esempio mostrare un messaggio all'utente o eseguire altre azioni necessarie
-
-        },
-      });
   }
 
   private saveChatMessagesAndExit(userId: number) {
@@ -610,7 +530,10 @@ export class GptComponent implements AfterViewInit {
   public saveChatMessage(userId: number, role: string, messageText: string) {
     console.log("!!!!!!!!!!" + userId);
     const currentDate = new Date(); // Ottieni la data e l'ora correnti
-    const formattedDate = currentDate.toISOString().slice(0, 19).replace('T', ' '); //  Formatta la data e l'ora in una stringa ISO
+    const formattedDate = currentDate
+      .toISOString()
+      .slice(0, 19)
+      .replace("T", " "); //  Formatta la data e l'ora in una stringa ISO
     console.log(formattedDate);
     const requestBody = {
       userId: userId,
@@ -646,8 +569,84 @@ export class GptComponent implements AfterViewInit {
   }
 
   public pulisciChat() {
+    this.currentSessionMessages = [];
     this.chatMessages = [];
+    this.getId().subscribe((userId: any) => {
+      console.log("UserID:", userId);
+      this.clearChat(userId);
+      // Esegui altre azioni qui con l'ID dell'utente
+    });
   }
+
+
+
+  public clearChat(userId: number) {
+    console.log("!!!!!!!!!!" + userId);
+    const requestBody = {
+      userId: userId,
+    };
+
+    const headers = new HttpHeaders({
+      "Content-Type": "application/json",
+    });
+
+    this.http
+      .post("http://localhost:3000/clear", requestBody, {
+        headers: headers,
+      })
+      .subscribe({
+        next: (response: any) => {
+          console.log("Chat cancellata con successo:", response);
+          // Puoi gestire la risposta dal server qui se necessario
+        },
+        error: (error: any) => {
+          if (error.status === 500) {
+            console.error(
+              "Errore durante il cancellamento del messaggio di chat:",
+              error
+            );
+          }
+        },
+      });
+  }
+
+
+
+
+  public getId(): Observable<number> {
+    const requestBody = {
+      username: this.loggedInUsername,
+    };
+  
+    const headers = new HttpHeaders({
+      "Content-Type": "application/json",
+    });
+  
+    const requestBodyJSON = JSON.stringify(requestBody);
+  
+    interface ApiResponse {
+      userId: number;
+      // Altri campi se presenti nella risposta
+    }
+  
+    return this.http.post<ApiResponse>("http://localhost:3000/uid", requestBodyJSON, {
+      headers: headers,
+      observe: "response",
+    }).pipe(
+      map(response => {
+        if (response.body && response.body.userId) {
+          return response.body.userId;
+        } else {
+          throw new Error('User ID not found in response body');
+        }
+      }),
+      catchError(error => {
+        console.error("Errore durante il recupero dell'ID:", error);
+        return throwError("Errore durante il recupero dell'ID");
+      })
+    );
+  }
+  
 
   private scrollToBottom() {
     if (this.chatContainer && this.chatContainer.nativeElement) {

@@ -122,6 +122,7 @@ export class RegisterComponent {
           console.log(response);
 
           if (response.status === 201) {
+            this.globalService.setGlbUsr(usr);
             this.toastr.success('Registrazione effettuata', 'Benvenuto!', { positionClass: 'toast-bottom-right'} );
             console.log('Ok - Registrazione effettuata');
             let token = this.extractTokenFromResponse(response)
