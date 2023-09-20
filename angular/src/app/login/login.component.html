@@ -23,7 +23,7 @@
 
   </div >
 
-  <div style="width: 33%;height:100%;background-color:blue;align-items: center;" >
+  <div style="width: 33%;background-color:blue;align-items: center;" >
     <app-titolo [titolo]="'LOGIN'" class="login-title"></app-titolo>
 
     <app-textfield placeholder="Username" #textfield type="text" class="custom-textfield"
@@ -32,19 +32,21 @@
     <app-textfield #textfieldpsw  [type]="passwordFieldType" placeholder="Password"
     style="position: relative; margin-left: 27%;top:20%" (keypress)="onTextFieldKeyPress($event, getValue(textfield.inputValue), getValue(textfieldpsw.inputValue))"></app-textfield>
 
-    <app-pulsante pagina="gpt" nome="SignIn"
-    (click)="login(getValue(textfield.inputValue), getValue(textfieldpsw.inputValue))"
-    class="custom-button login-button" style="position:relative;top:27%;margin-left: 89%;">
+    <app-pulsante img="bi bi-eye-fill" azione="cambiaSVG" (click)="togglePasswordVisibility()"  style="position:relative; margin-left: 72%;top: 13.5%;">
     </app-pulsante>
 
-    <app-pulsante img="bi bi-eye-fill" azione="cambiaSVG" (click)="togglePasswordVisibility()"  style="position:relative;margin-left: 80%;margin-top: 80%;">
+    <app-pulsante pagina="gpt" nome="SignIn"
+    (click)="login(getValue(textfield.inputValue), getValue(textfieldpsw.inputValue))"
+    class="custom-button login-button" style="position:relative;top:20%;margin-left: 41%;">
     </app-pulsante>
+
+    
 
   </div>
 
   <div style="width: 33%;background-color: yellowgreen;">
 
-    <app-pulsante pagina="register" nome="Register" azione="cambiaPagina" style="position:relative;margin-bottom: 80%;margin-left: 80%;">
+    <app-pulsante pagina="register" nome="Register" azione="cambiaPagina" style="position:relative;top: 8.5%;margin-left: 80%;">
     </app-pulsante>
 
   </div>
