@@ -1,23 +1,12 @@
 /* Default styles for larger screens */
-.login-title {
-   
-    top: 8%;
-    left: 50%;
-    transform: translate(-50%, -0%);
-}
 
-.login-button {
-   
-    top: 58%;
-    right: 53.5%;
-    transform: translate(-0%, -50%);
-}
+
+
 
 .input-fieldU {
    
     top: 35%;
     right: 57%;
-    transform: translate(0%, -50%);
     /* width: 70%; */
     margin: 0 auto;
 }
@@ -25,40 +14,8 @@
    
     top: 45%;
     right: 57%;
-    transform: translate(0%, -50%);
+
     /* width: 70%; */
     margin: 0 auto;
 }
 
-.register-button {
-   
-    top: 5%;
-    right: 8%;
-    transform: translate(0%, -50%);
-}
-
-
-/* Media query for smaller screens */
-@media (max-width: 768px) {
-    .login-title {
-        font-size: 20px;
-    }
-
-    .login-button {
-        top: 68%;
-        /* Adjust position for smaller screens */
-        right: 50%;
-        /* Adjust position for smaller screens */
-        transform: translate(50%, -50%);
-        /* Adjust transform for smaller screens */
-        font-size: 16px;
-    }
-
-    .input-field {
-        right: 50%;
-        /* Adjust position for smaller screens */
-        transform: translate(50%, -50%);
-        /* Adjust transform for smaller screens */
-        width: 80%;
-    }
-}

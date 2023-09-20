@@ -1,4 +1,4 @@
-<div class="login-container">
+<!-- <div class="login-container">
   <app-titolo [titolo]="'LOGIN'" class="login-title"></app-titolo>
 
   <app-textfield placeholder="Username" #textfield type="text" class="custom-textfield"
@@ -6,18 +6,49 @@
 
   <app-textfield #textfieldpsw  [type]="passwordFieldType" placeholder="Password" class="custom-textfield unselectable"
   style="position: absolute;top: 45%; right: 57%; transform: translate(0%, -50%); margin-top: 10px;" (keypress)="onTextFieldKeyPress($event, getValue(textfield.inputValue), getValue(textfieldpsw.inputValue))"></app-textfield>
-
-
-
-
-
-
   <app-pulsante pagina="gpt" nome="SignIn"
     (click)="login(getValue(textfield.inputValue), getValue(textfieldpsw.inputValue))"
     class="custom-button login-button"></app-pulsante>
 
   <app-pulsante pagina="register" nome="Register" azione="cambiaPagina"  class="pagina-button register-button">
   </app-pulsante>
+
     <app-pulsante img="bi bi-eye-fill" azione="cambiaSVG" (click)="togglePasswordVisibility()"  style="position:absolute;top: 49%; right: 41%; transform: translate(0%, -50%);">
     </app-pulsante>
+
+</div> -->
+
+<div style="width: 100%;height: 90% !important;display: flex;position:relative">
+  <div style="width: 33%;background-color: red;">
+
+  </div >
+
+  <div style="width: 33%;height:100%;background-color:blue;align-items: center;" >
+    <app-titolo [titolo]="'LOGIN'" class="login-title"></app-titolo>
+
+    <app-textfield placeholder="Username" #textfield type="text" class="custom-textfield"
+    style="position: relative;margin-left: 27%; top:5% "></app-textfield>
+
+    <app-textfield #textfieldpsw  [type]="passwordFieldType" placeholder="Password"
+    style="position: relative; margin-left: 27%;top:20%" (keypress)="onTextFieldKeyPress($event, getValue(textfield.inputValue), getValue(textfieldpsw.inputValue))"></app-textfield>
+
+    <app-pulsante pagina="gpt" nome="SignIn"
+    (click)="login(getValue(textfield.inputValue), getValue(textfieldpsw.inputValue))"
+    class="custom-button login-button" style="position:relative;top:27%;margin-left: 89%;">
+    </app-pulsante>
+
+    <app-pulsante img="bi bi-eye-fill" azione="cambiaSVG" (click)="togglePasswordVisibility()"  style="position:relative;margin-left: 80%;margin-top: 80%;">
+    </app-pulsante>
+
+  </div>
+
+  <div style="width: 33%;background-color: yellowgreen;">
+
+    <app-pulsante pagina="register" nome="Register" azione="cambiaPagina" style="position:relative;margin-bottom: 80%;margin-left: 80%;">
+    </app-pulsante>
+
+  </div>
+
+
+
 </div>
