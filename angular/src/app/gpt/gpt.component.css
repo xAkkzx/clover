@@ -14,6 +14,18 @@
     margin-right: auto; /* Spingi i messaggi di risposta a sinistra */
 }
 
+.custom-file-input {
+    /* Aggiungi qui i tuoi stili personalizzati */
+    background-color: white;
+    border: 2px solid black;
+    padding: 10px;
+    border-radius: 500px;
+    height: 15px;
+    color: #333;
+    cursor: pointer;
+}
+
+
 /* Styles for each chat message */
 .chat-message {
     margin-bottom: 8px;

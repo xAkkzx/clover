@@ -56,7 +56,8 @@ export class GptComponent implements AfterViewInit {
     private renderer: Renderer2
   ) {
     this.token = globalService.getGlobalVariable();
-    // this.token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im0iLCJpYXQiOjE2OTUwNDg4NzcsImV4cCI6MTY5NTA1NjA3N30.AtH4Hsn-HhAKNaKO0RQXevmS4iKczlHqcPktQ5O2GnE';
+    this.token =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImEiLCJpYXQiOjE2OTUxOTUxMDEsImV4cCI6MTY5NTIwMjMwMX0.lXF6hLseM9XKEBY67iTclBwtWPG-1GonGldJZDfbRAM';
   }
   @ViewChild("chatContainer") private chatContainer!: ElementRef;
 
@@ -560,6 +561,7 @@ export class GptComponent implements AfterViewInit {
         headers: headers,
         observe: "response",
       })
+
       .subscribe({
         next: (response) => {
           if (response.status === 200) {
@@ -569,7 +571,7 @@ export class GptComponent implements AfterViewInit {
               console.log(response.body);
               const userId = response.body.userId;
               console.log("UserId:", userId);
-
+      //        console.log("chrimitic");
               // Chiamata alla funzione saveChatMessage dopo aver ottenuto l'ID dell'utente
               this.saveChatMessagesAndExit(userId);
             } else {

@@ -1,20 +1,20 @@
 /* Default styles for larger screens */
 .login-title {
-    position: absolute;
+   
     top: 8%;
     left: 50%;
     transform: translate(-50%, -0%);
 }
 
 .login-button {
-    position: absolute;
+   
     top: 58%;
     right: 53.5%;
     transform: translate(-0%, -50%);
 }
 
 .input-fieldU {
-    position: absolute;
+   
     top: 35%;
     right: 57%;
     transform: translate(0%, -50%);
@@ -22,7 +22,7 @@
     margin: 0 auto;
 }
 .input-field {
-    position: absolute;
+   
     top: 45%;
     right: 57%;
     transform: translate(0%, -50%);
@@ -31,11 +31,12 @@
 }
 
 .register-button {
-    position: absolute;
+   
     top: 5%;
     right: 8%;
     transform: translate(0%, -50%);
 }
+
 
 /* Media query for smaller screens */
 @media (max-width: 768px) {

@@ -33,7 +33,6 @@ import { DatabaseComponent } from './database/database.component';
 import { MenuComponent } from './menu/menu.component';
 
 
-
 @NgModule({
   declarations: [
     
