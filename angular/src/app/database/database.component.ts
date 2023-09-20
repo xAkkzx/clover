@@ -16,8 +16,7 @@ export class DatabaseComponent {
   }
 
   change(v: boolean){
-    this.cambiacss=v;
-    console.log("jfkdinvj");  
+    this.cambiacss=v; 
   }
 
 }

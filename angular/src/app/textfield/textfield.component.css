@@ -9,7 +9,7 @@
 }
 
 .custom-textfield {
-  border: 2px solid black;
+  border: 2px solid #000;
   padding: 10px;
   border-radius: 500px;
   font-weight: bold;
@@ -18,7 +18,7 @@
 }
 
 .custom-ricerca {
-  border: 2px solid black;
+  border: 2px solid #000;
   padding: 10px;
   border-radius: 500px;
   width: 50%;
