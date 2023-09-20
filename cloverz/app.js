@@ -490,7 +490,7 @@ app.get("/welcome", (req, res) => {
 app.post("/chat", auth, async (req, res) => {
   try {
     const { nomeDb, tipoDb, richiesta } = req.body;
-    const db = fs.readFileSync(`dbz/${nomeDb}Tables.txt`, "utf-8");
+    const db = fs.readFileSync(`dbz/${userId}/${nomeDb}Tables.txt`, "utf-8");
     console.log(`dbz/${nomeDb}Tables.txt`);
     var c;
     const regola = process.env.REGOLAMYSQL;
