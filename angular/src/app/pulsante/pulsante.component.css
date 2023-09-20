@@ -14,7 +14,7 @@
 }
 
 .button:hover {
-  background-color: #333;
+  background-color: #99b9ff;
   color: #fff;
   border: 1px solid #000;
   border-radius: 5px;
@@ -33,8 +33,8 @@
 }
 
 .custom-button:hover {
-    background-color: #333;
-    color: #fff;
+    background-color: #000;
+    color: #99b9ff;
     border: 1px solid #000;
     border-radius: 5px;
     /* Arrotonda gli angoli anche durante l'hover */
