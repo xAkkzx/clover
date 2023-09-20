@@ -24,7 +24,7 @@
   <div style="width: 33%;height:100%;;align-items: center;">
     <app-titolo [titolo]="'REGISTER'" style="position: relative"/>
     
-    <app-textfield placeholder="Username" #textfield type = "text"  style="position: relative;margin-left:27% ; top:5%;" />
+    <app-textfield placeholder="Username" #textfield type = "text"  style="position: relative;margin-left:27% ; top:8%;" />
 
 
     <app-textfield #textfieldpsw  [type]="passwordFieldType" placeholder="Password" class="custom-textfield unselectable"
@@ -34,7 +34,7 @@
     </app-pulsante>
 
    
-   <app-pulsante pagina="gpt" nome="SignUp" (click)="registra  (getValue(textfield.inputValue), getValue(textfieldpsw.inputValue))" style="position:relative;margin-left:40%;top:35%" />
+   <app-pulsante pagina="gpt" nome="SignUp" (click)="registra  (getValue(textfield.inputValue), getValue(textfieldpsw.inputValue))" style="position:relative;margin-left:40%;top:26.5%" />
 
   </div>
 

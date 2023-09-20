@@ -60,6 +60,7 @@ export class GptComponent implements AfterViewInit {
     window.addEventListener("popstate", this.onPopState.bind(this));
     window.addEventListener("beforeunload", this.onBeforeUnload.bind(this));
     this.token = globalService.getGlobalVariable();
+    // this.token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImEiLCJpYXQiOjE2OTUxOTUxMDEsImV4cCI6MTY5NTIwMjMwMX0.lXF6hLseM9XKEBY67iTclBwtWPG-1GonGldJZDfbRAM';
   }
   @ViewChild("chatContainer") private chatContainer!: ElementRef;
 
@@ -149,9 +150,14 @@ export class GptComponent implements AfterViewInit {
         // 'Content-Type': 'application/json', // Set the content type to JSON
         "x-access-token": this.token,
       });
+      // const requestBody = {
+      //   idUtente: '6'// Usa this.password per ottenere il valore dall'input
+      // };
+      // const requestBodyJSON = JSON.stringify(requestBody);
+      // console.log(requestBodyJSON);
       const httpOptions = {
         headers: headers,
-        // body: formData, // Include the JSON request body here
+        // body: requestBodyJSON, // Include the JSON request body here
       };
       let res = "x";
 

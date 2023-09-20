@@ -16,9 +16,10 @@ const openai = new OpenAI({
 var messages = [];
 let numRichiesta = 0;
 let dataBaseVecchio = "";
-const uploadDir = "./dbz";
 
-const storage = multer.diskStorage({
+var uploadDir;
+var userId;
+var storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, uploadDir);
   },
@@ -31,11 +32,10 @@ const storage = multer.diskStorage({
     if (fs.existsSync(path.join(uploadDir, uniqueFilename))) {
       return cb(new Error("File with this name already exists."));
     }
-
     cb(null, uniqueFilename);
   },
 });
-const upload = multer({
+var upload = multer({
   storage: storage,
   fileFilter: (req, file, cb) => {
     const allowedFileExtensions = [".txt"];
@@ -51,11 +51,93 @@ const upload = multer({
   },
 });
 
+async function createFolderForUser() {
+  try {
+    // Database configuration
+    const dbConfig = {
+      host: process.env.MYSQL_HOST,
+      user: process.env.MYSQL_USER,
+      password: process.env.MYSQL_PASSWORD,
+      database: process.env.MYSQL_DATABASE,
+    };
+
+    // Create a MySQL pool for handling connections
+    const pool = mysql.createPool(dbConfig);
+
+    // Query the database to get the userId for the given username
+    const [rows] = await pool.execute("SELECT id__utente FROM utente;");
+
+    if (rows.length === 0) {
+      // User not found, handle the error or return an appropriate response
+      console.error("User not found");
+      return false;
+    }
+
+    for (const row of rows) {
+      const userId = row.id__utente;
+      const userFolderPath = `./dbz/${userId}`;
+
+      // Check if the user's folder exists; create it if it doesn't
+      if (!fs.existsSync(userFolderPath)) {
+        fs.mkdirSync(userFolderPath, { recursive: true });
+        console.log(`Folder created for user with ID ${userId}`);
+      }
+    }
+
+    return true; // Folders creation successful
+  } catch (error) {
+    console.error("Error creating folder:", error);
+    return false; // Folder creation failed
+  }
+}
+createFolderForUser();
+
 const app = express();
 
 app.use(cors());
 
 app.use(express.json());
+
+
+function uppy(){
+  uploadDir = `./dbz/${userId}`;
+  storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+      }
+      cb(null, uploadDir);
+    },
+    filename: (req, file, cb) => {
+      const originalName = path.parse(file.originalname).name;
+      const fileExtension = path.extname(file.originalname);
+      const uniqueFilename = `${originalName}${fileExtension}`;
+
+      // Check if the file already exists.
+      if (fs.existsSync(path.join(uploadDir, uniqueFilename))) {
+        return cb(new Error("File with this name already exists."));
+      }
+      cb(null, uniqueFilename);
+    },
+  });
+  upload = multer({
+    storage: storage,
+    fileFilter: (req, file, cb) => {
+      const allowedFileExtensions = [".txt"];
+      // Check if the file extension is allowed.
+      const isValidExtension = allowedFileExtensions.includes(
+        path.extname(file.originalname).toLowerCase()
+      );
+      if (!isValidExtension) {
+        // Return an error if the file extension is not allowed.
+        return cb(new Error("Only .txt files are allowed."));
+      }
+      cb(null, true);
+    },
+  });
+}
+
 
 function extractQuery(text) {
   const queryRegex = /SELECT[\s\S]*;/i;
@@ -300,6 +382,14 @@ app.post("/register", async (req, res) => {
       expiresIn: "2h",
     });
 
+    if (rowz.length > 0) {
+      userId = rowz[0].id__utente;
+      console.log(userId);
+      uppy();
+    } else {
+      console.log("unlucky non esiste");
+    }
+
     // Return new user
     res.status(201).json({ username, token });
   } catch (err) {
@@ -362,6 +452,18 @@ app.post("/login", async (req, res) => {
     const token = jwt.sign({ username }, process.env.TOKEN_KEY, {
       expiresIn: "2h",
     });
+
+    const [rowz] = await pool.execute(
+      "SELECT id__utente FROM utente WHERE username = ?",
+      [username]
+    );
+    if (rowz.length > 0) {
+      userId = rowz[0].id__utente;
+      console.log(userId);
+      uppy();
+    } else {
+      console.log("unlucky non esiste");
+    }
 
     res.status(200).json({ username, token, message: "Login effettuato" });
   } catch (err) {
@@ -616,8 +718,7 @@ app.post("/upload", upload.single("file"), auth, (req, res) => {
   if (!req.file) {
     return res.status(405).send("No file uploaded.");
   }
-  // You can process the uploaded file here (e.g., save it to a database or perform other operations).
-  // Respond with a success message.
+  
   res.status(200).send("File uploaded successfully.");
 });
 
@@ -626,6 +727,29 @@ app.use((err, req, res, next) => {
     return res.status(400).send("File upload error: " + err.message);
   }
   return next(err);
+});
+
+app.get("/dbz", auth, (req, res) =>{
+  const folderPath = `./dbz/${userId}`;
+  // Initialize an empty array to store the file names without extensions
+  const fileNames = [];
+  // Use fs.readdirSync() to get a list of file names in the specified folder
+  try {
+    const files = fs.readdirSync(folderPath);
+    // Iterate through the list of files and add their names without extensions to the array
+    for (const file of files) {
+      const filePath = path.join(folderPath, file);
+      // Check if the path is a file (not a directory)
+      if (fs.statSync(filePath).isFile()) {
+        const fileNameWithoutExtension = path.parse(file).name;
+        const resultString = fileNameWithoutExtension.replace(/Tables$/, "");
+        fileNames.push(resultString.toLowerCase()); // Convert to lowercase
+      }
+    }
+    console.log("File names (without extensions) in the folder:", fileNames);
+  } catch (error) {
+    console.error("Error reading the folder:", error);
+  }
 });
 
 module.exports = app;
