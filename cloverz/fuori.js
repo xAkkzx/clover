@@ -1,9 +1,9 @@
 const mysql_package = require("mysql");
 
 const sql = require("mssql");
-
+require("dotenv").config();
 const fs = require("fs");
-
+const desktopPath = require("path").join(require("os").homedir(), "Desktop");
 const path = require("path");
 
 var databaseStructure = [];
@@ -13,7 +13,7 @@ const connectionData = mysql_package.createConnection({
 
   user: "root",
 
-  password: "",
+  password: process.env.MYSQL_PASSWORD,
 });
 
 const args = process.argv.slice(2);
@@ -48,12 +48,19 @@ if (!serverType) {
   console.error("No database specified.");
 } else {
   try {
+    const dbzFolderPath = path.join(desktopPath, "dbz");
+    if (!fs.existsSync(dbzFolderPath)) {
+      fs.mkdirSync(dbzFolderPath);
+    }
     if (serverType === "mysql") {
       extractTablesMySQL(selectedDatabase, selectedTables);
+      console.log("Table extraction completed for MYSQL.");
+      console.log(`Database structure saved in ${dbzFolderPath}`);
     } else if (serverType === "mssql") {
       estraimsql(selectedDatabase)
         .then(() => {
           console.log("Table extraction completed for MSSQL.");
+          console.log(`Database structure saved in ${dbzFolderPath}`);
         })
 
         .catch((err) => {
@@ -70,6 +77,7 @@ if (!serverType) {
 function extractTablesMySQL(db, tables) {
   const folderName = "dbz";
 
+  
   const nome = "Tables_in_" + db;
 
   const texts = [];
@@ -161,10 +169,8 @@ function extractTablesMySQL(db, tables) {
                 texts.push(text);
 
                 const filePath = path.join(
-                  __dirname,
-
+                  desktopPath,
                   folderName,
-
                   db + "Tables.txt"
                 );
 
@@ -304,7 +310,7 @@ async function estraimsql(db) {
       databaseStructure.push(text);
     }
 
-    const filePath = path.join(__dirname, folderName, db + "Tables.txt");
+    const filePath = path.join(desktopPath, folderName, db + "Tables.txt");
 
     fs.writeFile(
       filePath,
@@ -325,7 +331,7 @@ async function estraimsql(db) {
     pool.close();
 
     if (verboseMode) {
-      const csvFilePath = path.join(__dirname, "csvz", db + "TableNames.csv");
+      const csvFilePath = path.join(desktopPath, folderName, db + "Tables.txt");
 
       fs.readFile(csvFilePath, "utf8", (err, data) => {
         if (err) {

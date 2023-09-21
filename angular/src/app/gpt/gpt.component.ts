@@ -75,6 +75,7 @@ export class GptComponent implements AfterViewInit {
 
   // Call the update function in GptComponent
   callUpdateFunctionInDatabaseComponent() {
+    this.databaseComponent.restoreName();
     this.databaseComponent.update();
   }
 
@@ -152,6 +153,56 @@ export class GptComponent implements AfterViewInit {
     }
   }
 
+  elimina(Dbz: any){
+    let ndb = Dbz.nome.toLocaleLowerCase();
+    console.log(ndb);
+    let errorz = "Remember to select the Database";
+    if(ndb === "database"){
+      this.toastr.error(errorz, "Error", {
+        positionClass: "toast-bottom-right",
+      });
+    }
+
+    const headers = new HttpHeaders({
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json", // Set the content type to JSON
+      "x-access-token": this.token,
+    });
+
+    const requestBody = {
+      nomeDb: ndb // Usa this.password per ottenere il valore dall'input
+    };
+
+    const requestBodyJSON = JSON.stringify(requestBody);
+
+    const httpOptions = {
+      headers: headers,
+      body: requestBodyJSON, // Include the JSON request body here
+    };
+
+    this.http.post("http://localhost:3000/delete", requestBodyJSON, {
+      ...httpOptions,
+      observe: "response",
+    })
+    .subscribe({
+      next: (response) =>{
+        if(response.status === 200){
+          this.toastr.success("", "File deleted succesfully!", {
+              positionClass: "toast-bottom-right",
+          });
+          this.callUpdateFunctionInDatabaseComponent()
+        }
+      },
+      error: (error) =>{
+        if(error.status === 404){
+          this.toastr.error("", "The database you tried to remove does not exist.", {
+            positionClass: "toast-bottom-right",
+          });
+        }
+      }
+    });
+  }
+
   onFileSelected(event: any): void {
     this.selectedFile = event.target.files[0];
 
@@ -181,7 +232,7 @@ export class GptComponent implements AfterViewInit {
               // if (typeof response.body === "object") {
               //   res = JSON.stringify(response.body);
               // }
-              this.toastr.success("", "File Caricato", {
+              this.toastr.success("", "File uploaded succesfully!", {
                 positionClass: "toast-bottom-right",
               });
               console.log(response.body);

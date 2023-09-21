@@ -32,6 +32,10 @@ export class DatabaseComponent {
     this.fetchFileNames();
   }
 
+  restoreName(): void{
+    this.nome = "Database";
+  }
+
   onMenuItemClick(item: string): void {
     this.nome= item;
     console.log(`Hai cliccato su: ${item}`);

@@ -728,6 +728,26 @@ app.post("/upload", upload.single("file"), auth, (req, res) => {
   // console.log("zz");
 });
 
+app.post("/delete", auth, (req, res) =>{
+  const { nomeDb } = req.body;
+  // Construct the file path
+  const filePath = path.join(
+    __dirname,
+    "dbz",
+    `${userId}`,
+    `${nomeDb}Tables.txt`
+  );
+  // Check if the file exists
+  if (fs.existsSync(filePath)) {
+    // If the file exists, delete it
+    fs.unlinkSync(filePath);
+    res.status(200).json({ message: "File deleted successfully" });
+  } else {
+    // If the file does not exist, return an error response
+    res.status(404).json({ error: "File not found" });
+  }
+});
+
 
 app.use((err, req, res, next) => {
   if (err instanceof multer.MulterError) {
