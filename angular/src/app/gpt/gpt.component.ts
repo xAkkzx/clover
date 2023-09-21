@@ -32,11 +32,11 @@ export class GptComponent implements AfterViewInit {
     ]),
   });
   token: string;
-  @ViewChild(TextfieldComponent, { static: false })
-  textfieldRic!: TextfieldComponent;
+  @ViewChild(TextfieldComponent, { static: false }) textfieldRic!: TextfieldComponent;
   menudata!: DatabaseComponent;
   chatMessages: { text: string; type: string }[] = [];
   isRequestEmpty: boolean = false;
+  @ViewChild(DatabaseComponent, { static: false }) databaseComponent!: DatabaseComponent;
 
   @Output() loginClicked: EventEmitter<void> = new EventEmitter<void>();
 
@@ -70,6 +70,12 @@ export class GptComponent implements AfterViewInit {
     // Optionally, you can return a custom message to prompt the user
     event.returnValue = "Are you sure you want to leave this page?";
   }
+
+  // Call the update function in GptComponent
+  callUpdateFunctionInDatabaseComponent() {
+    this.databaseComponent.update();
+  }
+
 
   // Define the popstate event handler
   onPopState(event: PopStateEvent) {
@@ -147,20 +153,12 @@ export class GptComponent implements AfterViewInit {
       formData.append("file", this.selectedFile);
       const headers = new HttpHeaders({
         "Access-Control-Allow-Origin": "*",
-        // 'Content-Type': 'application/json', // Set the content type to JSON
         "x-access-token": this.token,
       });
-      // const requestBody = {
-      //   idUtente: '6'// Usa this.password per ottenere il valore dall'input
-      // };
-      // const requestBodyJSON = JSON.stringify(requestBody);
-      // console.log(requestBodyJSON);
       const httpOptions = {
         headers: headers,
-        // body: requestBodyJSON, // Include the JSON request body here
       };
       let res = "x";
-
       this.http
         .post("http://localhost:3000/upload", formData, {
           ...httpOptions,
@@ -168,18 +166,14 @@ export class GptComponent implements AfterViewInit {
         })
         .subscribe({
           next: (response) => {
-            console.log(response);
-
+            // console.log(response+"a");
             if (response.status === 200) {
               console.log("File caricato correttamente");
-              if (typeof response.body === "object") {
-                res = JSON.stringify(response.body);
-              }
-              // console.log(this.formatJSONToTable(res))
+              // if (typeof response.body === "object") {
+              //   res = JSON.stringify(response.body);
+              // }
               console.log(response.body);
-              console.log(this.formatResponseAsTable(response.body));
-              res = this.formatResponseAsTable(response.body);
-              console.log("AO\n" + res + "\nAO");
+              this.callUpdateFunctionInDatabaseComponent()
             }
           },
           error: (error) => {
@@ -203,8 +197,7 @@ export class GptComponent implements AfterViewInit {
                 "http://localhost:4200/login"
               );
             }
-
-            console.log(error.status);
+            // console.log(error.status +"a");
             // console.error('Errore durante la richiesta:', error);
             // Puoi gestire gli errori di rete o altri errori qui
           },
@@ -375,7 +368,7 @@ export class GptComponent implements AfterViewInit {
             console.log(response.body);
             console.log(this.formatResponseAsTable(response.body));
             res = this.formatResponseAsTable(response.body);
-            console.log("AO\n" + res + "\nAO");
+            // console.log("AO\n" + res + "\nAO");
             //  this.tab(response.body);
             //  this.formatAndPrintResponse(response.body);
 
