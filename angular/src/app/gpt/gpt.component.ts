@@ -37,6 +37,7 @@ export class GptComponent implements AfterViewInit {
   chatMessages: { text: string; type: string, isTypingAnimation: boolean}[] = [];
   isRequestEmpty: boolean = false;
   @ViewChild(DatabaseComponent, { static: false }) databaseComponent!: DatabaseComponent;
+  @ViewChild('fileInputz', { static: false }) fileInput!: ElementRef;
 
   @Output() loginClicked: EventEmitter<void> = new EventEmitter<void>();
 
@@ -148,6 +149,7 @@ export class GptComponent implements AfterViewInit {
 
   onFileSelected(event: any): void {
     this.selectedFile = event.target.files[0];
+
   }
   uploadFile(): void {
 
