@@ -390,6 +390,7 @@ app.post("/register", async (req, res) => {
       userId = rowz[0].id__utente;
       console.log(userId);
       uppy();
+      createFolderForUser();
     } else {
       console.log("unlucky non esiste");
     }

@@ -150,6 +150,7 @@ export class GptComponent implements AfterViewInit {
     this.selectedFile = event.target.files[0];
   }
   uploadFile(): void {
+
     if (this.selectedFile) {
       const formData = new FormData();
       formData.append("file", this.selectedFile);
@@ -174,23 +175,32 @@ export class GptComponent implements AfterViewInit {
               // if (typeof response.body === "object") {
               //   res = JSON.stringify(response.body);
               // }
+              this.toastr.success("", "File Caricato", {
+                positionClass: "toast-bottom-right",
+              });
               console.log(response.body);
               this.callUpdateFunctionInDatabaseComponent()
             }
           },
           error: (error) => {
             if (error.status === 405) {
-              console.log("Nessun file è stato caricato");
+              this.toastr.error("No files were uploaded", "Error", {
+                positionClass: "toast-bottom-right",
+              });
               console.log(error.status);
               console.error(error);
             }
             if (error.status === 400) {
-              console.log("Errore nell'upload del file");
+              this.toastr.error("Error uploading the file", "Error", {
+                positionClass: "toast-bottom-right",
+              });
               console.log(error.status);
               console.error(error);
             }
             if (error.status === 401) {
-              console.log("Accesso non autorizzato");
+              this.toastr.error("Unauthorized access", "Error", {
+                positionClass: "toast-bottom-right",
+              });
               console.log(error.status);
               console.error(error);
               this.customToastrService.showErrorWithLink(
@@ -199,13 +209,22 @@ export class GptComponent implements AfterViewInit {
                 "http://localhost:4200/login"
               );
             }
+            if (error.status === 500) {
+              this.toastr.error("Error uploading the file", "Error", {
+                positionClass: "toast-bottom-right",
+              });
+              console.log(error.status);
+              console.error(error);
+            }
             // console.log(error.status +"a");
             // console.error('Errore durante la richiesta:', error);
             // Puoi gestire gli errori di rete o altri errori qui
           },
         });
-    } else {
-      alert("Please select a file to upload.");
+    }else{
+      this.toastr.error("No files were uploaded", "Error", {
+        positionClass: "toast-bottom-right",
+      });
     }
   }
 
