@@ -45,7 +45,7 @@ var upload = multer({
     );
     if (!isValidExtension) {
       // Return an error if the file extension is not allowed.
-      return cb(new Error("Only .txt files are allowed."));
+      return cb(new Error("Only .txt files that ends with Tables are allowed."));
     }
     cb(null, true);
   },
