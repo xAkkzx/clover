@@ -382,6 +382,10 @@ app.post("/register", async (req, res) => {
       expiresIn: "2h",
     });
 
+    const [rowz] = await pool.execute(
+      "SELECT id__utente FROM utente WHERE username = ?",
+      [username]
+    );
     if (rowz.length > 0) {
       userId = rowz[0].id__utente;
       console.log(userId);
@@ -718,8 +722,9 @@ app.post("/upload", upload.single("file"), auth, (req, res) => {
   if (!req.file) {
     return res.status(405).send("No file uploaded.");
   }
-  
-  res.status(200).send("File uploaded successfully.");
+  let message = "File input success";
+  res.status(200).json({message});
+  // console.log("zz");
 });
 
 app.use((err, req, res, next) => {
@@ -747,6 +752,8 @@ app.get("/dbz", auth, (req, res) =>{
       }
     }
     console.log("File names (without extensions) in the folder:", fileNames);
+    res.status(200).json({ fileNames });
+
   } catch (error) {
     console.error("Error reading the folder:", error);
   }
