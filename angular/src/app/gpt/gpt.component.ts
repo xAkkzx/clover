@@ -156,8 +156,6 @@ export class GptComponent implements AfterViewInit {
     this.selectedFile = event.target.files[0];
 
   }
-  uploadFile(): void {
-
   uploadFile(f: HTMLInputElement): void {
     if (this.selectedFile) {
       const formData = new FormData();
@@ -189,9 +187,7 @@ export class GptComponent implements AfterViewInit {
               console.log(response.body);
               this.callUpdateFunctionInDatabaseComponent()
             }
-            console.log("CHRI");
             this.resetFileInput(f);
-            console.log("MITIC");
           },
           error: (error) => {
             if (error.status === 405) {
@@ -219,7 +215,7 @@ export class GptComponent implements AfterViewInit {
                 "Sign In",
                 "http://localhost:4200/login"
               );
-            }
+            
             if (error.status === 500) {
               this.toastr.error("Error uploading the file", "Error", {
                 positionClass: "toast-bottom-right",
@@ -227,11 +223,13 @@ export class GptComponent implements AfterViewInit {
               console.log(error.status);
               console.error(error);
             }
+            
             // console.log(error.status +"a");
             // console.error('Errore durante la richiesta:', error);
             // Puoi gestire gli errori di rete o altri errori qui
 
-          },
+          }
+        }
         });
     }else{
       this.toastr.error("No files were uploaded", "Error", {
