@@ -727,12 +727,15 @@ app.post("/upload", upload.single("file"), auth, (req, res) => {
   // console.log("zz");
 });
 
+
 app.use((err, req, res, next) => {
   if (err instanceof multer.MulterError) {
     return res.status(400).send("File upload error: " + err.message);
   }
   return next(err);
 });
+
+
 
 app.get("/dbz", auth, (req, res) =>{
   const folderPath = `./dbz/${userId}`;

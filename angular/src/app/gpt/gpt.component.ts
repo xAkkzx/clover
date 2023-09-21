@@ -47,6 +47,7 @@ export class GptComponent implements AfterViewInit {
   getJsonValue: any;
   selectedFile: File | null = null;
   currentSessionMessages: any[] = [];
+ // f:any;
 
   constructor(
     private router: Router,
@@ -81,6 +82,10 @@ export class GptComponent implements AfterViewInit {
   onPopState(event: PopStateEvent) {
     // Call the esci() method when the user navigates backward or forward
     this.esci();
+  }
+
+  resetFileInput(f: HTMLInputElement){
+    f.value = '';
   }
 
   ngOnInit() {
@@ -147,7 +152,7 @@ export class GptComponent implements AfterViewInit {
   onFileSelected(event: any): void {
     this.selectedFile = event.target.files[0];
   }
-  uploadFile(): void {
+  uploadFile(f: HTMLInputElement): void {
     if (this.selectedFile) {
       const formData = new FormData();
       formData.append("file", this.selectedFile);
@@ -175,6 +180,9 @@ export class GptComponent implements AfterViewInit {
               console.log(response.body);
               this.callUpdateFunctionInDatabaseComponent()
             }
+            console.log("CHRI");
+            this.resetFileInput(f);
+            console.log("MITIC");
           },
           error: (error) => {
             if (error.status === 405) {
@@ -197,9 +205,11 @@ export class GptComponent implements AfterViewInit {
                 "http://localhost:4200/login"
               );
             }
+
             // console.log(error.status +"a");
             // console.error('Errore durante la richiesta:', error);
             // Puoi gestire gli errori di rete o altri errori qui
+
           },
         });
     } else {

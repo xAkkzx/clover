@@ -35,11 +35,12 @@
 
 <div style="width:100%; height: 10%; align-items: center;">
 
-  <input type="file" (change)="onFileSelected($event)" class="custom-file-input" style="position: relative;text-align: left; margin-left: 20%;">
+  <input #fileinput  type="file" (change)="onFileSelected($event)" class="custom-file-input" style="position: relative;text-align: left; margin-left: 20%;">
+
 
   <app-pulsante img="bi bi-trash3-fill" (click)="pulisciChat()" style="position: relative;margin-left:5%"/>
 
-  <app-pulsante img="bi bi-box-arrow-in-down" (click)="uploadFile()" style="position: relative;margin-left:10%" />
+  <app-pulsante img="bi bi-box-arrow-in-down" (click)="uploadFile(fileinput)" style="position: relative;margin-left:10%" />
   
   <app-pulsante img="bi bi-send-fill" (click)="chat(sceltaDb, '1', getValue(richiestaInput.inputValue))" style="position: relative;margin-left:10%"/>
   
