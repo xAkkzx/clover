@@ -146,7 +146,7 @@ export class RegisterComponent {
               this.customToastrService.showWarningWithLink(
                 error.error.replace("Login", ""),
                 'Login',
-                'http://localhost:4200/register'
+                'http://localhost:4200/login'
               );
             }
           }

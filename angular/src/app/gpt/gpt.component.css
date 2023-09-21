@@ -100,3 +100,30 @@
     height: 8px; /* Imposta l'altezza per corrispondere all'altezza della barra di scorrimento */
     flex: none; /* Assicura che l'elemento non influisca sul layout */
 }
+
+.typewriting {
+    overflow: hidden;
+    white-space: nowrap;
+    width: 0; /* Inizia con larghezza zero (testo vuoto) */
+    animation: typing 1s steps(40, end), blink-caret 0.75s step-end infinite;
+  }
+  
+  @keyframes typing {
+    from {
+      width: 0;
+    }
+    to {
+      width: 100%;
+    }
+  }
+  
+  @keyframes blink-caret {
+    from,
+    to {
+      border-color: transparent;
+    }
+    50% {
+      border-color: black;
+    }
+  }
+  

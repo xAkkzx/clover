@@ -15,10 +15,12 @@
 
     <div id="chatContainer" #chatContainer style="height: 90%; margin-top: 1.8%; margin-left: 3%; width: 80%;">
 
-      <div *ngFor="let message of chatMessages" [class]="message.type === 'request' ? 'request-message' : 'response-message'" [innerHTML]="message.text" >
+      <div *ngFor="let message of chatMessages" [class]="message.type === 'request' ? 'request-message' : 'response-message'">
+        <div [innerHTML]="message.text" [class]="message.isTypingAnimation ? 'typewriting' : ''"></div>
       </div>
-
-    </div> 
+    
+    </div>
+    
 
   </div>
 
