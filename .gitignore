@@ -1,5 +1,6 @@
 
 cloverz/.env
+cloverz/dbz
 cloverz/dati.csv
 
 *.csv
