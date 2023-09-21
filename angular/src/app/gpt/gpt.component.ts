@@ -34,9 +34,10 @@ export class GptComponent implements AfterViewInit {
   token: string;
   @ViewChild(TextfieldComponent, { static: false }) textfieldRic!: TextfieldComponent;
   menudata!: DatabaseComponent;
-  chatMessages: { text: string; type: string }[] = [];
+  chatMessages: { text: string; type: string, isTypingAnimation: boolean}[] = [];
   isRequestEmpty: boolean = false;
   @ViewChild(DatabaseComponent, { static: false }) databaseComponent!: DatabaseComponent;
+  @ViewChild('fileInputz', { static: false }) fileInput!: ElementRef;
 
   @Output() loginClicked: EventEmitter<void> = new EventEmitter<void>();
 
@@ -120,11 +121,13 @@ export class GptComponent implements AfterViewInit {
             this.chatMessages.push({
               text: message.messaggio,
               type: "request",
+              isTypingAnimation: false, // Imposta questa proprietà per attivare l'animazione
             });
           } else {
             this.chatMessages.push({
               text: message.messaggio,
               type: "response",
+              isTypingAnimation: false, // Aggiungi questa proprietà per attivare l'animazione
             });
           }
         });
@@ -151,7 +154,10 @@ export class GptComponent implements AfterViewInit {
 
   onFileSelected(event: any): void {
     this.selectedFile = event.target.files[0];
+
   }
+  uploadFile(): void {
+
   uploadFile(f: HTMLInputElement): void {
     if (this.selectedFile) {
       const formData = new FormData();
@@ -177,6 +183,9 @@ export class GptComponent implements AfterViewInit {
               // if (typeof response.body === "object") {
               //   res = JSON.stringify(response.body);
               // }
+              this.toastr.success("", "File Caricato", {
+                positionClass: "toast-bottom-right",
+              });
               console.log(response.body);
               this.callUpdateFunctionInDatabaseComponent()
             }
@@ -186,17 +195,23 @@ export class GptComponent implements AfterViewInit {
           },
           error: (error) => {
             if (error.status === 405) {
-              console.log("Nessun file è stato caricato");
+              this.toastr.error("No files were uploaded", "Error", {
+                positionClass: "toast-bottom-right",
+              });
               console.log(error.status);
               console.error(error);
             }
             if (error.status === 400) {
-              console.log("Errore nell'upload del file");
+              this.toastr.error("Error uploading the file", "Error", {
+                positionClass: "toast-bottom-right",
+              });
               console.log(error.status);
               console.error(error);
             }
             if (error.status === 401) {
-              console.log("Accesso non autorizzato");
+              this.toastr.error("Unauthorized access", "Error", {
+                positionClass: "toast-bottom-right",
+              });
               console.log(error.status);
               console.error(error);
               this.customToastrService.showErrorWithLink(
@@ -205,15 +220,23 @@ export class GptComponent implements AfterViewInit {
                 "http://localhost:4200/login"
               );
             }
-
+            if (error.status === 500) {
+              this.toastr.error("Error uploading the file", "Error", {
+                positionClass: "toast-bottom-right",
+              });
+              console.log(error.status);
+              console.error(error);
+            }
             // console.log(error.status +"a");
             // console.error('Errore durante la richiesta:', error);
             // Puoi gestire gli errori di rete o altri errori qui
 
           },
         });
-    } else {
-      alert("Please select a file to upload.");
+    }else{
+      this.toastr.error("No files were uploaded", "Error", {
+        positionClass: "toast-bottom-right",
+      });
     }
   }
 
@@ -283,7 +306,7 @@ export class GptComponent implements AfterViewInit {
       lines.push(currentLine);
     }
     const formattedRequest = lines.join("\n");
-    this.chatMessages.push({ text: formattedRequest, type: "request" });
+    this.chatMessages.push({ text: formattedRequest, type: "request",  isTypingAnimation: false });
     this.currentSessionMessages.push({
       message: formattedRequest,
       role: "utente",
@@ -293,7 +316,12 @@ export class GptComponent implements AfterViewInit {
       this.chatMessages.push({
         text: "Ricorda, devi prima selezionare il DataBase su cui agire.",
         type: "response",
+        isTypingAnimation: true, // Aggiungi questa proprietà per attivare l'animazione
       });
+
+      setTimeout(() => {
+        this.chatMessages[this.chatMessages.length - 1].isTypingAnimation = false;
+      }, 1000); // Il timeout deve essere uguale alla durata dell'animazione
 
       if (this.textfieldRic.inputValue == "") {
         this.isRequestEmpty = true; // Imposta la variabile a true se la richiesta è vuota
@@ -330,7 +358,12 @@ export class GptComponent implements AfterViewInit {
         this.chatMessages.push({
           text: "Non posso rispondere se non mi chiedi niente.",
           type: "response",
+          isTypingAnimation: true, // Aggiungi questa proprietà per attivare l'animazione
         });
+
+        setTimeout(() => {
+          this.chatMessages[this.chatMessages.length - 1].isTypingAnimation = false;
+        }, 1000); // Il timeout deve essere uguale alla durata dell'animazione
 
         if (this.textfieldRic.inputValue == "") {
           this.isRequestEmpty = true; // Imposta la variabile a true se la richiesta è vuota
@@ -357,6 +390,7 @@ export class GptComponent implements AfterViewInit {
         return;
       }
     }
+
 
     this.http
       .post("http://localhost:3000/chat", requestBodyJSON, {
@@ -385,7 +419,12 @@ export class GptComponent implements AfterViewInit {
             this.chatMessages.push({
               text: res,
               type: "response",
+              isTypingAnimation: true, // Aggiungi questa proprietà per attivare l'animazione
             });
+
+            setTimeout(() => {
+              this.chatMessages[this.chatMessages.length - 1].isTypingAnimation = false;
+            }, 1000); // Il timeout deve essere uguale alla durata dell'animazione
 
             this.currentSessionMessages.push({ message: res, role: "ai" });
 
@@ -402,7 +441,12 @@ export class GptComponent implements AfterViewInit {
             this.chatMessages.push({
               text: "Non è stato possibile eseguire la tua richiesta.",
               type: "response",
+              isTypingAnimation: true, // Aggiungi questa proprietà per attivare l'animazione
             });
+
+            setTimeout(() => {
+              this.chatMessages[this.chatMessages.length - 1].isTypingAnimation = false;
+            }, 1000); // Il timeout deve essere uguale alla durata dell'animazione
 
             this.currentSessionMessages.push({
               message: "Non è stato possibile eseguire la tua richiesta.",
@@ -450,6 +494,7 @@ export class GptComponent implements AfterViewInit {
             this.chatMessages.push({
               text: "errore durante elaborazione messaggio.",
               type: "response",
+              isTypingAnimation: true, // Aggiungi questa proprietà per attivare l'animazione
             });
 
             this.currentSessionMessages.push({
@@ -471,7 +516,12 @@ export class GptComponent implements AfterViewInit {
             this.chatMessages.push({
               text: "Accesso non autorizzato.",
               type: "response",
+              isTypingAnimation: true, // Aggiungi questa proprietà per attivare l'animazione
             });
+
+            setTimeout(() => {
+              this.chatMessages[this.chatMessages.length - 1].isTypingAnimation = false;
+            }, 1000); // Il timeout deve essere uguale alla durata dell'animazione
 
             this.currentSessionMessages.push({
               message: "Accesso non autorizzato.",
