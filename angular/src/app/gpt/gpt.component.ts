@@ -361,6 +361,11 @@ export class GptComponent implements AfterViewInit {
       role: "utente",
     });
 
+    setTimeout(() => {
+      console.log("A");
+      this.scrollToBottom();
+    });
+
     if (ndb === "database") {
       this.chatMessages.push({
         text: "Ricorda, devi prima selezionare il DataBase su cui agire.",
@@ -395,6 +400,11 @@ export class GptComponent implements AfterViewInit {
       this.currentSessionMessages.push({
         message: "Ricorda, devi prima selezionare il DataBase su cui agire.",
         role: "ai",
+      });
+
+      setTimeout(() => {
+        console.log("A");
+        this.scrollToBottom();
       });
 
       setTimeout(() => {
@@ -434,6 +444,11 @@ export class GptComponent implements AfterViewInit {
         this.currentSessionMessages.push({
           message: "Non posso rispondere se non mi chiedi niente.",
           role: "ai",
+        });
+
+        setTimeout(() => {
+          console.log("A");
+          this.scrollToBottom();
         });
 
         return;
@@ -482,6 +497,11 @@ export class GptComponent implements AfterViewInit {
               this.scrollToBottom();
             });
 
+            setTimeout(() => {
+              console.log("A");
+              this.scrollToBottom();
+            });
+
             // this.router.navigate(['/', 'gpt']);
           }
         },
@@ -500,6 +520,11 @@ export class GptComponent implements AfterViewInit {
             this.currentSessionMessages.push({
               message: "Non è stato possibile eseguire la tua richiesta.",
               role: "ai",
+            });
+
+            setTimeout(() => {
+              console.log("A");
+              this.scrollToBottom();
             });
 
             if (this.textfieldRic.inputValue == "") {
@@ -577,6 +602,10 @@ export class GptComponent implements AfterViewInit {
               role: "ai",
             });
 
+            setTimeout(() => {
+              this.scrollToBottom();
+            });
+
             if (this.textfieldRic.inputValue == "") {
               this.isRequestEmpty = true; // Imposta la variabile a true se la richiesta è vuota
             }
@@ -628,6 +657,7 @@ export class GptComponent implements AfterViewInit {
   private saveChatMessagesAndExit(userId: number) {
     // Chiamata alla funzione saveChatMessage prima di uscire
     this.currentSessionMessages.forEach((message) => {
+      console.log(message.message);
       this.saveChatMessage(userId, message.role, message.message);
     });
 
