@@ -38,16 +38,12 @@ var storage = multer.diskStorage({
 var upload = multer({
   storage: storage,
   fileFilter: (req, file, cb) => {
-    const allowedFileExtensions = [".txt"];
-    // Check if the file extension is allowed.
-    const isValidExtension = allowedFileExtensions.includes(
-      path.extname(file.originalname).toLowerCase()
-    );
-    if (!isValidExtension) {
-      // Return an error if the file extension is not allowed.
-      return cb(new Error("Only .txt files that ends with Tables are allowed."));
+    if (file.originalname.toLowerCase().endsWith("tables.txt")) {
+      cb(null, true); // Accept the file
+    } else {
+      // Return an error if the file name doesn't match the required format
+      cb(new Error("File name must end with 'Tables.txt'"));
     }
-    cb(null, true);
   },
 });
 
@@ -124,16 +120,12 @@ function uppy(){
   upload = multer({
     storage: storage,
     fileFilter: (req, file, cb) => {
-      const allowedFileExtensions = [".txt"];
-      // Check if the file extension is allowed.
-      const isValidExtension = allowedFileExtensions.includes(
-        path.extname(file.originalname).toLowerCase()
-      );
-      if (!isValidExtension) {
-        // Return an error if the file extension is not allowed.
-        return cb(new Error("Only .txt files are allowed."));
+      if (file.originalname.toLowerCase().endsWith("tables.txt")) {
+        cb(null, true); // Accept the file
+      } else {
+        // Return an error if the file name doesn't match the required format
+        cb(new Error("File name must end with 'Tables.txt'"));
       }
-      cb(null, true);
     },
   });
 }
@@ -719,13 +711,19 @@ app.post("/clear", async (req, res) => {
 
 
 
-app.post("/upload", upload.single("file"), auth, (req, res) => {
-  if (!req.file) {
-    return res.status(405).send("No file uploaded.");
-  }
-  let message = "File input success";
-  res.status(200).json({message});
-  // console.log("zz");
+app.post("/upload", auth, (req, res, next) => {
+  upload.single("file")(req, res, function (err) {
+    if (err) {
+      return res
+        .status(400)
+        .json({ error: "File upload error: " + err.message });
+    } else if (!req.file) {
+      return res.status(405).json({ error: "No file uploaded." });
+    }
+
+    let message = "File input success";
+    res.status(200).json({ message });
+  });
 });
 
 app.post("/delete", auth, (req, res) =>{

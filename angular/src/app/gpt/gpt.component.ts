@@ -247,13 +247,15 @@ export class GptComponent implements AfterViewInit {
               });
               console.log(error.status);
               console.error(error);
+              this.resetFileInput(f);
             }
             if (error.status === 400) {
-              this.toastr.error("Error uploading the file", "Error", {
+              this.toastr.error("Remember to use our tool to extract the database structure.", "The file must end with Tables.txt", {
                 positionClass: "toast-bottom-right",
               });
               console.log(error.status);
               console.error(error);
+              this.resetFileInput(f);
             }
             if (error.status === 401) {
               this.toastr.error("Unauthorized access", "Error", {
