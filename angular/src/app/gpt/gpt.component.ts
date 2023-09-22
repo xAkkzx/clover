@@ -19,6 +19,8 @@ import { TextfieldComponent } from "../textfield/textfield.component";
 import { timestamp } from "rxjs";
 import { DatabaseComponent } from "../database/database.component";
 import { map, catchError, throwError } from "rxjs";
+import { forkJoin } from 'rxjs';
+import { concatMap, tap } from 'rxjs/operators';
 
 @Component({
   selector: "app-gpt",
@@ -640,73 +642,88 @@ export class GptComponent implements AfterViewInit {
       });
   }
 
-  public esci() {
-    if (this.loggedInUsername === "") {
-      this.globalService.setGlobalVariable("");
-      this.router.navigate(["/", "login"]);
-      return;
-    }
-
-    console.log("AAAAIAAAAAAAAAA");
-
-    this.getId().subscribe((userId: any) => {
-      console.log("UserID:", userId);
-      this.saveChatMessagesAndExit(userId);
-      // Esegui altre azioni qui con l'ID dell'utente
-    });
+public esci() {
+  if (this.loggedInUsername === "") {
+    this.globalService.setGlobalVariable("");
+    this.router.navigate(["/", "login"]);
+    return;
   }
 
-  private saveChatMessagesAndExit(userId: number) {
-    // Chiamata alla funzione saveChatMessage prima di uscire
-    this.currentSessionMessages.forEach((message) => {
-      console.log(message.message);
-      this.saveChatMessage(userId, message.role, message.message);
+  console.log("AAAAIAAAAAAAAAA");
+
+  this.getId()
+    .pipe(
+      concatMap((userId: any) => {
+        console.log("UserID:", userId);
+        return this.saveChatMessagesAndExit(userId);
+      })
+    )
+    .subscribe(() => {
+      // Esegui altre azioni qui con l'ID dell'utente
     });
 
     this.globalService.setGlobalVariable("");
     this.router.navigate(["/", "login"]);
-  }
+}
+private saveChatMessagesAndExit(userId: number) {
+  // Crea un array di observable per le chiamate HTTP
+  const saveObservables = this.currentSessionMessages.map((message) => {
+    console.log(message.message);
+    return this.saveChatMessage(userId, message.role, message.message);
+  });
 
-  public saveChatMessage(userId: number, role: string, messageText: string) {
-    console.log("!!!!!!!!!!" + userId);
-    const currentDate = new Date(); // Ottieni la data e l'ora correnti
-    const formattedDate = currentDate
-      .toISOString()
-      .slice(0, 19)
-      .replace("T", " "); //  Formatta la data e l'ora in una stringa ISO
-    console.log(formattedDate);
-    const requestBody = {
-      userId: userId,
-      role: role,
-      message: messageText,
-      timestamp: formattedDate, // Aggiungi il timestamp al messaggio
-    };
+  // Combina tutti gli observable in un unico observable
+  return forkJoin(saveObservables);
+}
 
-    const headers = new HttpHeaders({
-      "Content-Type": "application/json",
-    });
 
-    this.http
-      .post("http://localhost:3000/save", requestBody, {
-        headers: headers,
+public saveChatMessage(userId: number, role: string, messageText: string) {
+  console.log("!!!!!!!!!!" + userId);
+  const currentDate = new Date(); // Ottieni la data e l'ora correnti
+  const formattedDate = currentDate
+    .toISOString()
+    .slice(0, 19)
+    .replace("T", " "); //  Formatta la data e l'ora in una stringa ISO
+  console.log(formattedDate);
+  const requestBody = {
+    userId: userId,
+    role: role,
+    message: messageText,
+    timestamp: formattedDate, // Aggiungi il timestamp al messaggio
+  };
+
+  const headers = new HttpHeaders({
+    "Content-Type": "application/json",
+  });
+
+  // Restituisci l'observable risultante dalla chiamata HTTP
+  return this.http
+    .post("http://localhost:3000/save", requestBody, {
+      headers: headers,
+    })
+    .pipe(
+      tap((response: any) => {
+        //console.log("Messaggio di chat salvato con successo:", response);
+        // Puoi gestire la risposta dal server qui se necessario
+      }),
+      catchError((error: any) => {
+        if (error.status === 406 || error.status === 500) {
+          console.error(
+            "Errore durante il salvataggio del messaggio di chat:",
+            error
+          );
+        }
+        // Puoi gestire gli errori qui se necessario
+        throw error;
       })
-      .subscribe({
-        next: (response: any) => {
-          console.log("Messaggio di chat salvato con successo:", response);
-          // Puoi gestire la risposta dal server qui se necessario
-        },
-        error: (error: any) => {
-          if (error.status === 406 || error.status === 500) {
-            console.error(
-              "Errore durante il salvataggio del messaggio di chat:",
-              error
-            );
-          }
+    );
+}
 
-          // Puoi gestire gli errori qui se necessario
-        },
-      });
-  }
+
+
+
+
+
 
   public pulisciChat() {
     this.currentSessionMessages = [];

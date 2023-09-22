@@ -593,10 +593,10 @@ app.post("/save", async (req, res) => {
         [userId, message, role,timestamp]
       );
 
-      res.status(200).send("Messaggio salvato con successo nella cronologia della chat.");
+      res.status(200).json({message: "Messaggio salvato con successo nella cronologia della chat."});
     } else {
       // Se almeno uno dei parametri è undefined, restituisci un errore 400 Bad Request
-      res.status(406).send("I parametri della richiesta contengono valori undefined.");
+      res.status(406).json({message: "I parametri della richiesta contengono valori undefined."});
     }
   } catch (err) {
     console.error(err);
